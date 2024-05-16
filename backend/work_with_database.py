@@ -71,6 +71,7 @@ class Brand(Base):
     brand_name = Column(String)
     description = Column(Text)
     img = Column(String)
+    url_web = Column(String)  # Thêm cột "url" vào bảng "brands"
 
 
 class Order(Base):
@@ -130,38 +131,107 @@ class PaymentDetail(Base):
     order = relationship("Order", backref="payment_details")
 
 
+# test
+def test_alter_table_with_brand_table(db_path, table_name, operation, column):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{db_path}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    Base = declarative_base()
+
+    # Định nghĩa lớp tạm thời để áp dụng thay đổi cấu trúc bảng
+    class TempTable(Base):
+        __tablename__ = table_name
+
+        # Định nghĩa các cột hiện có trong bảng
+        brand_id = Column(Integer, primary_key=True, autoincrement=True)
+        brand_name = Column(String)
+        description = Column(Text)
+        img = Column(String)
+
+    # Kiểm tra loại thao tác
+    if operation == "add":
+        # Thêm cột mới vào bảng
+        setattr(TempTable, column, Column(String))
+
+    elif operation == "drop":
+        # Xóa cột khỏi bảng
+        delattr(TempTable, column)
+
+    # Tạo bảng tạm thời
+    Base.metadata.create_all(bind=engine)
+
+    # Thực hiện thay đổi cấu trúc bảng bằng cách tạo bảng mới và sao chép dữ liệu từ bảng cũ
+    session.execute(f"INSERT INTO {TempTable.__tablename__} SELECT * FROM {table_name}")
+    session.commit()
+
+    # Xóa bảng cũ
+    session.execute(f"DROP TABLE {table_name}")
+    session.commit()
+
+    # Đổi tên bảng tạm thời thành tên bảng gốc
+    session.execute(f"ALTER TABLE {TempTable.__tablename__} RENAME TO {table_name}")
+    session.commit()
+
+    # Đóng phiên làm việc
+    session.close()
+
+
 # Tạo các bảng trong cơ sở dữ liệu
 # Base.metadata.create_all(engine)
 
-####################################################
-########## interact with the database ##############
-####################################################
+
+##################################################################
+########## interact with the user table in database ##############
+##################################################################
+
+
+# check user is taken
+def is_username_taken(username):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem tên người dùng đã tồn tại trong cơ sở dữ liệu hay chưa
+    existing_user = session.query(User).filter_by(username=username).first()
+
+    # Trả về True nếu tên người dùng đã được sử dụng, False nếu chưa
+    return existing_user is not None
 
 
 # add user
 def add_user(
     username, password, email, fullname, phone_number, address, img, is_admin=False
 ):
-    # Tạo engine và phiên làm việc
-    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    # Kiểm tra xem tên người dùng đã tồn tại hay chưa
+    if is_username_taken(username):
+        messgae = f"Tên người dùng đã tồn tại. Vui lòng chọn tên người dùng khác."
+        return {"status": False, "messgae": messgae}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-    # Tạo đối tượng User mới
-    new_user = User(
-        username=username,
-        password=password,
-        email=email,
-        fullname=fullname,
-        phone_number=phone_number,
-        address=address,
-        img=img,
-        is_admin=is_admin,
-    )
+        # Tạo đối tượng User mới
+        new_user = User(
+            username=username,
+            password=password,
+            email=email,
+            fullname=fullname,
+            phone_number=phone_number,
+            address=address,
+            img=img,
+            is_admin=is_admin,
+        )
 
-    # Thêm đối tượng User mới vào phiên làm việc và commit thay đổi
-    session.add(new_user)
-    session.commit()
+        # Thêm đối tượng User mới vào phiên làm việc và commit thay đổi
+        session.add(new_user)
+        session.commit()
+        messgae = f"Thêm người dùng thành công"
+        return {"status": True, "messgae": messgae}
 
 
 # delete user
@@ -207,3 +277,68 @@ def update_user(user_id, new_data):
     else:
         message = f"Không tìm thấy người dùng với user_id {user_id}."
         return {"status": False, "message": message}
+
+
+def get_user(user_id):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Tìm người dùng dựa trên user_id
+    user = session.query(User).filter_by(user_id=user_id).first()
+
+    if user:
+        # Trả về thông tin người dùng
+        user_info = {
+            "user_id": user.user_id,
+            "username": user.username,
+            "email": user.email,
+            "fullname": user.fullname,
+            "phone_number": user.phone_number,
+            "address": user.address,
+            "img": user.img,
+            "is_admin": user.is_admin,
+        }
+        return {"status": True, "messgae": user_info}
+    else:
+        messgae = f"Không tìm thấy người dùng với user_id {user_id}."
+        return {"status": False, "messgae": messgae}
+
+
+##################################################################
+########## interact with the brands table in database ############
+##################################################################
+
+
+# check brand is taken
+def is_brand_taken(brand_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    existing_user = session.query(Brand).filter_by(brand_name=brand_name).first()
+
+    return existing_user is not None
+
+
+def add_brand(brand_name, description, img):
+
+    if is_username_taken(brand_name):
+        messgae = f"Tên thương hiệu đã tồn tại. Vui lòng chọn tên thương hiệu khác."
+        return {"status": False, "messgae": messgae}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Tạo đối tượng Brand mới
+        new_brand = Brand(brand_name=brand_name, description=description, img=img)
+
+        # Thêm đối tượng Brand mới vào phiên làm việc và commit thay đổi
+        session.add(new_brand)
+        session.commit()
+        messgae = f"Thêm thương hiệu thành công"
+        return {"status": True, "messgae": messgae}
