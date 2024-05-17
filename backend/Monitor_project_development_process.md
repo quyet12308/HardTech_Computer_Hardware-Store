@@ -4,4 +4,4 @@
 ## Ngày 15/5/2024
 - Đã tạo ra 3 hàm add_user , delete_user,update_user . Bọn nó đề hoạt động khá ổn (dùng sqlalchemy - thăng này rất mạnh, dùng thay thế cho sqlite truyền thống)
 ## Ngày 16/5/2024
-- Có ý định thay đổi bảng brands để thêm thuộc tính url_web nhưng khá là khó khăn và cồng kềnh nên sẽ tạm gác lại để bao giờ rảnh để làm sau . Vì cái này chỉ là ý muốn nhất thời , nó không quan trọng lắm .
+- Có ý định thay đổi bảng brands để thêm thuộc tính url_web nhưng khá là khó khăn và cồng kềnh nên sẽ tạm gác lại để bao giờ rảnh để làm sau . Vì cái này chỉ là ý muốn nhất thời , nó không quan trọng lắm . Hàm test_alter_table_with_brand_table là hàm chính cho việc này

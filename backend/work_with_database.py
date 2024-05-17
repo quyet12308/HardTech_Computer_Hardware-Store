@@ -9,11 +9,21 @@ from sqlalchemy import (
     ForeignKey,
     Numeric,
     func,
+    MetaData,
+    Table,
+    text,
+    select,
 )
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 from setting import DATA_BASE_PATH
 from sqlalchemy.orm import sessionmaker
+import json
+
+
+def convert_to_json(**kwargs):
+    return json.dumps(kwargs)
+
 
 ####################################################
 ################ create database ###################
@@ -71,7 +81,7 @@ class Brand(Base):
     brand_name = Column(String)
     description = Column(Text)
     img = Column(String)
-    url_web = Column(String)  # Thêm cột "url" vào bảng "brands"
+    # url_web = Column(String)  # Thêm cột "url" vào bảng "brands"
 
 
 class Order(Base):
@@ -129,6 +139,48 @@ class PaymentDetail(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
     order = relationship("Order", backref="payment_details")
+
+
+######################################################################
+################ delete or clear table in database ###################
+######################################################################
+
+
+def delete_table_data(db_path, table_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{db_path}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Xóa sạch dữ liệu của bảng
+    table = Base.metadata.tables[table_name]
+    session.execute(table.delete())
+    session.commit()
+
+    message = f"Đã xóa sạch dữ liệu của bảng '{table_name}'."
+    return {"status": True, "message": message}
+
+
+######################################################################
+################ display table in database ###########################
+######################################################################
+
+
+def display_table_data(db_path, table_name):
+    engine = create_engine(f"sqlite:///{db_path}")
+    metadata = MetaData()
+
+    with engine.connect() as connection:
+        metadata.reflect(bind=engine)
+        table = metadata.tables[table_name]
+
+        # Lấy toàn bộ dữ liệu từ bảng
+        select_statement = select([table])
+        result = connection.execute(select_statement)
+
+        print(f"Nội dung của bảng '{table_name}':")
+        for row in result:
+            print(row)
 
 
 # test
@@ -318,14 +370,29 @@ def is_brand_taken(brand_name):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    existing_user = session.query(Brand).filter_by(brand_name=brand_name).first()
+    existing_brand = session.query(Brand).filter_by(brand_name=brand_name).first()
 
-    return existing_user is not None
+    return existing_brand is not None
+
+
+def create_brand_description(
+    lich_su, san_pham, uu_diem, nhuoc_diem, dong_san_pham, website
+):
+    brand_description = {
+        "lich_su": lich_su,
+        "san_pham": san_pham,
+        "uu_diem": uu_diem,
+        "nhuoc_diem": nhuoc_diem,
+        "dong_san_pham": dong_san_pham,
+        "website": website,
+    }
+    return json.dumps(brand_description, ensure_ascii=False)
 
 
 def add_brand(brand_name, description, img):
-
-    if is_username_taken(brand_name):
+    # print(brand_name)
+    # print(is_brand_taken(brand_name=brand_name))
+    if is_brand_taken(brand_name):
         messgae = f"Tên thương hiệu đã tồn tại. Vui lòng chọn tên thương hiệu khác."
         return {"status": False, "messgae": messgae}
     else:
@@ -342,3 +409,140 @@ def add_brand(brand_name, description, img):
         session.commit()
         messgae = f"Thêm thương hiệu thành công"
         return {"status": True, "messgae": messgae}
+
+
+def edit_brand_data(brand_id, new_brand_name=None, new_description=None, new_img=None):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Lấy đối tượng Brand cần chỉnh sửa
+    brand = session.query(Brand).filter_by(brand_id=brand_id).first()
+
+    if not brand:
+        message = f"Không tìm thấy thương hiệu với ID {brand_id}."
+        return {"status": False, "message": message}
+
+    # Cập nhật thông tin của thương hiệu
+    if new_brand_name is not None:
+        brand.brand_name = new_brand_name
+    if new_description is not None:
+        brand.description = new_description
+    if new_img is not None:
+        brand.img = new_img
+
+    # Commit thay đổi
+    session.commit()
+
+    message = f"Đã chỉnh sửa thông tin thương hiệu với ID {brand_id}."
+    return {"status": True, "message": message}
+
+
+def delete_brand(brand_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem thương hiệu có tồn tại trong cơ sở dữ liệu hay không
+    brand = session.query(Brand).filter_by(brand_name=brand_name).first()
+    if brand is None:
+        message = f"Thương hiệu '{brand_name}' không tồn tại trong cơ sở dữ liệu."
+        return {"status": False, "message": message}
+
+    # Xóa thương hiệu từ cơ sở dữ liệu
+    session.delete(brand)
+    session.commit()
+    message = f"Đã xóa thương hiệu '{brand_name}' thành công."
+    return {"status": True, "message": message}
+
+
+##################################################################
+########## interact with the categories table in database ########
+##################################################################
+
+
+def is_categorie_taken(category_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    existing_brand = (
+        session.query(Category).filter_by(category_name=category_name).first()
+    )
+
+    return existing_brand is not None
+
+
+def add_category(category_name, description):
+    # print(brand_name)
+    # print(is_brand_taken(brand_name=brand_name))
+    if is_categorie_taken(category_name):
+        messgae = f"Tên thể loại đã tồn tại. Vui lòng chọn tên thể loại khác."
+        return {"status": False, "messgae": messgae}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Tạo đối tượng Brand mới
+        new_category = Category(category_name=category_name, description=description)
+
+        # Thêm đối tượng Brand mới vào phiên làm việc và commit thay đổi
+        session.add(new_category)
+        session.commit()
+        messgae = f"Thêm thể loại thành công"
+        return {"status": True, "messgae": messgae}
+
+
+def edit_category_data(category_id, new_category_name=None, new_description=None):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Lấy đối tượng Brand cần chỉnh sửa
+    category = session.query(Category).filter_by(category_id=category_id).first()
+
+    if not category:
+        message = f"Không tìm thấy thể loại với ID {category_id}."
+        return {"status": False, "message": message}
+
+    # Cập nhật thông tin của thương hiệu
+    if new_category_name is not None:
+        category.category_name = new_category_name
+    if new_description is not None:
+        category.description = new_description
+
+    # Commit thay đổi
+    session.commit()
+
+    message = f"Đã chỉnh sửa thông tin thể loại với ID {category_id}."
+    return {"status": True, "message": message}
+
+
+def delete_category(category_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem thương hiệu có tồn tại trong cơ sở dữ liệu hay không
+    category = session.query(Category).filter_by(category_name=category_name).first()
+    if category is None:
+        message = f"Thể loại '{category_name}' không tồn tại trong cơ sở dữ liệu."
+        return {"status": False, "message": message}
+
+    # Xóa thương hiệu từ cơ sở dữ liệu
+    session.delete(category)
+    session.commit()
+    message = f"Đã xóa thể loại '{category_name}' thành công."
+    return {"status": True, "message": message}
+
+
+##################################################################
+########## interact with the products table in database ##########
+##################################################################
