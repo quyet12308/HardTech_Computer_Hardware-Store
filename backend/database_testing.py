@@ -19,6 +19,16 @@ from work_with_database import (
     edit_brand_data,
     add_category,
     edit_category_data,
+    add_product,
+    edit_product_data,
+    delete_product,
+    get_product_details,
+    add_order,
+    compress_order_items,
+    edit_order,
+    add_to_cart,
+    add_payment,
+    edit_payment,
 )
 
 # b = add_user(
@@ -54,14 +64,14 @@ from work_with_database import (
 #     "databases/ecommerce_database.db", "brands", "add", "url_web"
 # # )
 
-description_json = create_brand_description(
-    lich_su="Thành lập năm 1969 tại California, Hoa Kỳ.",
-    san_pham="Cung cấp CPU, GPU và chipset cho máy tính cá nhân, máy tính xách tay, máy chủ và máy trạm.",
-    uu_diem="Giá thành cạnh tranh, hiệu năng ngày càng được cải thiện, đặc biệt trong phân khúc tầm trung và cao cấp.",
-    nhuoc_diem="Một số dòng sản phẩm có thể tiêu thụ nhiều điện năng hơn so với Intel.",
-    dong_san_pham="Ryzen 3, Ryzen 5, Ryzen 7, Ryzen 9, Radeon RX 6000 series.",
-    website="https://shop-us-en.amd.com/",
-)
+# description_json = create_brand_description(
+#     lich_su="Thành lập năm 1969 tại California, Hoa Kỳ.",
+#     san_pham="Cung cấp CPU, GPU và chipset cho máy tính cá nhân, máy tính xách tay, máy chủ và máy trạm.",
+#     uu_diem="Giá thành cạnh tranh, hiệu năng ngày càng được cải thiện, đặc biệt trong phân khúc tầm trung và cao cấp.",
+#     nhuoc_diem="Một số dòng sản phẩm có thể tiêu thụ nhiều điện năng hơn so với Intel.",
+#     dong_san_pham="Ryzen 3, Ryzen 5, Ryzen 7, Ryzen 9, Radeon RX 6000 series.",
+#     website="https://shop-us-en.amd.com/",
+# )
 # a = add_brand(brand_name="AMD", description=description_json, img="")
 # print(a)
 
@@ -75,8 +85,11 @@ description_json = create_brand_description(
 # a = delete_brand(brand_name="AMD")
 # print(a)
 
-# a = delete_table_data(DATA_BASE_PATH, "brands")
+# a = delete_table_data(DATA_BASE_PATH, "payment_details")
 # print(a)
+
+# b = delete_table_data(DATA_BASE_PATH, "cart_item")
+# print(b)
 
 # a = edit_brand_data(new_brand_name="AMD", brand_id=1)
 # print(a)
@@ -86,5 +99,55 @@ description_json = create_brand_description(
 # a = add_category(category_name="Main", description=category_description)
 # print(a)
 
-a = edit_category_data(new_category_name="Main", category_id=1)
-print(a)
+# a = edit_category_data(new_category_name="Main", category_id=1)
+# print(a)
+
+# product_name = "Main test"
+# price = 1000000
+# description = "Main test"
+# category_id = 1
+# brand_id = 1
+# quantity = 10
+# image = "main_test.jpg"
+
+# result = add_product(
+#     product_name=product_name,
+#     price=price,
+#     description=description,
+#     category_id=category_id,
+#     brand_id=brand_id,
+#     quantity=quantity,
+#     image=image,
+# )
+
+# print(result)
+
+# a = get_product_details(product_id=1)
+# print(a)
+
+# b = compress_order_items(
+#     product_ids=[1, 2, 3], quantities=[2, 1, 2], unit_prices=[400, 600, 500]
+# )
+# a = add_order(
+#     order_items=b,
+#     order_status="đang chờ xác nhận",
+#     payment_method="paypay",
+#     shipping_address="test",
+#     total_price="200000",
+#     user_id=2,
+# )
+# print(a)
+
+# a = edit_order(order_id=1, order_status="Đang giao", payment_method="Momo")
+# print(a)
+
+# a = add_to_cart(product_id=2, quantity=1, user_id=3)
+# print(a)
+
+result = add_payment(order_id=1, amount=100, provider="PayPal", status="Thành công")
+print(result)
+
+# result = edit_payment(
+#     payment_id=1, amount=150, provider="Stripe", status="Đã hoàn thành"
+# )
+# print(result)

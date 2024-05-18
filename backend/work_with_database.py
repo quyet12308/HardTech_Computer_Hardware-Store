@@ -20,6 +20,8 @@ from setting import DATA_BASE_PATH
 from sqlalchemy.orm import sessionmaker
 import json
 
+from datetime import datetime
+
 
 def convert_to_json(**kwargs):
     return json.dumps(kwargs)
@@ -469,11 +471,11 @@ def is_categorie_taken(category_name):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    existing_brand = (
+    existing_category = (
         session.query(Category).filter_by(category_name=category_name).first()
     )
 
-    return existing_brand is not None
+    return existing_category is not None
 
 
 def add_category(category_name, description):
@@ -546,3 +548,442 @@ def delete_category(category_name):
 ##################################################################
 ########## interact with the products table in database ##########
 ##################################################################
+
+
+def is_product_taken(product_name):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    existing_product = (
+        session.query(Product).filter_by(product_name=product_name).first()
+    )
+
+    return existing_product is not None
+
+
+def add_product(
+    product_name, price, description, category_id, brand_id, quantity, image
+):
+    if is_product_taken(product_name=product_name):
+        messgae = f"Tên sản phẩm đã tồn tại. Vui lòng chọn tên sản phẩm khác."
+        return {"status": False, "messgae": messgae}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Tạo đối tượng sản phẩm mới
+        product = Product(
+            product_name=product_name,
+            price=price,
+            description=description,
+            category_id=category_id,
+            brand_id=brand_id,
+            quantity=quantity,
+            img=image,
+        )
+
+        # Thêm sản phẩm vào phiên làm việc
+        session.add(product)
+
+        # Commit thay đổi
+        session.commit()
+
+        message = "Đã thêm sản phẩm thành công."
+        return {"status": True, "message": message}
+
+
+def edit_product_data(
+    product_id,
+    new_product_name=None,
+    new_price=None,
+    new_description=None,
+    new_category_id=None,
+    new_brand_id=None,
+    new_quantity=None,
+    new_image=None,
+):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Lấy đối tượng sản phẩm cần chỉnh sửa
+    product = session.query(Product).filter_by(product_id=product_id).first()
+
+    if not product:
+        message = f"Không tìm thấy sản phẩm với ID {product_id}."
+        return {"status": False, "message": message}
+
+    # Cập nhật thông tin của sản phẩm
+    if new_product_name is not None:
+        product.product_name = new_product_name
+    if new_price is not None:
+        product.price = new_price
+    if new_description is not None:
+        product.description = new_description
+    if new_category_id is not None:
+        product.category_id = new_category_id
+    if new_brand_id is not None:
+        product.brand_id = new_brand_id
+    if new_quantity is not None:
+        product.quantity = new_quantity
+    if new_image is not None:
+        product.img = new_image
+
+    # Commit thay đổi
+    session.commit()
+
+    message = f"Đã chỉnh sửa thông tin sản phẩm với ID {product_id}."
+    return {"status": True, "message": message}
+
+
+def delete_product(product_id):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Lấy đối tượng sản phẩm cần xóa
+    product = session.query(Product).filter_by(product_id=product_id).first()
+
+    if not product:
+        message = f"Không tìm thấy sản phẩm với ID {product_id}."
+        return {"status": False, "message": message}
+
+    # Xóa sản phẩm khỏi phiên làm việc
+    session.delete(product)
+
+    # Commit thay đổi
+    session.commit()
+
+    message = f"Đã xóa sản phẩm với ID {product_id}."
+    return {"status": True, "message": message}
+
+
+def get_product_details(product_id=None, product_name=None):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    query = session.query(Product, Category, Brand).join(Category).join(Brand)
+
+    if product_id is not None:
+        query = query.filter(Product.product_id == product_id)
+    elif product_name is not None:
+        query = query.filter(Product.product_name == product_name)
+    else:
+        message = "Vui lòng cung cấp ID hoặc tên sản phẩm."
+        return {"status": False, "message": message}
+
+    result = query.first()
+
+    if not result:
+        message = "Không tìm thấy sản phẩm."
+        return {"status": False, "message": message}
+
+    product, category, brand = result
+
+    product_details = {
+        "product_id": product.product_id,
+        "product_name": product.product_name,
+        "price": product.price,
+        "description": product.description,
+        "category": {
+            "category_id": category.category_id,
+            "category_name": category.category_name,
+        },
+        "brand": {"brand_id": brand.brand_id, "brand_name": brand.brand_name},
+        "quantity": product.quantity,
+        "image": product.image,
+        "created_at": product.created_at,
+        "updated_at": product.updated_at,
+        "img": product.img,
+    }
+
+    return {"status": True, "product_details": product_details}
+
+
+###################################################################################
+########## interact with the order and order_detail table in database #############
+###################################################################################
+
+
+def compress_order_items(product_ids, quantities, unit_prices):
+    compressed_items = []
+    if len(product_ids) == len(quantities) and len(quantities) == len(unit_prices):
+        for i in range(len(product_ids)):
+            compressed_item = {
+                "product_id": product_ids[i],
+                "quantity": quantities[i],
+                "unit_price": unit_prices[i],
+            }
+            compressed_items.append(compressed_item)
+        return {"status": True, "message": compressed_items}
+    else:
+        message = f"Số lượng của các thông số truyền vào không bằng nhau"
+        return {"status": False, "message": message}
+
+
+def add_order(
+    user_id, order_status, total_price, shipping_address, payment_method, order_items
+):
+    if order_items["status"] == False:
+        return {"status": False, "message": order_items["message"]}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Tạo đối tượng đơn hàng mới
+        order = Order(
+            user_id=user_id,
+            order_status=order_status,
+            total_price=total_price,
+            shipping_address=shipping_address,
+            payment_method=payment_method,
+        )
+
+        # Thêm đơn hàng vào phiên làm việc
+        session.add(order)
+
+        # Commit thay đổi để lấy order_id mới được tạo
+        session.commit()
+        order_item_datas = order_items["message"]
+        # Lặp qua các mục trong đơn hàng và tạo đối tượng chi tiết đơn hàng
+        for item in order_item_datas:
+            product_id = int(item["product_id"])
+            quantity = int(item["quantity"])
+            unit_price = int(item["unit_price"])
+
+            # Tạo đối tượng chi tiết đơn hàng mới
+            order_detail = OrderDetail(
+                order_id=order.order_id,
+                product_id=product_id,
+                quantity=quantity,
+                unit_price=unit_price,
+            )
+
+            # Thêm chi tiết đơn hàng vào phiên làm việc
+            session.add(order_detail)
+
+        # Commit thay đổi cuối cùng
+        session.commit()
+
+        message = "Đã thêm đơn hàng thành công."
+        return {"status": True, "message": message}
+
+
+def edit_order(
+    order_id,
+    user_id=None,
+    order_status=None,
+    total_price=None,
+    shipping_address=None,
+    payment_method=None,
+    order_items=None,
+):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Tìm đơn hàng cần chỉnh sửa
+    order = session.query(Order).get(order_id)
+
+    if not order:
+        return {"status": False, "message": "Đơn hàng không tồn tại."}
+
+    # Cập nhật thông tin đơn hàng
+    if user_id is not None:
+        order.user_id = user_id
+    if order_status is not None:
+        order.order_status = order_status
+    if total_price is not None:
+        order.total_price = total_price
+    if shipping_address is not None:
+        order.shipping_address = shipping_address
+    if payment_method is not None:
+        order.payment_method = payment_method
+
+    # Thêm lại chi tiết đơn hàng mới
+    if order_items is not None:
+        # Xóa chi tiết đơn hàng cũ
+        session.query(OrderDetail).filter(OrderDetail.order_id == order_id).delete()
+        order_item_datas = order_items["message"]
+        for item in order_item_datas:
+            product_id = int(item["product_id"])
+            quantity = int(item["quantity"])
+            unit_price = int(item["unit_price"])
+
+            order_detail = OrderDetail(
+                order_id=order_id,
+                product_id=product_id,
+                quantity=quantity,
+                unit_price=unit_price,
+            )
+
+            session.add(order_detail)
+
+    # Commit thay đổi cuối cùng
+    session.commit()
+
+    message = "Đã chỉnh sửa đơn hàng thành công."
+    return {"status": True, "message": message}
+
+
+def delete_order(order_id):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Tìm đơn hàng theo order_id
+    order = session.query(Order).filter(Order.order_id == order_id).first()
+
+    if order:
+        # Xóa các chi tiết đơn hàng liên quan
+        session.query(OrderDetail).filter(OrderDetail.order_id == order_id).delete()
+
+        # Xóa đơn hàng
+        session.delete(order)
+        session.commit()
+
+        message = "Đã xóa đơn hàng thành công."
+        return {"status": True, "message": message}
+    else:
+        message = "Không tìm thấy đơn hàng."
+        return {"status": False, "message": message}
+
+
+###################################################################################
+########## interact with the cart and cart_item table in database #################
+###################################################################################
+
+
+def add_to_cart(user_id, product_id, quantity):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem giỏ hàng của người dùng đã tồn tại hay chưa
+    cart = session.query(Cart).filter(Cart.user_id == user_id).first()
+
+    if not cart:
+        # Tạo giỏ hàng mới nếu chưa tồn tại
+        cart = Cart(user_id=user_id, total=0)
+        session.add(cart)
+        session.commit()
+
+    # Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+    cart_item = (
+        session.query(CartItem)
+        .filter(CartItem.cart_id == cart.id, CartItem.product_id == product_id)
+        .first()
+    )
+
+    if cart_item:
+        # Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
+        cart_item.quantity += quantity
+    else:
+        # Nếu sản phẩm chưa tồn tại trong giỏ hàng, tạo mới
+        cart_item = CartItem(cart_id=cart.id, product_id=product_id, quantity=quantity)
+        session.add(cart_item)
+
+    # Cập nhật tổng số lượng sản phẩm trong giỏ hàng
+    cart.total += quantity
+
+    session.commit()
+
+    message = "Đã thêm sản phẩm vào giỏ hàng thành công."
+    return {"status": True, "message": message}
+
+
+###################################################################################
+########## interact with the payment_details table in database ####################
+###################################################################################
+
+
+def add_payment(order_id, amount, provider, status):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem đơn hàng đã tồn tại hay chưa
+    order = session.query(Order).filter(Order.order_id == order_id).first()
+
+    if not order:
+        # Nếu đơn hàng không tồn tại, trả về thông báo lỗi
+        message = "Đơn hàng không tồn tại."
+        return {"status": False, "message": message}
+
+    # Tạo một payment detail mới
+    payment_detail = PaymentDetail(
+        order_id=order_id, amount=amount, provider=provider, status=status
+    )
+    session.add(payment_detail)
+    session.commit()
+
+    message = "Đã thêm thanh toán thành công."
+    return {"status": True, "message": message}
+
+
+def edit_payment(payment_id, amount=None, provider=None, status=None):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem thanh toán có tồn tại hay không
+    payment = (
+        session.query(PaymentDetail).filter(PaymentDetail.id == payment_id).first()
+    )
+
+    if not payment:
+        # Nếu thanh toán không tồn tại, trả về thông báo lỗi
+        message = "Thanh toán không tồn tại."
+        return {"status": False, "message": message}
+
+    # Cập nhật thông tin thanh toán nếu tham số được truyền vào
+    if amount is not None:
+        payment.amount = amount
+    if provider is not None:
+        payment.provider = provider
+    if status is not None:
+        payment.status = status
+
+    session.commit()
+
+    message = "Đã sửa thông tin thanh toán thành công."
+    return {"status": True, "message": message}
+
+
+def delete_payment(payment_id):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Kiểm tra xem thanh toán có tồn tại hay không
+    payment = (
+        session.query(PaymentDetail).filter(PaymentDetail.id == payment_id).first()
+    )
+
+    if not payment:
+        # Nếu thanh toán không tồn tại, trả về thông báo lỗi
+        message = "Thanh toán không tồn tại."
+        return {"status": False, "message": message}
+
+    # Xóa thanh toán
+    session.delete(payment)
+    session.commit()
+
+    message = "Đã xóa thông tin thanh toán thành công."
+    return {"status": True, "message": message}
