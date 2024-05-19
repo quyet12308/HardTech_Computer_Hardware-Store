@@ -29,7 +29,12 @@ from work_with_database import (
     add_to_cart,
     add_payment,
     edit_payment,
+    add_login_session,
 )
+
+from base_codes.get_token import generate_token
+from base_codes.gettime import gettime2, add_time_to_datetime, convert_to_datetime
+from base_codes.hash_function import *
 
 # b = add_user(
 #     username="user3",
@@ -144,10 +149,35 @@ from work_with_database import (
 # a = add_to_cart(product_id=2, quantity=1, user_id=3)
 # print(a)
 
-result = add_payment(order_id=1, amount=100, provider="PayPal", status="Thành công")
-print(result)
+# result = add_payment(order_id=1, amount=100, provider="PayPal", status="Thành công")
+# print(result)
 
 # result = edit_payment(
 #     payment_id=1, amount=150, provider="Stripe", status="Đã hoàn thành"
 # )
 # print(result)
+
+# a = add_login_session(
+#     user_id=2,
+#     expiration_date=convert_to_datetime(
+#         time_string=add_time_to_datetime(hours=2)["message"]
+#     ),
+#     token_value=generate_token(),
+# )
+# print(a)
+
+# update password
+
+# user_infor = get_user(user_id=1)["message"]
+# old_password = user_infor["password"]
+
+# new_password = hash_password(password=old_password)
+# user_infor["password"] = new_password
+# a = update_user(new_data=user_infor, user_id=1)
+# print(a)
+
+# old_password = "admin123"
+
+# new_password = get_user(user_id=1)["message"]["password"]
+# a = verify_password(hex_string=new_password, password=old_password)
+# print(a)

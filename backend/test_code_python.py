@@ -1,21 +1,19 @@
-import sqlite3
+# import datetime
 
-# Kết nối với CSDL SQLite
-conn = sqlite3.connect(
-    "databases/ecommerce_database.db"
-)  # Thay thế bằng đường dẫn thực tế đến tệp CSDL SQLite của bạn
 
-cursor = conn.cursor()
+# def get_current_time():
+#     current_time = datetime.datetime.now()
+#     formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+#     return formatted_time
 
-try:
-    cursor.execute("PRAGMA main.timezone")
-    result = cursor.fetchone()
 
-    if result is not None:
-        print("Múi giờ hiện tại:", result[0])
-    else:
-        print("Không tìm thấy kết quả.")
-except Exception as e:
-    print("Lỗi:", str(e))
+# # Sử dụng hàm
+# current_time = get_current_time()
+# print(current_time)
 
-conn.close()
+from base_codes.hash_function import *
+from work_with_database import *
+
+old_password = "admin123"
+
+new_pass = ""

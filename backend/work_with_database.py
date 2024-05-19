@@ -143,6 +143,30 @@ class PaymentDetail(Base):
     order = relationship("Order", backref="payment_details")
 
 
+class Token(Base):
+    __tablename__ = "tokens"
+    token_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"))
+    token_value = Column(String)
+    expiration_date = Column(DateTime)  # Thêm trường hợp lệ của token
+    created_at = Column(DateTime, server_default=func.now())
+    user = relationship("User", backref="tokens")
+
+
+class Comment(Base):
+    __tablename__ = "comments"
+    comment_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"))
+    product_id = Column(Integer, ForeignKey("products.product_id"))
+    content = Column(Text)
+    rating = Column(Integer)  # Thêm trường đánh giá
+    is_approved = Column(Boolean, default=False)  # Thêm trường được chấp nhận
+    is_deleted = Column(Boolean, default=False)  # Thêm trường đã bị xóa
+    created_at = Column(DateTime, server_default=func.now())
+    user = relationship("User", backref="comments")
+    product = relationship("Product", backref="comments")
+
+
 ######################################################################
 ################ delete or clear table in database ###################
 ######################################################################
@@ -236,9 +260,48 @@ def test_alter_table_with_brand_table(db_path, table_name, operation, column):
 # Base.metadata.create_all(engine)
 
 
+###################################################################################
+########## interact with the token (login_session) table in database ##############
+###################################################################################
+
+
+def add_login_session(user_id, token_value, expiration_date):
+    # Tạo engine và phiên làm việc
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Tạo đối tượng Token mới
+    new_token = Token(
+        user_id=user_id, token_value=token_value, expiration_date=expiration_date
+    )
+
+    # Thêm đối tượng Token mới vào phiên làm việc và commit thay đổi
+    session.add(new_token)
+    session.commit()
+    session.close()
+
+    messgae = "Thêm phiên đăng nhập thành công"
+    return {"status": True, "messgae": messgae}
+
+
 ##################################################################
 ########## interact with the user table in database ##############
 ##################################################################
+
+
+def get_user_id_by_username(username):
+    engine = create_engine("sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # Truy vấn để tìm người dùng theo tên người dùng
+    user = session.query(User).filter_by(username=username).first()
+
+    if user is not None:
+        return {"status": True, "message": user.user_id}
+    else:
+        return {"status": False, "message": ""}
 
 
 # check user is taken
@@ -353,8 +416,9 @@ def get_user(user_id):
             "address": user.address,
             "img": user.img,
             "is_admin": user.is_admin,
+            "password": user.password,
         }
-        return {"status": True, "messgae": user_info}
+        return {"status": True, "message": user_info}
     else:
         messgae = f"Không tìm thấy người dùng với user_id {user_id}."
         return {"status": False, "messgae": messgae}

@@ -1,3 +1,4 @@
 .env
 __pycache__
 base_codes\security_info.py
+base_codes\__pycache__

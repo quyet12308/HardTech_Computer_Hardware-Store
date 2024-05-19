@@ -9,3 +9,5 @@
 ## Ngày 18/5/2024 
 - Nhận thấy rằng hình như cái sqlalchemy nó ghi thời gian vơí múi giờ utc mà mình là utc 07 . Đã thử khắc phục qua nhưng chưa dược => Tạm để đó đã , nếu thời gian thật sự cần thiết thì có thể sẽ viết 1 cái hàm nhỏ chuyển thời gian về utc07 sau khi lấy dữ liệu từ db ra
 - Tính thêm thuộc tính update_at cho bảng order nhưng khá khó khăn hoặc do chưa tìm hiểu kỹ vì vậy tạm thời sẽ không thay đổi cấu trúc bảng để sau fix
+- Có lẽ có thể dùng key word là thực thi câu lệnh sqlite trong sqlalchemy để có thể thay đổi cấu trúc bảng 
+

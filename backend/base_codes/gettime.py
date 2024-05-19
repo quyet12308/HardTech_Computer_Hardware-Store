@@ -29,6 +29,36 @@ def gettime4():
     return t
 
 
+def add_time_to_datetime(datetime_str=None, days=0, hours=0, minutes=0, seconds=0):
+    if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
+        return {
+            "status": False,
+            "message": "Nhập vào ít nhất 1 tham số thời gian để cộng",
+        }
+
+    if datetime_str is None:
+        dt = datetime.datetime.now()  # Lấy thời gian hiện tại
+    else:
+        try:
+            dt = datetime.datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            return {
+                "status": False,
+                "message": "Định dạng chuỗi thời gian không chính xác",
+            }
+
+    delta = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+    new_dt = dt + delta
+    new_datetime_str = new_dt.strftime("%Y-%m-%d %H:%M:%S")
+
+    return {"status": True, "message": new_datetime_str}
+
+
+def convert_to_datetime(time_string):
+    datetime_object = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S")
+    return datetime_object
+
+
 # def check_time_range(created_time, now_time, minute):
 #     # Chuyển đổi chuỗi thời gian thành đối tượng datetime
 #     created_datetime = datetime.datetime.strptime(created_time, "%Y-%m-%d %H:%M:%S")
@@ -118,3 +148,13 @@ def check_availability(time1, time2, days):
 # expected_timezone = timezone("Asia/Ho_Chi_Minh")
 # current_timezone = timezone("2024-03-24 23:13:32")
 # print(current_timezone)
+
+# datetime_str = "2024-05-19 10:30:00"
+# # new_datetime_str = add_time_to_datetime(datetime_str, hours=2, minutes=30)
+# new_datetime_str = add_time_to_datetime(
+#     datetime_str,
+# )
+# print(new_datetime_str)
+
+# result = add_time_to_datetime(hours=2)
+# print(result)
