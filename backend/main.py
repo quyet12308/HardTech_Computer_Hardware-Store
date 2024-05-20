@@ -8,6 +8,10 @@ from fastapi.middleware.cors import (
 )
 from work_with_database import *
 from base_codes.hash_function import *
+from base_codes.get_token import generate_token
+from base_codes.gettime import *
+from setting import *
+from base_codes.string_python_en import responses
 
 app = FastAPI()  # khởi tạo app fastapi
 
@@ -25,62 +29,70 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+class RegisterVerificationCodeRequest(BaseModel):
+    email:str
 
-@app.post("api/login")
+class RegisterCreateAccountRequest(BaseModel):
+    email:str
+    username:str
+    password:str
+
+
+
+
+@app.post("/api/login")
 async def login(login_data: LoginRequest):
     username = login_data.username
     password = login_data.password
 
     check_user_exists = get_user_id_by_username(username=username)
     if check_user_exists["status"]:
-        get_password_in_db = get_user(user_id=check_user_exists["message"]["password"])
+        get_user_infor_using_userid = get_user(user_id=check_user_exists["message"])
+        get_password_in_db = get_user_infor_using_userid["message"]["password"]
         check_password = verify_password(
             hex_string=get_password_in_db, password=password
         )
         if check_password:
-            
-
-
-async def login(request_data: dict):
-    if request_data:
-        # print(request_data)
-        # print(type(request_data))
-        name_user = request_data["name"]  # nhận các tham số từ frontend
-        password = request_data["pass"]
-
-        login_check = query_database_for_login_register_by_name(
-            name=name_user
-        )  # truy xuất trong database bằng name truyền vào từ frontend
-        login_token = generate_random_token_string(
-            length=12
-        )  # tạo token cho phiên đăng nhập
-        if login_check:
-            # id1_,name1 , email1 , password1, createdtime1 = login_check
-            password1 = login_check["password"]
-            email1 = login_check["email"]
-            avata_img1 = login_check["avata_img"]
-            # if password == password1:
-            if verify_password(hex_string=password1, password=password):
+            token_login_session = generate_token()
+            result_login_session = add_login_session(
+                token_value=token_login_session,
+                user_id=check_user_exists["message"],
+                expiration_date=convert_to_datetime(
+                    time_string=add_time_to_datetime(
+                        hours=LOGIN_SESSION_EFFECTIVE_PERIOD
+                    )["message"]
+                ),
+            )
+            if result_login_session["status"]:
                 return {
                     "response": {
                         "message": responses["dang_nhap_thanh_cong"],
                         "status": True,
-                        "token": login_token,
-                        "email": email1,
-                        "avata_img": avata_img1,
+                        "token": token_login_session,
+                        "avata_img": get_user_infor_using_userid["message"]["img"],
                     }
                 }
-            else:
-                return {
-                    "response": {"message": responses["sai_mat_khau"], "status": False}
-                }
         else:
-            return {
-                "response": {
-                    "message": responses["tai_khoan_chua_duoc_dang_ky"],
-                    "status": False,
-                }
+            return {"response": {"message": responses["sai_mat_khau"], "status": False}}
+    else:
+        return {
+            "response": {
+                "message": responses["tai_khoan_chua_duoc_dang_ky"],
+                "status": False,
             }
+        }
+
+# register
+@app.post("/api/register/send-verification-email")
+async def send_verification_email(register_data:RegisterVerificationCodeRequest):
+    email = register_data.email
+
+    
+
+@app.post("/api/register/create-account")
+
+
+
 
 
 if __name__ == "__main__":

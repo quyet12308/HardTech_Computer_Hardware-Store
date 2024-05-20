@@ -30,6 +30,9 @@ from work_with_database import (
     add_payment,
     edit_payment,
     add_login_session,
+    get_user_id_by_username,
+    add_authentication_code,
+    query_authentication_code_by_email,
 )
 
 from base_codes.get_token import generate_token
@@ -181,3 +184,18 @@ from base_codes.hash_function import *
 # new_password = get_user(user_id=1)["message"]["password"]
 # a = verify_password(hex_string=new_password, password=old_password)
 # print(a)
+
+# a = get_user_id_by_username(username="user2")
+# print(a)
+
+# a = add_authentication_code(
+#     code="111111",
+#     email="quyet12305@gmail.com",
+#     expiration_time=convert_to_datetime(
+#         time_string=add_time_to_datetime(minutes=3)["message"]
+#     ),
+# )
+# print(a)
+
+# a = query_authentication_code_by_email(email="quyet12306@gmail.com")
+# print(a["code"].code)

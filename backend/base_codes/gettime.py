@@ -29,6 +29,22 @@ def gettime4():
     return t
 
 
+def convert_utc_to_utc7(utc_time):
+    # Chuyển chuỗi thời gian UTC thành đối tượng datetime
+    datetime_utc = datetime.datetime.strptime(utc_time, "%Y-%m-%d %H:%M:%S")
+
+    # Tạo một đối tượng timedelta đại diện cho sự chênh lệch giữa UTC và UTC+7
+    utc_offset = timedelta(hours=7)
+
+    # Chuyển đổi thời gian từ UTC sang UTC+7
+    datetime_utc7 = datetime_utc + utc_offset
+
+    # Định dạng lại chuỗi thời gian theo định dạng "%Y-%m-%d %H:%M:%S"
+    utc7_time = datetime_utc7.strftime("%Y-%m-%d %H:%M:%S")
+
+    return utc7_time
+
+
 def add_time_to_datetime(datetime_str=None, days=0, hours=0, minutes=0, seconds=0):
     if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
         return {
@@ -158,3 +174,7 @@ def check_availability(time1, time2, days):
 
 # result = add_time_to_datetime(hours=2)
 # print(result)
+
+# utc_time = "2024-05-20 08:30:00"
+# utc7_time = convert_utc_to_utc7(utc_time)
+# print(utc7_time)

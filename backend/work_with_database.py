@@ -167,6 +167,14 @@ class Comment(Base):
     product = relationship("Product", backref="comments")
 
 
+class AuthenticationCode(Base):
+    __tablename__ = "authentication_codes"
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True)
+    code = Column(String)
+    expiration_time = Column(DateTime)
+
+
 ######################################################################
 ################ delete or clear table in database ###################
 ######################################################################
@@ -259,6 +267,55 @@ def test_alter_table_with_brand_table(db_path, table_name, operation, column):
 # Tạo các bảng trong cơ sở dữ liệu
 # Base.metadata.create_all(engine)
 
+###################################################################################
+########## interact with the authentication_codes table in database ###############
+###################################################################################
+
+
+def add_authentication_code(email, code, expiration_time):
+    try:
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        existing_code = session.query(AuthenticationCode).filter_by(email=email).first()
+
+        if existing_code:
+            existing_code.code = code
+            existing_code.expiration_time = expiration_time
+            session.commit()
+            message = "Cập nhật code xác thực thành công"
+        else:
+            new_code = AuthenticationCode(
+                email=email, code=code, expiration_time=expiration_time
+            )
+            session.add(new_code)
+            session.commit()
+            message = "Thêm code xác thực thành công"
+
+        return {"status": True, "message": message}
+    except Exception as e:
+        return {"status": False, "message": str(e)}
+
+
+def query_authentication_code_by_email(email):
+    try:
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        code = (
+            session.query(AuthenticationCode)
+            .filter_by(email=email)
+            .order_by(AuthenticationCode.expiration_time.desc())
+            .first()
+        )
+        if code:
+            return {"status": True, "code": code}
+        else:
+            return {"status": False, "message": "Authentication code not found."}
+    except Exception as e:
+        return {"status": False, "message": str(e)}
+
 
 ###################################################################################
 ########## interact with the token (login_session) table in database ##############
@@ -291,7 +348,7 @@ def add_login_session(user_id, token_value, expiration_date):
 
 
 def get_user_id_by_username(username):
-    engine = create_engine("sqlite:///{DATA_BASE_PATH}")
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
 
