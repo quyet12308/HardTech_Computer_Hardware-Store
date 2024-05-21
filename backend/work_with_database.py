@@ -310,7 +310,7 @@ def query_authentication_code_by_email(email):
             .first()
         )
         if code:
-            return {"status": True, "code": code}
+            return {"status": True, "message": code}
         else:
             return {"status": False, "message": "Authentication code not found."}
     except Exception as e:
@@ -377,7 +377,14 @@ def is_username_taken(username):
 
 # add user
 def add_user(
-    username, password, email, fullname, phone_number, address, img, is_admin=False
+    username,
+    password,
+    email,
+    fullname=None,
+    phone_number=None,
+    address=None,
+    img=None,
+    is_admin=False,
 ):
     # Kiểm tra xem tên người dùng đã tồn tại hay chưa
     if is_username_taken(username):
@@ -429,16 +436,88 @@ def delete_user(user_id):
         return {"status": False, "message": message}
 
 
+# def creat_new_data_for_update_user(
+#     username=None,
+#     fullname=None,
+#     phone_number=None,
+#     address=None,
+#     img=None,
+#     password=None,
+# ):
+#     new_data = {}
+#     if username is not None:
+#         check_username = is_username_taken(username=username)
+#         print(check_username)
+#         if check_username:
+#             message = (
+#                 f"Tên người dùng {username} này đã được sử dụng,vui lòng chọn tên khác"
+#             )
+#             return {"status": False, "message": message}
+#         else:
+#             new_data["username"] = username
+#             if fullname is not None:
+#                 new_data["fullname"] = fullname
+#             if phone_number is not None:
+#                 new_data["phone_number"] = phone_number
+#             if address is not None:
+#                 new_data["address"] = address
+#             if img is not None:
+#                 new_data["img"] = img
+#             if password is not None:
+#                 new_data["password"] = password
+
+#             return {"status": True, "message": new_data}
+
+
+def creat_new_data_for_update_user(
+    username=None,
+    fullname=None,
+    phone_number=None,
+    address=None,
+    img=None,
+    password=None,
+):
+    new_data = {}
+
+    if username is not None:
+        check_username = is_username_taken(username=username)
+        if check_username:
+            message = (
+                f"Tên người dùng '{username}' đã được sử dụng, vui lòng chọn tên khác."
+            )
+            return {"status": False, "message": message}
+        else:
+            new_data["username"] = username
+
+    if fullname is not None:
+        new_data["fullname"] = fullname
+    if phone_number is not None:
+        new_data["phone_number"] = phone_number
+    if address is not None:
+        new_data["address"] = address
+    if img is not None:
+        new_data["img"] = img
+    if password is not None:
+        new_data["password"] = password
+
+    return {"status": True, "message": new_data}
+
+
 # update user
-def update_user(user_id, new_data):
+def update_user(user_id=None, email=None, new_data=None):
     # Tạo engine và phiên làm việc
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
-
-    # Tìm người dùng dựa trên user_id
-    user = session.query(User).filter_by(user_id=user_id).first()
-
+    if user_id is not None:
+        # Tìm người dùng dựa trên user_id
+        user = session.query(User).filter_by(user_id=user_id).first()
+    else:
+        if email is not None:
+            user = session.query(User).filter_by(email=email).first()
+        else:
+            message = f"Cần truyền vào ít nhất 1 trong 2 thông tin user_id hoặc email để thực hiện truy vấn"
+            return {"status": False, "message": message}
     if user:
         # Cập nhật thông tin người dùng với dữ liệu mới
         for key, value in new_data.items():
@@ -453,14 +532,21 @@ def update_user(user_id, new_data):
         return {"status": False, "message": message}
 
 
-def get_user(user_id):
+def get_user(user_id=None, email=None):
     # Tạo engine và phiên làm việc
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    # Tìm người dùng dựa trên user_id
-    user = session.query(User).filter_by(user_id=user_id).first()
+    # Tìm người dùng dựa trên user_id hoặc email
+    if user_id:
+        user = session.query(User).filter_by(user_id=user_id).first()
+        identifier = user_id
+    elif email:
+        user = session.query(User).filter_by(email=email).first()
+        identifier = email
+    else:
+        return {"status": False, "message": "Vui lòng cung cấp user_id hoặc email"}
 
     if user:
         # Trả về thông tin người dùng
@@ -477,8 +563,8 @@ def get_user(user_id):
         }
         return {"status": True, "message": user_info}
     else:
-        messgae = f"Không tìm thấy người dùng với user_id {user_id}."
-        return {"status": False, "messgae": messgae}
+        message = f"Không tìm thấy người dùng với {identifier}."
+        return {"status": False, "message": message}
 
 
 ##################################################################

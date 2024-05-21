@@ -70,6 +70,14 @@ def add_time_to_datetime(datetime_str=None, days=0, hours=0, minutes=0, seconds=
     return {"status": True, "message": new_datetime_str}
 
 
+def check_expired_time(input_time):
+    current_time = datetime.datetime.now()
+    if input_time > current_time:
+        return True
+    else:
+        return False
+
+
 def convert_to_datetime(time_string):
     datetime_object = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S")
     return datetime_object
@@ -178,3 +186,7 @@ def check_availability(time1, time2, days):
 # utc_time = "2024-05-20 08:30:00"
 # utc7_time = convert_utc_to_utc7(utc_time)
 # print(utc7_time)
+
+# input_time = "2024-05-21 08:43:00"
+# result = check_expired_time(input_time)
+# print(result)  # Kết quả sẽ in ra True hoặc False tùy thuộc vào thời gian hiện tại

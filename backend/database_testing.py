@@ -33,6 +33,7 @@ from work_with_database import (
     get_user_id_by_username,
     add_authentication_code,
     query_authentication_code_by_email,
+    creat_new_data_for_update_user,
 )
 
 from base_codes.get_token import generate_token
@@ -51,6 +52,13 @@ from base_codes.hash_function import *
 # )
 # print(b)
 
+# b = add_user(
+#     username="user4",
+#     email="",
+#     password="user123",
+# )
+# print(b)
+
 # delete_user(user_id=2)
 
 # new_data = {
@@ -64,6 +72,20 @@ from base_codes.hash_function import *
 # }
 
 # update_user(user_id=3, new_data=new_data)
+
+# new_data = {"username": "user2", "fullname": "Đỗ Thị Phương Anh"}
+
+# a = update_user(email="user4@example.com", new_data=new_data)
+# print(a)
+
+# new_data = creat_new_data_for_update_user(
+#     fullname="Đỗ Thị Phương Anh", phone_number="123456789"
+# )
+# print(new_data)
+
+# a = update_user(email="user4@example.com", new_data=new_data["message"])
+# print(a)
+
 
 # a = get_user(user_id=3)
 # print(a)
@@ -199,3 +221,6 @@ from base_codes.hash_function import *
 
 # a = query_authentication_code_by_email(email="quyet12306@gmail.com")
 # print(a["code"].code)
+
+# a = get_user(email="quyet12306@gmail.com")
+# print(a)
