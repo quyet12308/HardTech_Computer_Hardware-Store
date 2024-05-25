@@ -34,6 +34,10 @@ from work_with_database import (
     add_authentication_code,
     query_authentication_code_by_email,
     creat_new_data_for_update_user,
+    get_product_overview,
+    drop_table,
+    drop_table2,
+    drop_table3,
 )
 
 from base_codes.get_token import generate_token
@@ -132,13 +136,13 @@ from base_codes.hash_function import *
 # a = edit_category_data(new_category_name="Main", category_id=1)
 # print(a)
 
-# product_name = "Main test"
-# price = 1000000
-# description = "Main test"
+# product_name = "main test3"
+# price = 2000000
+# description = "Main test3"
 # category_id = 1
 # brand_id = 1
-# quantity = 10
-# image = "main_test.jpg"
+# quantity = 5
+# image = "main_test3.jpg"
 
 # result = add_product(
 #     product_name=product_name,
@@ -223,4 +227,16 @@ from base_codes.hash_function import *
 # print(a["code"].code)
 
 # a = get_user(email="quyet12306@gmail.com")
+# print(a)
+
+a = get_product_overview()
+print(a)
+
+# a = drop_table(table_name="products", db_path=DATA_BASE_PATH)
+# print(a)
+
+# a = drop_table2(table_name="products")
+# print(a)
+
+# a = drop_table3(table_name="products")
 # print(a)

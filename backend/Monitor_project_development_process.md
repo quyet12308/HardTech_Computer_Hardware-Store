@@ -11,3 +11,5 @@
 - Tính thêm thuộc tính update_at cho bảng order nhưng khá khó khăn hoặc do chưa tìm hiểu kỹ vì vậy tạm thời sẽ không thay đổi cấu trúc bảng để sau fix
 - Có lẽ có thể dùng key word là thực thi câu lệnh sqlite trong sqlalchemy để có thể thay đổi cấu trúc bảng 
 
+## Ngày 25/5/2024
+- để ý cái time settup trong sqlalchemy vì hình như nó dùng utc0 mà mình là utc07 nên lúc lấy dữ liệu ra nếu là thời gian mà thằng sqlalchemy tạo thì cần 1 hàm để cover utc0 thành utc07 còn nếu là thời gian được thêm từ bên ngoài thì không cần xử lý

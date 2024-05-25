@@ -13,14 +13,16 @@ from sqlalchemy import (
     Table,
     text,
     select,
+    Float,
 )
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 from setting import DATA_BASE_PATH
 from sqlalchemy.orm import sessionmaker
 import json
-
+import sqlite3
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def convert_to_json(**kwargs):
@@ -65,9 +67,18 @@ class Product(Base):
     image = Column(String)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
-    img = Column(String)
     category = relationship("Category", backref="products")
     brand = relationship("Brand", backref="products")
+
+
+class Discount(Base):
+    __tablename__ = "discounts"
+    discount_id = Column(Integer, primary_key=True, autoincrement=True)
+    product_id = Column(Integer, ForeignKey("products.product_id"))
+    discount_percentage = Column(Float)
+    start_date = Column(DateTime)
+    end_date = Column(DateTime)
+    product = relationship("Product", backref="discounts")
 
 
 class Category(Base):
@@ -175,9 +186,71 @@ class AuthenticationCode(Base):
     expiration_time = Column(DateTime)
 
 
-######################################################################
-################ delete or clear table in database ###################
-######################################################################
+##################################################################################
+################ delete or clear or drop table in database ###################
+##################################################################################
+
+
+def drop_table(table_name, db_path):
+    # Tạo đối tượng SQLAlchemy Engine
+    engine = create_engine(f"sqlite:///{db_path}")
+
+    # Xác định tên bảng và kiểm tra xem bảng có tồn tại hay không
+    if engine.has_table(table_name):
+        # Xóa bảng
+        engine.execute(f"DROP TABLE {table_name}")
+        message = f"Bảng '{table_name}' đã được xóa thành công."
+        return {"status": True, "message": message}
+    else:
+        message = f"Bảng '{table_name}' không tồn tại."
+        return {"status": True, "message": message}
+
+
+def drop_table2(table_name):
+    # Tạo đối tượng engine để kết nối với cơ sở dữ liệu SQLite
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+
+    # Tạo đối tượng metadata để lấy thông tin về cơ sở dữ liệu
+    metadata = MetaData(bind=engine)
+    metadata.reflect()
+
+    # Kiểm tra xem bảng có tồn tại hay không
+    if table_name in metadata.tables:
+        # Lấy đối tượng bảng từ metadata
+        table = metadata.tables[table_name]
+
+        # Xóa bảng
+        table.drop(engine)
+        message = f"Bảng '{table_name}' đã được xóa thành công."
+        return {"status": True, "message": message}
+    else:
+        message = f"Bảng '{table_name}' không tồn tại trong cơ sở dữ liệu."
+        return {"status": False, "message": message}
+
+
+def drop_table3(table_name):
+    # Kết nối tới cơ sở dữ liệu SQLite
+    conn = sqlite3.connect(f"{DATA_BASE_PATH}")
+    cursor = conn.cursor()
+
+    # Kiểm tra xem bảng có tồn tại hay không
+    cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
+    )
+    result = cursor.fetchone()
+
+    if result is not None:
+        # Xóa bảng
+        cursor.execute(f"DROP TABLE {table_name}")
+        conn.commit()
+        message = f"Bảng '{table_name}' đã được xóa thành công."
+        # Đóng kết nối
+        cursor.close()
+        conn.close()
+        return {"status": True, "message": message}
+    else:
+        message = f"Bảng '{table_name}' không tồn tại trong cơ sở dữ liệu."
+        return {"status": False, "message": message}
 
 
 def delete_table_data(db_path, table_name):
@@ -193,6 +266,27 @@ def delete_table_data(db_path, table_name):
 
     message = f"Đã xóa sạch dữ liệu của bảng '{table_name}'."
     return {"status": True, "message": message}
+
+
+######################################################################
+################ execute sql in database ###########################
+######################################################################
+
+
+def execute_sql(sql_statement):
+    # Tạo đối tượng engine để kết nối với cơ sở dữ liệu SQLite
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+
+    try:
+        # Kết nối và thực thi câu lệnh SQL
+        with engine.connect() as conn:
+            conn.execute(sql_statement)
+
+        print("Câu lệnh SQL đã được thực thi thành công.")
+        return True
+    except SQLAlchemyError as e:
+        print("Lỗi trong quá trình thực thi câu lệnh SQL:", str(e))
+        return False
 
 
 ######################################################################
@@ -435,38 +529,6 @@ def delete_user(user_id):
         message = f"Không tìm thấy người dùng với user_id {user_id}."
         return {"status": False, "message": message}
 
-
-# def creat_new_data_for_update_user(
-#     username=None,
-#     fullname=None,
-#     phone_number=None,
-#     address=None,
-#     img=None,
-#     password=None,
-# ):
-#     new_data = {}
-#     if username is not None:
-#         check_username = is_username_taken(username=username)
-#         print(check_username)
-#         if check_username:
-#             message = (
-#                 f"Tên người dùng {username} này đã được sử dụng,vui lòng chọn tên khác"
-#             )
-#             return {"status": False, "message": message}
-#         else:
-#             new_data["username"] = username
-#             if fullname is not None:
-#                 new_data["fullname"] = fullname
-#             if phone_number is not None:
-#                 new_data["phone_number"] = phone_number
-#             if address is not None:
-#                 new_data["address"] = address
-#             if img is not None:
-#                 new_data["img"] = img
-#             if password is not None:
-#                 new_data["password"] = password
-
-#             return {"status": True, "message": new_data}
 
 
 def creat_new_data_for_update_user(
@@ -790,7 +852,7 @@ def add_product(
             category_id=category_id,
             brand_id=brand_id,
             quantity=quantity,
-            img=image,
+            image=image,
         )
 
         # Thêm sản phẩm vào phiên làm việc
@@ -839,7 +901,7 @@ def edit_product_data(
     if new_quantity is not None:
         product.quantity = new_quantity
     if new_image is not None:
-        product.img = new_image
+        product.image = new_image
 
     # Commit thay đổi
     session.commit()
@@ -909,10 +971,72 @@ def get_product_details(product_id=None, product_name=None):
         "image": product.image,
         "created_at": product.created_at,
         "updated_at": product.updated_at,
-        "img": product.img,
     }
 
     return {"status": True, "product_details": product_details}
+
+
+def get_product_overview():
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    products = session.query(Product).all()
+    overview = []
+
+    for product in products:
+        product_data = {
+            "product_name": product.product_name,
+            "image": product.image,
+            "price": product.price,
+            "discount": None,
+        }
+
+        discount = (
+            session.query(Discount).filter_by(product_id=product.product_id).first()
+        )
+        if discount:
+            product_data["discount"] = discount.discount_percentage
+
+        overview.append(product_data)
+
+    session.close()
+
+    return overview
+
+###################################################################################
+########## interact with the discount  table in database ##########################
+###################################################################################
+
+def add_discount_to_product(product_id, discount_percentage, start_date, end_date):
+    try:
+        # Tạo kết nối đến cơ sở dữ liệu
+        engine = create_engine('sqlite:///your_database.db')
+        Base.metadata.create_all(engine)
+
+        # Tạo một giảm giá cho sản phẩm
+        discount = Discount(
+            product_id=product_id,
+            discount_percentage=discount_percentage,
+            start_date=start_date,
+            end_date=end_date
+        )
+
+        # Thêm giảm giá vào sản phẩm
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        product = session.query(Product).get(product_id)  # Lấy sản phẩm theo product_id
+        product.discounts.append(discount)
+
+        # Lưu các thay đổi vào cơ sở dữ liệu
+        session.commit()
+        session.close()
+
+        message = "Thêm giảm giá thành công cho sản phẩm."
+        return {"status": True, "message": message}
+    except Exception as e:
+        message = f"Lỗi trong quá trình thêm giảm giá: {str(e)}"
+        return {"status": False, "message": message}
 
 
 ###################################################################################

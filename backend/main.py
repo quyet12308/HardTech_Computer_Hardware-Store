@@ -298,5 +298,16 @@ async def forgot_password_reset_password(
                 }
 
 
+@app.get("/api/homepage/list-products")
+async def get_list_products_for_homepage():
+    list_product = get_product_overview()
+    return {
+        "response": {
+            "message": {"list_products": list_product},
+            "status": True,
+        }
+    }
+
+
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8030, reload=True)
