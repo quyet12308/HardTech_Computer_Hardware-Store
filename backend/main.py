@@ -6,7 +6,8 @@ import uvicorn
 from fastapi.middleware.cors import (
     CORSMiddleware,
 )
-from work_with_database import *
+from work_with_databases.Database_initialization_and_structure import *
+from work_with_databases.work_with_user_service import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *

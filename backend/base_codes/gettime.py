@@ -70,6 +70,19 @@ def add_time_to_datetime(datetime_str=None, days=0, hours=0, minutes=0, seconds=
     return {"status": True, "message": new_datetime_str}
 
 
+def convert_utc0_to_utc7(utc0_time):
+    # Tạo đối tượng datetime từ giá trị thời gian UTC+0
+    utc0_datetime = datetime.datetime.strptime(utc0_time, "%Y-%m-%d %H:%M:%S")
+
+    # Chuyển đổi thành múi giờ UTC+7 (Việt Nam)
+    utc7_datetime = utc0_datetime + datetime.timedelta(hours=7)
+
+    # Định dạng lại thành chuỗi thời gian
+    utc7_time = utc7_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+    return utc7_time
+
+
 def check_expired_time(input_time):
     current_time = datetime.datetime.now()
     if input_time > current_time:
@@ -190,3 +203,7 @@ def check_availability(time1, time2, days):
 # input_time = "2024-05-21 08:43:00"
 # result = check_expired_time(input_time)
 # print(result)  # Kết quả sẽ in ra True hoặc False tùy thuộc vào thời gian hiện tại
+
+utc0_time = "2024-05-26 10:30:00"
+utc7_time = convert_utc0_to_utc7(utc0_time)
+print(utc7_time)

@@ -38,6 +38,7 @@ from work_with_database import (
     drop_table,
     drop_table2,
     drop_table3,
+    query_category_by_name,
 )
 
 from base_codes.get_token import generate_token
@@ -128,9 +129,9 @@ from base_codes.hash_function import *
 # a = edit_brand_data(new_brand_name="AMD", brand_id=1)
 # print(a)
 
-# category_description = "Main máy tính (hay còn gọi là bo mạch chủ hoặc motherboard) là thành phần cốt lõi trong một hệ thống máy tính. Nó là một bảng mạch điện tử lớn được thiết kế để kết nối và điều khiển các thành phần khác nhau của máy tính như bộ vi xử lý (CPU), bộ nhớ (RAM), ổ đĩa cứng, đồ họa, âm thanh, cổng kết nối và các linh kiện khác.\nMain máy tính chịu trách nhiệm quản lý và điều phối hoạt động của các thành phần khác nhau trong hệ thống. Nó cung cấp các kết nối và giao tiếp giữa các thành phần, cho phép truyền dữ liệu và tín hiệu điện trong hệ thống máy tính."
+# category_description = "RAM (Random Access Memory) là một loại bộ nhớ trong máy tính được sử dụng để lưu trữ dữ liệu tạm thời và dùng làm bộ nhớ làm việc cho các chương trình và hệ điều hành.\n Hiệu suất của RAM được đánh giá dựa trên dung lượng (thường được đo bằng đơn vị gigabyte - GB) và tốc độ truyền dữ liệu (thường được đo bằng megahertz - MHz). RAM có thể được nâng cấp hoặc mở rộng để cung cấp hiệu suất tốt hơn cho các ứng dụng đòi hỏi nhiều tài nguyên."
 
-# a = add_category(category_name="Main", description=category_description)
+# a = add_category(category_name="RAM", description=category_description)
 # print(a)
 
 # a = edit_category_data(new_category_name="Main", category_id=1)
@@ -229,8 +230,10 @@ from base_codes.hash_function import *
 # a = get_user(email="quyet12306@gmail.com")
 # print(a)
 
-a = get_product_overview()
-print(a)
+# a = get_product_overview()
+# # print(a)
+# for i in a:
+#     print(i)
 
 # a = drop_table(table_name="products", db_path=DATA_BASE_PATH)
 # print(a)
