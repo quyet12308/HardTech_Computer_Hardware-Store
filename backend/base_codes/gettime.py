@@ -204,6 +204,6 @@ def check_availability(time1, time2, days):
 # result = check_expired_time(input_time)
 # print(result)  # Kết quả sẽ in ra True hoặc False tùy thuộc vào thời gian hiện tại
 
-utc0_time = "2024-05-26 10:30:00"
-utc7_time = convert_utc0_to_utc7(utc0_time)
-print(utc7_time)
+# utc0_time = "2024-05-26 10:30:00"
+# utc7_time = convert_utc0_to_utc7(utc0_time)
+# print(utc7_time)

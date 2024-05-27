@@ -1,45 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from setting import DATA_BASE_PATH
-from work_with_database import (
-    User,
-    Brand,
-    add_user,
-    delete_user,
-    update_user,
-    get_user,
-    test_alter_table_with_brand_table,
-    add_brand,
-    create_brand_description,
-    is_brand_taken,
-    is_username_taken,
-    display_table_data,
-    delete_brand,
-    delete_table_data,
-    edit_brand_data,
-    add_category,
-    edit_category_data,
-    add_product,
-    edit_product_data,
-    delete_product,
-    get_product_details,
-    add_order,
-    compress_order_items,
-    edit_order,
-    add_to_cart,
-    add_payment,
-    edit_payment,
-    add_login_session,
-    get_user_id_by_username,
-    add_authentication_code,
-    query_authentication_code_by_email,
-    creat_new_data_for_update_user,
-    get_product_overview,
-    drop_table,
-    drop_table2,
-    drop_table3,
-    query_category_by_name,
-)
+from setting import *
+
+from Database_initialization_and_structure import *
+from work_with_databases.work_with_products_and_discount_service import *
+from work_with_databases.work_with_payment_service import *
+from work_with_databases.work_with_cart_service import *
+from work_with_databases.work_with_order_service import *
+from work_with_databases.work_with_user_and_sesion_service import *
+from work_with_databases.work_with_brand_and_category_service import *
+from work_with_databases.work_with_comment_and_ranking_service import *
 
 from base_codes.get_token import generate_token
 from base_codes.gettime import gettime2, add_time_to_datetime, convert_to_datetime
@@ -137,13 +107,13 @@ from base_codes.hash_function import *
 # a = edit_category_data(new_category_name="Main", category_id=1)
 # print(a)
 
-# product_name = "main test3"
-# price = 2000000
-# description = "Main test3"
-# category_id = 1
+# product_name = "CPU1"
+# price = 3000000
+# description = "CPU Test1"
+# category_id = 2
 # brand_id = 1
 # quantity = 5
-# image = "main_test3.jpg"
+# image = "cpu_test1.jpg"
 
 # result = add_product(
 #     product_name=product_name,
@@ -241,5 +211,40 @@ from base_codes.hash_function import *
 # a = drop_table2(table_name="products")
 # print(a)
 
-# a = drop_table3(table_name="products")
+# a = drop_table3(table_name="cart_item")
 # print(a)
+
+# a = query_category_by_name(category_name="CPU")
+# print(a["messgae"].category_id)
+
+# a = generate_token()
+# print(a)
+
+# a = get_product_overview(
+#     order_by="created_at",
+#     reverse=True,
+#     category_name=PRODUCT_TYPES_ON_HOMEPAGE[0],
+#     limit=3,
+# )
+# for i in a:
+#     print(i)
+
+# a = get_product_detail(product_id=3)
+# print(a)
+
+# a = get_user_comments(limit=10, user_id=1)
+# print(a)
+
+# a = get_user_id_from_token(token_value="hIqILgWLZHDJYZHh9xPDTQ1716172722")
+# print(a)
+
+# a = add_to_cart(
+#     quantity=3,
+#     user_id=3,
+#     product_id=2,
+# )
+# print(a)
+
+search_results = search_products(keyword="main")
+for product in search_results:
+    print(product)

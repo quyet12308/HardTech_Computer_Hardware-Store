@@ -13,3 +13,11 @@
 
 ## Ngày 25/5/2024
 - để ý cái time settup trong sqlalchemy vì hình như nó dùng utc0 mà mình là utc07 nên lúc lấy dữ liệu ra nếu là thời gian mà thằng sqlalchemy tạo thì cần 1 hàm để cover utc0 thành utc07 còn nếu là thời gian được thêm từ bên ngoài thì không cần xử lý
+
+## Ngày 26/5/2024
+- Thấy rằng cấu trúc dự án nếu ném tất cả các logic thao tác với db trong 1 file thì sẽ rất khó quản lý nên đã thay đổi cấu trúc của nó đi thành 1 thư mục chứa các code có thể thao tác với db , tác riêng từng file là 1 mảng khác nhau 
+- Đường dẫn tương đối khi chia ra như vậy nó không hoạt dộng phải áp dụng đường dẫn khác để giải quyết cụ thể có thể xem ở trong thư mục work_with_databases
+
+## Ngày 27/5/2024
+- Cái giá trị thời gian trong 2 bảng cart thì cái update nó theo utc7 còn created thì nó theo utc0
+- À mà đã xóa 2 bảng cart cũ đi thay bằng 2 cái mới nhá ( vì bảng cũ có cái tổng giá tiền không hợp lý)

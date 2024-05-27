@@ -17,23 +17,26 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
-from setting import DATA_BASE_PATH
+from setting import *
 from sqlalchemy.orm import sessionmaker
 import json
 import sqlite3
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import UniqueConstraint
 
 
 def convert_to_json(**kwargs):
     return json.dumps(kwargs)
 
 
+engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+
+
 ####################################################
 ################ create database ###################
 ####################################################
-# Tạo engine cho SQLite
-engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+
 
 # Tạo Base class
 Base = declarative_base()
@@ -120,26 +123,51 @@ class OrderDetail(Base):
     product = relationship("Product", backref="order_details")
 
 
+# class Cart(Base):
+#     __tablename__ = "cart"
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     user_id = Column(Integer, ForeignKey("users.user_id"))
+#     total = Column(Integer)
+#     created_at = Column(DateTime, server_default=func.now())
+#     updated_at = Column(DateTime, onupdate=func.now())
+#     user = relationship("User", backref="cart")
+
+
+# class CartItem(Base):
+#     __tablename__ = "cart_item"
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     cart_id = Column(Integer, ForeignKey("cart.id"))
+#     product_id = Column(Integer, ForeignKey("products.product_id"))
+#     quantity = Column(Integer)
+#     created_at = Column(DateTime, server_default=func.now())
+#     updated_at = Column(DateTime, onupdate=func.now())
+#     cart = relationship("Cart", backref="cart_items")
+#     product = relationship("Product", backref="cart_items")
+
+
 class Cart(Base):
     __tablename__ = "cart"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
-    total = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
-    user = relationship("User", backref="cart")
+    user = relationship("User", backref="carts")
+    __table_args__ = (UniqueConstraint("user_id", name="_user_cart_uc"),)
 
 
 class CartItem(Base):
     __tablename__ = "cart_item"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    cart_id = Column(Integer, ForeignKey("cart.id"))
-    product_id = Column(Integer, ForeignKey("products.product_id"))
-    quantity = Column(Integer)
+    cart_id = Column(Integer, ForeignKey("cart.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.product_id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
     cart = relationship("Cart", backref="cart_items")
     product = relationship("Product", backref="cart_items")
+    __table_args__ = (
+        UniqueConstraint("cart_id", "product_id", name="_cart_product_uc"),
+    )
 
 
 class PaymentDetail(Base):
@@ -359,4 +387,4 @@ def test_alter_table_with_brand_table(db_path, table_name, operation, column):
 
 
 # Tạo các bảng trong cơ sở dữ liệu
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)

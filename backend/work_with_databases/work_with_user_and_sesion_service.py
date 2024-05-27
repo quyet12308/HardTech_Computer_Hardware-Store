@@ -1,4 +1,5 @@
 from Database_initialization_and_structure import *
+from sqlalchemy.orm.exc import NoResultFound
 
 ##################################################################
 ########## interact with the user table in database ##############
@@ -215,6 +216,31 @@ def add_login_session(user_id, token_value, expiration_date):
 
     messgae = "Thêm phiên đăng nhập thành công"
     return {"status": True, "messgae": messgae}
+
+
+def get_user_id_from_token(token_value):
+    # Tạo session
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    try:
+        # Lấy thông tin token từ database
+        token = session.query(Token).filter(Token.token_value == token_value).one()
+
+        # Kiểm tra nếu token đã hết hạn
+        if token.expiration_date <= datetime.now():
+            raise Exception("Mã đã hết hạn")
+
+        return {"status": True, "message": token.user_id}
+
+    except NoResultFound:
+        raise Exception("Mã không tồn tại")
+
+    except Exception as e:
+        raise Exception(str(e))
+
+    finally:
+        session.close()
 
 
 ###################################################################################

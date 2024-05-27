@@ -6,8 +6,11 @@ import uvicorn
 from fastapi.middleware.cors import (
     CORSMiddleware,
 )
-from work_with_databases.Database_initialization_and_structure import *
-from work_with_databases.work_with_user_service import *
+from Database_initialization_and_structure import *
+from work_with_databases.work_with_user_and_sesion_service import *
+from work_with_databases.work_with_products_and_discount_service import *
+from work_with_databases.work_with_comment_and_ranking_service import *
+from work_with_databases.work_with_cart_service import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *
@@ -16,6 +19,7 @@ from base_codes.string_python_en import responses
 from base_codes.get_code import generate_random_6_digit_number
 from email_with_python.send_emails_using_oulook_server import *
 from base_codes.security_info import *
+from request_model import *
 
 app = FastAPI()  # khởi tạo app fastapi
 
@@ -27,33 +31,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-
-class RegisterVerificationCodeRequest(BaseModel):
-    email: str
-    username: str
-
-
-class RegisterCreateAccountRequest(BaseModel):
-    email: str
-    username: str
-    password: str
-    code: str
-
-
-class ForgotPasswordForgotPasswordRequest(BaseModel):
-    email: str
-
-
-class ForgotPasswordResetPasswordRequest(BaseModel):
-    email: str
-    new_password: str
-    code: str
 
 
 @app.post("/api/login")
@@ -299,15 +276,212 @@ async def forgot_password_reset_password(
                 }
 
 
+# api show product in hompage
 @app.get("/api/homepage/list-products")
 async def get_list_products_for_homepage():
-    list_product = get_product_overview()
+    list_products = {}
+    list_product_newest = get_product_overview(
+        order_by="created_at",
+        limit=10,
+        reverse=True,
+    )
+    list_products["newest"] = list_product_newest
+    for i in range(len(PRODUCT_TYPES_ON_HOMEPAGE)):
+        list_products[f"product_type_{i}"] = get_product_overview(
+            category_name=PRODUCT_TYPES_ON_HOMEPAGE[i],
+            limit=10,
+            reverse=True,
+        )
     return {
         "response": {
-            "message": {"list_products": list_product},
+            "message": list_products,
             "status": True,
         }
     }
+
+
+# api show product detail
+@app.post("/api/homepage/show-detailed-products")
+async def show_detailed_products(
+    request_data: ShowDetailedProductsRequest,
+):
+    if request_data:
+        product_id = request_data.product_id
+
+        product_detail = get_product_detail(product_id=product_id)
+
+        if product_detail is None:
+            return {
+                "response": {
+                    "message": product_detail,
+                    "status": False,
+                }
+            }
+        else:
+            return {
+                "response": {
+                    "message": product_detail,
+                    "status": True,
+                }
+            }
+
+
+# api show user ifor
+@app.post("/api/userpage/show-user-infor")
+async def show_user_infor(request_data: ShowUserInforRequest):
+    token_login_session = request_data.token_login_session
+
+    check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+    if check_login_session["status"]:
+        user_id = check_login_session["message"]
+        user_infor = get_user(user_id=user_id)
+        user_comments = get_user_comments(user_id=user_id, limit=5)
+        return {
+            "response": {
+                "message": {"user_infor": user_infor, "user_comments": user_comments},
+                "status": True,
+            }
+        }
+    else:
+        return {
+            "response": {
+                "message": responses["phien_dang_nhap_het_han"],
+                "status": False,
+            }
+        }
+
+
+# edit user infor
+@app.put("/api/userpage/edit-user-information")
+async def edit_user_information(request_data: EditUserInformationRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        username = request_data.username
+        fullname = request_data.fullname
+        address = request_data.address
+        phone_number = request_data.phone_number
+        image = request_data.image
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            creat_new_data = creat_new_data_for_update_user(
+                phone_number=phone_number,
+                address=address,
+                fullname=fullname,
+                img=image,
+                username=username,
+            )
+            if creat_new_data["status"]:
+                new_data = creat_new_data["message"]
+                updateuser = update_user(new_data=new_data, user_id=user_id)
+                if updateuser["status"]:
+                    return {
+                        "response": {
+                            "message": responses["sua_thong_tin_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    print(f"{updateuser['message']}")
+                    return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+            else:
+                print(f"{updateuser['message']}")
+                return {
+                    "response": {
+                        "message": updateuser["message"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+# Delete the account
+@app.delete("/api/userpage/delete-account")
+async def delete_account(request_data: DeleteAccountRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            deleteuser = delete_user(user_id=user_id)
+            if deleteuser["status"]:
+                return {
+                        "response": {
+                            "message": responses["xoa_tai_khoan_thanh_cong"],
+                            "status": True,
+                        }
+                    } 
+            else:
+                print(f"{deleteuser["message"]}")
+                return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+# add to cart
+@app.post("/api/cartpage/add-product-to-cart")
+async def add_product_to_cart(request_data: AddProducttoCartRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        product_id = request_data.product_id
+        quantity = request_data.quantity
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            addtocart = add_to_cart(
+                quantity=quantity,
+                product_id=product_id,
+                user_id=user_id
+            )
+            if addtocart["status"]:
+                return {
+                        "response": {
+                            "message": responses["da_them_san_pham_vao_gio_hang_thanh_cong"],
+                            "status": True,
+                        }
+                    } 
+            else:
+                
+                return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
 
 
 if __name__ == "__main__":

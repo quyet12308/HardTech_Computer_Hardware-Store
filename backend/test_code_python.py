@@ -1,7 +1,7 @@
 # import datetime
 from sqlalchemy import MetaData, Table, Column, String, create_engine
 from setting import *
-from work_with_database import *
+from work_with_databases.Database_initialization_and_structure import *
 
 
 # def get_current_time():
