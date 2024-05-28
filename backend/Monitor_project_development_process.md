@@ -21,3 +21,12 @@
 ## Ngày 27/5/2024
 - Cái giá trị thời gian trong 2 bảng cart thì cái update nó theo utc7 còn created thì nó theo utc0
 - À mà đã xóa 2 bảng cart cũ đi thay bằng 2 cái mới nhá ( vì bảng cũ có cái tổng giá tiền không hợp lý)
+- Định làm 6 trạng thái đơn hàng như sau:
+```cmd
+Pending: Đơn hàng chưa được xử lý hoặc chưa được xác nhận.
+Processing: Đơn hàng đang được xử lý, các hoạt động như gói hàng, chuẩn bị vận chuyển đang diễn ra.
+Shipped: Đơn hàng đã được vận chuyển hoặc giao cho đơn vị vận chuyển.
+Delivered: Đơn hàng đã được giao thành công và nhận được bởi khách hàng.
+Cancelled: Đơn hàng đã bị hủy bỏ trước khi được xử lý hoặc giao hàng.
+Returned: Đơn hàng đã được trả lại bởi khách hàng sau khi đã được giao.
+```

@@ -68,3 +68,22 @@ class RemoveProductFromCartRequest(BaseModel):
 
 class SearchProductsByKeywordRequest(BaseModel):
     keyword: str
+
+
+class FilterProductsHomepageRequest(BaseModel):
+    category_name: str
+    brand_name: str
+
+
+class PlaceOrderRequest(BaseModel):
+    user_id: str
+
+
+class AddNewProductRequest(BaseModel):
+    product_name: str
+    price: float
+    description: str
+    category_id: int
+    brand_id: int
+    quantity: int
+    image: str

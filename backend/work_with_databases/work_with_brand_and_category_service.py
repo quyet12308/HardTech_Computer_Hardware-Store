@@ -207,3 +207,18 @@ def query_category_by_name(category_name):
     except SQLAlchemyError as e:
         message = f"An error occurred: {str(e)}"
         return {"status": False, "messgae": message}
+
+
+def get_unique_category_and_brand_names():
+    # Tạo engine để kết nối đến CSDL
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    category_names = session.query(Category.category_name).distinct().all()
+    brand_names = session.query(Brand.brand_name).distinct().all()
+
+    category_names = [name[0] for name in category_names]
+    brand_names = [name[0] for name in brand_names]
+
+    # return category_names, brand_names
+    return {"category_names": category_names, "brand_names": brand_names}

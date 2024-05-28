@@ -19,6 +19,8 @@ responses = {
     "da_them_san_pham_vao_gio_hang_thanh_cong": "Product added to cart successfully",
     "da_cap_nhat_so_luong_san_pham_trong_gio_hang_thanh_cong": "The number of products in the shopping cart has been successfully updated",
     "da_xoa_san_pham_khoi_gio_hang_thanh_cong": "Product successfully removed from cart",
+    "du_lieu_yeu_cau_khong_hop_le": "Invalid request data",
+    "khong_tim_thay_san_pham": "No products found",
     "xoa_tai_khoan_thanh_cong": "Account deleted successfully",
     "booking_tour_thanh_cong": "Tour booking successful",
     "booking_tour_that_bai": "Tour booking failed",

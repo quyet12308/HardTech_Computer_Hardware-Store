@@ -1,5 +1,6 @@
 from Database_initialization_and_structure import *
 
+
 ###################################################################################
 ########## interact with the order and order_detail table in database #############
 ###################################################################################
@@ -151,3 +152,23 @@ def delete_order(order_id):
     else:
         message = "Không tìm thấy đơn hàng."
         return {"status": False, "message": message}
+
+
+def add_order_statuses(status_list):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    message = ""
+    for status in status_list:
+        existing_status = session.query(OrderStatus).filter_by(status=status).first()
+        if existing_status:
+            session.close()
+            return {"status": False, "message": f"Trạng thái '{status}' đã tồn tại."}
+
+        new_status = OrderStatus(status=status)
+        session.add(new_status)
+
+    session.commit()
+    session.close()
+    return {"status": True, "message": "Thêm trạng thái đơn hàng thành công."}

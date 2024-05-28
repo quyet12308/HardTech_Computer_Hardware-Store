@@ -211,7 +211,7 @@ from base_codes.hash_function import *
 # a = drop_table2(table_name="products")
 # print(a)
 
-# a = drop_table3(table_name="cart_item")
+# a = drop_table3(table_name="orders")
 # print(a)
 
 # a = query_category_by_name(category_name="CPU")
@@ -245,6 +245,20 @@ from base_codes.hash_function import *
 # )
 # print(a)
 
-search_results = search_products(keyword="main")
-for product in search_results:
-    print(product)
+# search_results = search_products(keyword="main")
+# for product in search_results:
+#     print(product)
+
+# a = get_unique_category_and_brand_names()
+# print(a)
+
+# list_order_statuses = [
+#     "Pending",
+#     "Processing",
+#     "Shipped",
+#     "Delivered",
+#     "Cancelled",
+#     "Returned",
+# ]
+# a = add_order_statuses(list_order_statuses)
+# print(a)

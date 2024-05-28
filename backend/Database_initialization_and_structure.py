@@ -105,11 +105,21 @@ class Order(Base):
     order_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.user_id"))
     order_date = Column(DateTime, server_default=func.now())
-    order_status = Column(String)
     total_price = Column(Numeric)
     shipping_address = Column(String)
     payment_method = Column(String)
     user = relationship("User", backref="orders")
+    status_id = Column(Integer, ForeignKey("order_statuses.status_id"))
+    order_status_rel = relationship("OrderStatus", backref="order_statuses")
+
+
+class OrderStatus(Base):
+    __tablename__ = "order_statuses"
+    status_id = Column(Integer, primary_key=True, autoincrement=True)
+    status = Column(String)
+
+    # Add relationship to Order
+    orders = relationship("Order", backref="order_status")
 
 
 class OrderDetail(Base):
@@ -123,26 +133,14 @@ class OrderDetail(Base):
     product = relationship("Product", backref="order_details")
 
 
-# class Cart(Base):
-#     __tablename__ = "cart"
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     user_id = Column(Integer, ForeignKey("users.user_id"))
-#     total = Column(Integer)
-#     created_at = Column(DateTime, server_default=func.now())
-#     updated_at = Column(DateTime, onupdate=func.now())
-#     user = relationship("User", backref="cart")
-
-
-# class CartItem(Base):
-#     __tablename__ = "cart_item"
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     cart_id = Column(Integer, ForeignKey("cart.id"))
-#     product_id = Column(Integer, ForeignKey("products.product_id"))
-#     quantity = Column(Integer)
-#     created_at = Column(DateTime, server_default=func.now())
-#     updated_at = Column(DateTime, onupdate=func.now())
-#     cart = relationship("Cart", backref="cart_items")
-#     product = relationship("Product", backref="cart_items")
+class OrderStatusHistory(Base):
+    __tablename__ = "order_status_history"
+    history_id = Column(Integer, primary_key=True, autoincrement=True)
+    order_id = Column(Integer, ForeignKey("orders.order_id"))
+    status_id = Column(Integer, ForeignKey("order_statuses.status_id"))
+    status_date = Column(DateTime, server_default=func.now())
+    order = relationship("Order", backref="order_status_history")
+    status = relationship("OrderStatus")
 
 
 class Cart(Base):
@@ -387,4 +385,4 @@ def test_alter_table_with_brand_table(db_path, table_name, operation, column):
 
 
 # Tạo các bảng trong cơ sở dữ liệu
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)

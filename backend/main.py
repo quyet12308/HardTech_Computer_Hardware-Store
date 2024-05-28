@@ -11,6 +11,7 @@ from work_with_databases.work_with_user_and_sesion_service import *
 from work_with_databases.work_with_products_and_discount_service import *
 from work_with_databases.work_with_comment_and_ranking_service import *
 from work_with_databases.work_with_cart_service import *
+from work_with_databases.work_with_brand_and_category_service import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *
@@ -277,7 +278,7 @@ async def forgot_password_reset_password(
 
 
 # api show product in hompage
-@app.get("/api/homepage/list-products")
+@app.get("/api/homepage/list-products-and-hompage-infor")
 async def get_list_products_for_homepage():
     list_products = {}
     list_product_newest = get_product_overview(
@@ -292,9 +293,13 @@ async def get_list_products_for_homepage():
             limit=10,
             reverse=True,
         )
+    category_and_brand_names = get_unique_category_and_brand_names()
     return {
         "response": {
-            "message": list_products,
+            "message": {
+                "list_products": list_products,
+                "category_and_brand_names": category_and_brand_names,
+            },
             "status": True,
         }
     }
@@ -408,6 +413,7 @@ async def edit_user_information(request_data: EditUserInformationRequest):
                 }
             }
 
+
 # Delete the account
 @app.delete("/api/userpage/delete-account")
 async def delete_account(request_data: DeleteAccountRequest):
@@ -420,19 +426,19 @@ async def delete_account(request_data: DeleteAccountRequest):
             deleteuser = delete_user(user_id=user_id)
             if deleteuser["status"]:
                 return {
-                        "response": {
-                            "message": responses["xoa_tai_khoan_thanh_cong"],
-                            "status": True,
-                        }
-                    } 
-            else:
-                print(f"{deleteuser["message"]}")
-                return {
-                        "response": {
-                            "message": responses["co_loi_xay_ra"],
-                            "status": False,
-                        }
+                    "response": {
+                        "message": responses["xoa_tai_khoan_thanh_cong"],
+                        "status": True,
                     }
+                }
+            else:
+                print(f"{deleteuser['message']}")
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
         else:
             return {
                 "response": {
@@ -440,6 +446,7 @@ async def delete_account(request_data: DeleteAccountRequest):
                     "status": False,
                 }
             }
+
 
 # add to cart
 @app.post("/api/cartpage/add-product-to-cart")
@@ -454,25 +461,25 @@ async def add_product_to_cart(request_data: AddProducttoCartRequest):
         if check_login_session["status"]:
             user_id = check_login_session["message"]
             addtocart = add_to_cart(
-                quantity=quantity,
-                product_id=product_id,
-                user_id=user_id
+                quantity=quantity, product_id=product_id, user_id=user_id
             )
             if addtocart["status"]:
                 return {
-                        "response": {
-                            "message": responses["da_them_san_pham_vao_gio_hang_thanh_cong"],
-                            "status": True,
-                        }
-                    } 
-            else:
-                
-                return {
-                        "response": {
-                            "message": responses["co_loi_xay_ra"],
-                            "status": False,
-                        }
+                    "response": {
+                        "message": responses[
+                            "da_them_san_pham_vao_gio_hang_thanh_cong"
+                        ],
+                        "status": True,
                     }
+                }
+            else:
+
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
         else:
             return {
                 "response": {
@@ -482,6 +489,164 @@ async def add_product_to_cart(request_data: AddProducttoCartRequest):
             }
 
 
+# edit cart quantity
+@app.put("/api/cartpage/update-cart-item-quantity")
+async def update_cart_item_quantity1(request_data: UpdateCartItemQuantityRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        product_id = request_data.product_id
+        quantity = request_data.quantity
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            updatecartitemquantity = update_cart_item_quantity(
+                quantity=quantity, product_id=product_id, user_id=user_id
+            )
+            if updatecartitemquantity["status"]:
+                return {
+                    "response": {
+                        "message": responses[
+                            "da_cap_nhat_so_luong_san_pham_trong_gio_hang_thanh_cong"
+                        ],
+                        "status": True,
+                    }
+                }
+            else:
+
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
+# delete product in cart
+@app.delete("/api/cartpage/remove-product-from-cart")
+async def remove_product_from_cart1(request_data: RemoveProductFromCartRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        product_id = request_data.product_id
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            removeproductfromcart = remove_product_from_cart(
+                product_id=product_id, user_id=user_id
+            )
+            if removeproductfromcart["status"]:
+                return {
+                    "response": {
+                        "message": responses[
+                            "da_xoa_san_pham_khoi_gio_hang_thanh_cong"
+                        ],
+                        "status": True,
+                    }
+                }
+            else:
+                print(f"{removeproductfromcart['message']}")
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
+@app.post("/api/search-products-by-keyword")
+async def search_products_by_keyword(request_data: SearchProductsByKeywordRequest):
+    if request_data:
+        keyword = request_data.keyword
+        products = search_products(keyword=keyword)
+
+        if products:
+            products_list = []
+            for product in products:
+                product_dict = product.__dict__
+                product_dict.pop(
+                    "_sa_instance_state"
+                )  # Loại bỏ thuộc tính không cần thiết
+                products_list.append(product_dict)
+
+            return {
+                "response": {
+                    "message": products_list,
+                    "status": True,
+                }
+            }
+        else:
+            return {
+                "response": {
+                    "message": responses["khong_tim_thay_san_pham"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+# filter product
+@app.post("/api/filter-products-homepage")
+async def filter_products_homepage(request_data: FilterProductsHomepageRequest):
+    if request_data:
+        category_name = request_data.category_name
+        brand_name = request_data.brand_name
+        products = filter_products(category_name=category_name, brand_name=brand_name)
+        if products:
+            return {
+                "response": {
+                    "status": True,
+                    "message": [product.__dict__ for product in products],
+                }
+            }
+        else:
+            return {
+                "response": {
+                    "status": False,
+                    "message": responses["khong_tim_thay_san_pham"],
+                }
+            }
+
+
+# oder
+@app.post("/api/place-order")
+async def place_order(request_data: PlaceOrderRequest):
+    user_id = request_data.user_id
+    products = request_data.products
+
+    order_id = place_order(user_id, products)
+
+    return {"response": {"order_id": order_id, "message": "Order placed successfully"}}
+
+
+# admin product manager
+# api add product
+@app.post("/api/admin/add-new-product")
+async def add_new_product(request_data: AddNewProductRequest):
+    if request_data:
+        pass
 
 
 if __name__ == "__main__":

@@ -278,6 +278,22 @@ def search_products(keyword):
     return products
 
 
+def filter_products(category_name=None, brand_name=None):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    query = session.query(Product)
+
+    if category_name:
+        query = query.join(Category).filter(Category.category_name == category_name)
+
+    if brand_name:
+        query = query.join(Brand).filter(Brand.brand_name == brand_name)
+
+    products = query.all()
+    return products
+
+
 ###################################################################################
 ########## interact with the discount  table in database ##########################
 ###################################################################################
