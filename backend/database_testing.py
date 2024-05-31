@@ -130,18 +130,18 @@ from base_codes.hash_function import *
 # a = get_product_details(product_id=1)
 # print(a)
 
-# b = compress_order_items(
-#     product_ids=[1, 2, 3], quantities=[2, 1, 2], unit_prices=[400, 600, 500]
-# )
-# a = add_order(
-#     order_items=b,
-#     order_status="đang chờ xác nhận",
-#     payment_method="paypay",
-#     shipping_address="test",
-#     total_price="200000",
-#     user_id=2,
-# )
-# print(a)
+b = compress_order_items(
+    product_ids=[1, 2, 3], quantities=[2, 1, 2], unit_prices=[400, 600, 500]
+)
+a = add_order(
+    order_items=b,
+    order_status="đang chờ xác nhận",
+    payment_method="paypay",
+    shipping_address="test",
+    total_price="200000",
+    user_id=2,
+)
+print(a)
 
 # a = edit_order(order_id=1, order_status="Đang giao", payment_method="Momo")
 # print(a)
