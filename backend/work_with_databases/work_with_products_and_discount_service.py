@@ -62,39 +62,43 @@ def edit_product_data(
     new_quantity=None,
     new_image=None,
 ):
-    # Tạo engine và phiên làm việc
-    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    if is_product_taken(product_name=new_product_name):
+        messgae = f"Tên sản phẩm đã tồn tại. Vui lòng chọn tên sản phẩm khác."
+        return {"status": False, "messgae": messgae}
+    else:
+        # Tạo engine và phiên làm việc
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-    # Lấy đối tượng sản phẩm cần chỉnh sửa
-    product = session.query(Product).filter_by(product_id=product_id).first()
+        # Lấy đối tượng sản phẩm cần chỉnh sửa
+        product = session.query(Product).filter_by(product_id=product_id).first()
 
-    if not product:
-        message = f"Không tìm thấy sản phẩm với ID {product_id}."
-        return {"status": False, "message": message}
+        if not product:
+            message = f"Không tìm thấy sản phẩm với ID {product_id}."
+            return {"status": False, "message": message}
 
-    # Cập nhật thông tin của sản phẩm
-    if new_product_name is not None:
-        product.product_name = new_product_name
-    if new_price is not None:
-        product.price = new_price
-    if new_description is not None:
-        product.description = new_description
-    if new_category_id is not None:
-        product.category_id = new_category_id
-    if new_brand_id is not None:
-        product.brand_id = new_brand_id
-    if new_quantity is not None:
-        product.quantity = new_quantity
-    if new_image is not None:
-        product.image = new_image
+        # Cập nhật thông tin của sản phẩm
+        if new_product_name is not None:
+            product.product_name = new_product_name
+        if new_price is not None:
+            product.price = new_price
+        if new_description is not None:
+            product.description = new_description
+        if new_category_id is not None:
+            product.category_id = new_category_id
+        if new_brand_id is not None:
+            product.brand_id = new_brand_id
+        if new_quantity is not None:
+            product.quantity = new_quantity
+        if new_image is not None:
+            product.image = new_image
 
-    # Commit thay đổi
-    session.commit()
+        # Commit thay đổi
+        session.commit()
 
-    message = f"Đã chỉnh sửa thông tin sản phẩm với ID {product_id}."
-    return {"status": True, "message": message}
+        message = f"Đã chỉnh sửa thông tin sản phẩm với ID {product_id}."
+        return {"status": True, "message": message}
 
 
 def delete_product(product_id):

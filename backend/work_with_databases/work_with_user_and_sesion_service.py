@@ -6,6 +6,16 @@ from sqlalchemy.orm.exc import NoResultFound
 ##################################################################
 
 
+def is_admin_user(user_id):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    user = session.query(User).filter(User.user_id == user_id).first()
+    if user and user.is_admin:
+        return True
+    return False
+
+
 def get_user_id_by_username(username):
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)

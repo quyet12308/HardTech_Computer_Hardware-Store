@@ -30,3 +30,12 @@ Delivered: Đơn hàng đã được giao thành công và nhận được bởi
 Cancelled: Đơn hàng đã bị hủy bỏ trước khi được xử lý hoặc giao hàng.
 Returned: Đơn hàng đã được trả lại bởi khách hàng sau khi đã được giao.
 ```
+
+## Ngày 31/5/2024
+- Xóa file base_codes\security_info.py ra khỏi git ( hóa ra là do sử dụng dấu / \ nên có sự nhầm lẫn của file .gitignore vì vậy file bảo mật của mình vẫn nằm trong git)
+- Đã khắc phục bằng cách thay đổi đường dẫn file thành \ , remove file bằng lệnh 
+    ```cmd 
+    git rm --cached base_codes\security_info.py
+    ```
+    Và đẩy nó lại lên git
+- Test lại web thì thấy lỗi ở phần hàm get_product_overview do không lấy được cái product_name . Mà hiện tịa hết thời gian làm cái này rồi , nên tạm gác nó lại về tối nay làm sau 

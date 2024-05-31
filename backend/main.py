@@ -633,6 +633,7 @@ async def filter_products_homepage(request_data: FilterProductsHomepageRequest):
 # oder
 @app.post("/api/place-order")
 async def place_order(request_data: PlaceOrderRequest):
+    token_login_session = request_data.token_login_session
     user_id = request_data.user_id
     products = request_data.products
 
@@ -646,7 +647,140 @@ async def place_order(request_data: PlaceOrderRequest):
 @app.post("/api/admin/add-new-product")
 async def add_new_product(request_data: AddNewProductRequest):
     if request_data:
-        pass
+        token_login_session = request_data.token_login_session
+        product_name: str = request_data.product_name
+        price: float = request_data.price
+        description: str = request_data.description
+        category_id: int = request_data.category_id
+        brand_id: int = request_data.brand_id
+        quantity: int = request_data.quantity
+        image: str = request_data.image
+
+        # check admin
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                addproduct = add_product(
+                    product_name=product_name,
+                    image=image,
+                    brand_id=brand_id,
+                    category_id=category_id,
+                    description=description,
+                    price=price,
+                    quantity=quantity,
+                )
+                if addproduct["status"]:
+                    return {
+                        "response": {
+                            "status": True,
+                            "message": responses["da_them_san_pham_thanh_cong"],
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "status": False,
+                            "message": responses["ten_san_pham_da_ton_tai"],
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+# edit product
+@app.put("/api/admin/edit-product")
+async def edit_product(request_data: EditProductRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        product_id: str = request_data.product_id
+        product_name: str = request_data.product_name
+        price: float = request_data.price
+        description: str = request_data.description
+        category_id: int = request_data.category_id
+        brand_id: int = request_data.brand_id
+        quantity: int = request_data.quantity
+        image: str = request_data.image
+
+        # check admin
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                editproductdata = edit_product_data(
+                    product_id=product_id,
+                    new_brand_id=brand_id,
+                    new_category_id=category_id,
+                    new_description=description,
+                    new_image=image,
+                    new_price=price,
+                    new_product_name=product_name,
+                    new_quantity=quantity,
+                )
+                if editproductdata["status"]:
+                    return {
+                        "response": {
+                            "status": True,
+                            "message": responses["sua_thong_tin_san_pham_thanh_cong"],
+                        }
+                    }
+                else:
+                    print(f"Lỗi {editproductdata['message']}")
+                    return {
+                        "response": {
+                            "status": False,
+                            "message": responses["co_loi_xay_ra"],
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+# show all product in admin page
+# @app.get("/api/")
 
 
 if __name__ == "__main__":

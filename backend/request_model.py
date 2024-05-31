@@ -76,10 +76,24 @@ class FilterProductsHomepageRequest(BaseModel):
 
 
 class PlaceOrderRequest(BaseModel):
+    token_login_session: str
     user_id: str
 
 
 class AddNewProductRequest(BaseModel):
+    token_login_session: str
+    product_name: str
+    price: float
+    description: str
+    category_id: int
+    brand_id: int
+    quantity: int
+    image: str
+
+
+class EditProductRequest(BaseModel):
+    token_login_session: str
+    product_id: str
     product_name: str
     price: float
     description: str
