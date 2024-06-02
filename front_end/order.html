@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HardTech</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="../css/style.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="../css/base.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="../css/order.css" rel="stylesheet" type="text/css" media="all"/>
+<link href="../css/cart.css" rel="stylesheet" type="text/css" media="all"/>
+
+
+</head>
+<body>
+    <header class="header"></header>
+	<div class="breadcrumb"></div>
+    <div class="wrap">
+        <!-- điền thông tin thanh toán -->
+        <div class="order_containner">
+            <div class="order_products">
+                <p class="order_title">thông tin Sản phẩm</p>
+                    <div class="order__category">
+                        <div class="order__category-name">Sản phẩm</div>
+                        <div class="order__category-price">Số lượng</div>
+                        <div class="order__category-ticket">Giá</div>
+                    </div>
+                <div class="cart__form">
+                    <div class="cart__content">
+                        <div class="cart__content-main">
+                            <img src="./images/Gigabyte RTX 4070 AORUS MASTER.jpg" class="cart__content-img" alt="">
+                            <div class="cart__content-name"> Card Màn Hình Gigabyte RTX 4070 AORUS MASTER - NK</div>
+                        </div>
+                            <div class="order_quantity">1</div>
+                            <div class="cart__content-price">18.890.000 đ</div>
+                    </div> 
+                </div>
+                <div class="cart__form">
+                    <div class="cart__content">
+                        <div class="cart__content-main">
+                            <img src="./images/Gigabyte RTX 4070 AORUS MASTER.jpg" class="cart__content-img" alt="">
+                            <div class="cart__content-name"> Card Màn Hình Gigabyte RTX 4070 AORUS MASTER - NK</div>
+                        </div>
+                            <div class="order_quantity">1</div>
+                            <div class="cart__content-price">18.890.000 đ</div>
+                    </div> 
+                </div>
+            </div>
+            <div class="order_customer-info">
+                <p class="order_title">thông tin khách hàng</p>
+                <form id="order_information">
+                    <div class="form-group">
+                        <input type="text" id="username" class="form-control" placeholder="" required>
+                        <label for="name-input" class="form-label">Họ và Tên*</label>
+
+                    </div>
+                    <div class="form_group-1">
+                        <div class="form-group">
+                            <input type="text" id="number" class="form-control" pattern="[0-9]*" inputmode="numeric" placeholder="" required>
+                            <label for="name-input" class="form-label">Số Điện Thoại*</label>
+
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="username" class="form-control" placeholder="" required>
+                            <label for="name-input" class="form-label">Email</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="text" class="form-control" placeholder="" required>
+                        <label for="name-input" class="form-label">Địa Chỉ*</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="username" class="form-control" placeholder="" required>
+                        <label for="name-input" class="form-label">Tỉnh/Thành Phố</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="text" class="form-control" placeholder="" required>
+                        <label for="name-input" class="form-label">Quận/Huyện</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="text" class="form-control" placeholder="" required>
+                        <label for="name-input" class="form-label">Ghi chú</label>
+                    </div>
+                </form>
+            </div>
+            <div class="order_payment-method">
+                <p class="order_title">phương thức thanh toán</p>
+                <div class="payment-options">
+                    <div class="option">
+                      <input type="radio" id="momo_payment" name="payment-method" value="option1">
+                      <label for="option1">Thanh toán bằng Momo
+                        <img src="./images/momo.png" alt="">
+                      </label>
+                    </div>
+                    <div class="option">
+                      <input type="radio" id="vnpay_payment" name="payment-method" value="option2">
+                      <label for="option2">Thanh toán bằng VNpay
+                        <img src="./images/icon-payment-vnpay.png" alt="">
+                      </label>
+                    </div>
+                    <div class="option">
+                      <input type="radio" id="stripe_payment" name="payment-method" value="option3">
+                      <label for="option3">Thanh toán bằng Stripe
+                        <img src="./images/stripe.jpg" alt="">
+                      </label>
+                    </div>
+                    <div class="option">
+                      <input type="radio" id="paypal_payment" name="payment-method" value="option3">
+                      <label for="option3">Thanh toán bằng Paypal
+                        <img src="./images/PayPal_Logo_2007.png" alt="">
+                      </label>
+                    </div>
+                    <div class="option">
+                      <input type="radio" id="zalopay_payment" name="payment-method" value="option3">
+                      <label for="option3">Thanh toán bằng Zalopay
+                        <img src="./images/zalopay.png" alt="">
+                      </label>
+                    </div>
+                  </div>
+            </div>
+            <div class="order_price">
+                <p class="order_title">tổng tiền thanh toán</p>
+                <div class="order_total-price">
+                    <p class="order_total-price-title">Tổng cộng: </p>
+                    <div class="total_price">18.900.000đ</div>
+                </div>
+            </div>
+            <div class="order_button">
+                <div class="btn">thanh toán</div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"></footer>
+
+</body>
+<script src="./layout/header.js"></script>
+<script src="./layout/footer.js"></script>
+<script src="./layout/breadcrumbs.js"></script>
+<script src="./js/script.js"></script>
+<script src="./js/cart.js"></script>
+</html>

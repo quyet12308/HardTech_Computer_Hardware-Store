@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Order Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="../admin/admin_css/admin_order.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="../css/grid.css" rel="stylesheet" type="text/css" media="all"/>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>Quản lý đơn hàng</h1>
+        <nav>
+          <ul>
+            <li><a href="#orders"><i class="fas fa-list-alt"></i> Danh sách đơn hàng</a></li>
+            <li><a href="#filters"><i class="fas fa-filter"></i> Lọc đơn hàng</a></li>
+            <li><a href="#update-status"><i class="fas fa-edit"></i> Cập nhật trạng thái</a></li>
+            <li><a href="../admin/admin_hompage.html"><i class="fa-solid fa-house"></i> Quay về trang chủ</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="orders">
+        <div class="section-header">
+          <h2>Danh sách đơn hàng</h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Đơn hàng</th>
+                <th>Kháng hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái đơn hàng</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="order-list"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="filters">
+        <div class="section-header">
+          <h2>Lọc đơn hàng</h2>
+        </div>
+        <div class="form-container">
+          <form id="filter-form">
+            <div class="form-group">
+              <label for="order-status">Trạng thái đơn hàng:</label>
+              <select id="order-status">
+                <option value="">Tất cả</option>
+                <option value="pending">Chưa giải quyết</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="shipped">Đã vận chuyển</option>
+                <option value="delivered">Đã giao hàng</option>
+              </select>
+            </div>
+            <button type="submit"><i class="fas fa-search"></i> Lọc</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="update-status">
+        <div class="section-header">
+          <h2>Cập nhật trạng thái đơn hàng</h2>
+        </div>
+        <div class="form-container">
+          <form id="status-form">
+            <div class="form-group">
+              <label for="order-id">Mã đơn hàng:</label>
+              <input type="text" id="order-id" required>
+            </div>
+            <div class="form-group">
+              <label for="new-status">Trạng thái cập nhật:</label>
+              <select id="new-status">
+                <option value="pending">Chưa giải quyết</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="shipped">Đã vận chuyển</option>
+                <option value="delivered">Đã giao hàng</option>
+              </select>
+            </div>
+            <button type="submit"><i class="fas fa-save"></i> Cập nhật</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="../admin/admin_js/admin_order.js"></script>
+  </body>
+</html>

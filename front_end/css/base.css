@@ -1,0 +1,125 @@
+:root{
+    --bg-btn:linear-gradient(to right, black, red);
+    --primary-color: red;
+    --black: black;
+    --white: white;
+    --bg-color: #f5f5f5;
+    --text1-color: #6b6969;
+    --textcolor: #333;
+}   
+
+.btn {
+    /* display: inline-block;
+    background: var(--bg-btn);
+    color: var(--white);
+    padding: 10px 20px;
+    border: .2rem solid var(--black);
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 4px; */
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: 500;
+    background: var(--bg-btn);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--primary-color);
+    border: 2px solid var(--black);
+    opacity: 0.8;
+    color: black;
+}
+
+.in_1-row {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.in_1-row i{
+    margin-right: 10px;
+}
+
+/* .header__distance {
+    margin-top: 150px;
+} */
+
+.breadcrumb {
+    background-color: #fff;
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #cecece;
+    margin-bottom: 20px;
+    margin-top: 180px;
+}
+
+.breadcrumb a {
+    color: var(--text1-color);
+    
+}.breadcrumb a:first-child {
+    margin-left: 5%;
+}
+
+.breadcrumb a:hover {
+    color: var(--primary-color);
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from   {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Pagination */
+.pagination{
+    margin: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+}
+
+.pagination-item{
+    margin: 0 12px;
+}
+
+.pagination-item__link{
+    --height:30px;
+    display: block;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 400;
+    color: #939393;
+    min-width: 40px;
+    height: var(--height);
+    line-height: var(--height);
+    text-align: center;
+}
+
+.pagination-item__link:hover{
+    color: var(--primary-color);
+}
+
+.pagination-item__icon{
+    color: #939393;
+}
+
+.pagination-item--active .pagination-item__link{
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.pagination-item--active .pagination-item__link:hover{
+    background-color: #ed5c3f;
+}

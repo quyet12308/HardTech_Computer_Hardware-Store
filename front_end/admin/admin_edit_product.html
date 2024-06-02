@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh Sửa Thông Tin Sản Phẩm</title>
+    <link rel="stylesheet" href="./admin_css/admin_edit_product.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Chỉnh Sửa Thông Tin Sản Phẩm</h1>
+        <form id="editProductForm">
+            <div class="form-group">
+                <label for="productImage">Chọn Ảnh Mới:</label>
+                <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)">
+                <div id="imagePreview"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="productName">Tên Sản Phẩm:</label>
+                <input type="text" id="productName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">Giá Sản Phẩm:</label>
+                <input type="number" id="productPrice" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Mô Tả Sản Phẩm:</label>
+                <textarea id="productDescription" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="productBrand">Hãng Sản Xuất:</label>
+                <select id="productBrand" required>
+                    <option value="" disabled selected>Chọn hãng sản xuất</option>
+                    <option value="Brand1">Hãng 1</option>
+                    <option value="Brand2">Hãng 2</option>
+                    <option value="Brand3">Hãng 3</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productCategory">Thể Loại:</label>
+                <select id="productCategory" required>
+                    <option value="" disabled selected>Chọn thể loại</option>
+                    <option value="Category1">Thể Loại 1</option>
+                    <option value="Category2">Thể Loại 2</option>
+                    <option value="Category3">Thể Loại 3</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productQuantity">Số Lượng Trong Kho</label>
+                <input type="number" id="productQuantity" required>
+            </div>
+
+            <button type="submit">Cập Nhật Sản Phẩm</button>
+        </form>
+    </div>
+
+    <script src="./admin_js/admin_edit_product.js"></script>
+</body>
+</html>

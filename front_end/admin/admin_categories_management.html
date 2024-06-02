@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Thể Loại</title>
+  <link rel="stylesheet" href="./admin_css/admin_categories_management.css">
+</head>
+<body>
+
+  <h1>Quản lý Thể Loại</h1>
+
+  <table id="categoryTable">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên Thể Loại</th>
+        <th>Mô Tả</th>
+        <th>Hành Động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Các thể loại sẽ được thêm vào đây -->
+    </tbody>
+  </table>
+
+  <h2>Thêm Thể Loại Mới</h2>
+  <form id="addCategoryForm">
+    <input type="text" id="newCategoryName" placeholder="Tên Thể Loại" required>
+    <textarea id="newCategoryDescription" placeholder="Mô Tả" required></textarea>
+    <button type="submit">Thêm Thể Loại</button>
+  </form>
+
+  <h2>Sửa Thể Loại</h2>
+  <form id="editCategoryForm" class="edit-form">
+    <input type="hidden" id="editIndex">
+    <input type="text" id="editCategoryName" placeholder="Tên Thể Loại" required>
+    <textarea id="editCategoryDescription" placeholder="Mô Tả" required></textarea>
+    <button type="submit">Cập Nhật</button>
+  </form>
+
+  <script src="./admin_js/admin_categories_management.js"></script>
+
+</body>
+</html>

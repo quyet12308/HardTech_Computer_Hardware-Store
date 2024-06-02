@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Hãng Sản Xuất</title>
+  <link rel="stylesheet" href="./admin_css/admin_brands_management.css">
+</head>
+<body>
+
+  <h1>Quản lý Hãng Sản Xuất</h1>
+
+  <table id="manufacturerTable">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ảnh Đại Diện</th>
+        <th>Tên Hãng</th>
+        <th>Mô Tả</th>
+        <th>Hành Động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Các hãng sản xuất sẽ được thêm vào đây -->
+    </tbody>
+  </table>
+
+  <h2>Thêm Hãng Sản Xuất Mới</h2>
+  <form id="addManufacturerForm">
+    <input type="file" id="newImage" accept="image/*" required>
+    <input type="text" id="newName" placeholder="Tên Hãng" required>
+    <textarea id="newDescription" placeholder="Mô Tả" required></textarea>
+    <button type="submit">Thêm Hãng</button>
+  </form>
+
+  <h2>Sửa Hãng Sản Xuất</h2>
+  <form id="editManufacturerForm" class="edit-form">
+    <input type="hidden" id="editIndex">
+    <input type="file" id="editImage" accept="image/*">
+    <input type="text" id="editName" placeholder="Tên Hãng" required>
+    <textarea id="editDescription" placeholder="Mô Tả" required></textarea>
+    <button type="submit">Cập Nhật</button>
+  </form>
+
+  <script src="./admin_js/admin_brands_management.js"></script>
+
+</body>
+</html>

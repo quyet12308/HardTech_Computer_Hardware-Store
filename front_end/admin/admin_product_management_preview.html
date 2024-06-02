@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Lý Sản Phẩm</title>
+    <link rel="stylesheet" href="./admin_css/admin_product_management_preview.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#">Trang Chủ</a>
+    <a href="#">Thêm Mới Sản Phẩm</a>
+    <a href="#">Quản Lý Hãng Sản Xuất</a>
+    <a href="#">Quản Lý Thể Loại</a>
+    <a href="#">Quản Lý Giảm giá</a>
+</div>
+
+<div class="container">
+    <h1>Quản Lý Sản Phẩm</h1>
+    
+    <div class="filter-container">
+        <input type="text" id="nameFilter" placeholder="Lọc theo tên sản phẩm">
+        <select id="brandFilter">
+            <option value="">Lọc theo hãng sản xuất</option>
+            <!-- Add options dynamically -->
+        </select>
+        <select id="categoryFilter">
+            <option value="">Lọc theo thể loại</option>
+            <!-- Add options dynamically -->
+        </select>
+        <select id="quantityFilter">
+            <option value="">Lọc theo số lượng trong kho</option>
+            <option value="<10">< 10</option>
+            <option value="10-20">10 - 20</option>
+            <option value="20-50">20 - 50</option>
+            <option value=">50">> 50</option>
+        </select>
+        <select id="priceFilter">
+            <option value="">Lọc theo giá</option>
+            <option value="<1000000">< 1,000,000</option>
+            <option value="1000000-2000000">1,000,000 - 2,000,000</option>
+            <option value="2000000-5000000">2,000,000 - 5,000,000</option>
+            <option value=">5000000">> 5,000,000</option>
+        </select>
+        <button class="button" onclick="filterProducts()">Lọc</button>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Hãng Sản Xuất</th>
+                <th>Thể Loại</th>
+                <th>Số Lượng</th>
+                <th>Giá</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody id="productTable">
+            <!-- Add rows dynamically -->
+        </tbody>
+    </table>
+</div>
+<script src="./admin_js/admin_product_management_preview.js"></script>
+
+</body>
+</html>

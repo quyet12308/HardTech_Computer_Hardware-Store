@@ -1,0 +1,128 @@
+.wrap {
+    width: 70%;
+}
+.order_containner {
+    background-color: white;
+	 box-shadow: 0 0 18px rgba(0, 0, 0, .22);
+     padding: 0 12px;
+}
+
+.order_products {
+
+}
+
+.order_customer-info {
+
+}
+
+
+
+.order_payment-method {
+
+}
+
+.order_price {
+    
+}
+
+.order__category{
+    display: flex;
+    justify-content: space-around;
+    color: var(--text1-color);
+    margin-bottom: 10px;
+}
+
+.order__category-price {
+    margin-left: 250px;
+}
+
+.order_title {
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 20px;
+    margin-bottom: 16px;
+    padding-top: 12px;
+    font-weight: 600;
+}
+/* làm label bay lên trên khung */
+.form-group {
+    position: relative;
+  }
+  
+.form-label {
+    position: absolute;
+    top: 40%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #aaa;
+    transition: all 0.3s ease;
+    background-color: #fff; 
+    padding: 0 4px; 
+    z-index: 1; 
+  }
+  
+.form-control:focus + .form-label,
+.form-control:not(:placeholder-shown) + .form-label {
+    top: 0;
+    font-size: 14px;
+    color: #333;
+  }
+
+.form_group-1 {
+    /* display: flex; */
+}
+
+.form-group input {
+    width: 100%;
+    border: 1px solid #d6d6d6;
+    padding: 13px 12px;
+    border-radius: 5px;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 12px;
+    outline: 0;
+}
+
+.form-group input:hover {
+    border: 1px solid var(--primary-color);
+    
+}
+
+.payment-options {
+    align-items: center;
+}
+
+
+.payment-options .option {
+    margin: 12px 0;
+    
+}
+
+.payment-options img{
+    width: 40px;
+    height: 100%;
+}
+
+
+
+.order_total-price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total_price {
+    color: var(--primary-color);
+    font-size: 30px;
+}
+
+.order_button {
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.order_button .btn {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+}

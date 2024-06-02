@@ -1,0 +1,159 @@
+.bg_color{
+    background-color: rgb(238, 236, 236);
+}
+
+.red{
+    color: red;
+}
+
+.cart__container{
+    width: 100%;
+    padding-bottom: 60px;
+    /* margin-top: 120px; */
+}
+
+.cart__form{
+    /* position: fixed; */
+    /* z-index: 999; */
+    bottom: 0;
+    background-color: #fff;
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #cecece;
+    margin-bottom: 20px;
+}
+
+.cart__category{
+    display: flex;
+    font-size: 16px;
+    color: var(--text1-color);
+    text-decoration: none;
+    /* justify-content: space-between; */
+    align-items: center;
+}
+
+#cart__check-all {
+    margin-left: 20px;
+}
+
+.cart__category-name{
+    margin-left: 40px;
+    width: 300px;
+}
+
+.cart__category-price{
+    margin-left: 240px;
+}
+
+.cart__category-ticket{
+    margin-left: 260px;
+}
+
+.cart__category-operate{
+    margin-left: 150px;
+}
+
+/* thông tin tour trg giỏ */
+.cart__content{
+    display: flex;
+    font-size: 16px;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: center;
+    height: 120px;
+}
+
+.cart__content-main{
+    display: flex;
+    width: 400px;
+    align-items: center;
+    color: var(--black);
+}
+
+.cart__content-main .cart__check {
+    margin: 0 20px;
+    height: 20px;
+    width: 25px;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: red;
+  }
+
+.cart__content-main img{
+    height: 100px;
+    width: 100px;
+    margin-right: 20px;
+}
+
+.cart__content-price {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.cart__quantity-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .cart__quantity-input button {
+    width: 30px;
+    height: 32px;
+    font-size: 20px;
+    background-color: var(--bg-color);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .cart__quantity-input button:hover {
+    background-color:#e7e5e5 ;
+  }
+  
+  .cart__quantity-input .quantity-value {
+    width: 50px;
+    height: 32px;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    margin: 0 10px;
+    border-color: #e7e5e5;
+  }
+.cart__content-delete:hover{
+    color: red;
+    cursor: pointer;
+}
+
+/* giao dien tong thanh toan */
+.cart__cast{
+    display: flex;
+    font-size: 16px;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+}
+
+.cart__cast-amount{
+    display: flex;
+    align-items: center;
+}
+
+.cart__price{
+    display: flex;
+    align-items: center;
+    margin-left: 300px;
+}
+
+.cart__price-sum{
+    margin-left: 20px;
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.cart__cast-pay-btn.btn{
+    margin: 0;
+    width: 200px;
+    text-align: center;
+}
