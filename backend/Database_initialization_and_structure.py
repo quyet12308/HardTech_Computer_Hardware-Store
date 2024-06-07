@@ -24,6 +24,7 @@ import sqlite3
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import UniqueConstraint
+import simplejson as json
 
 
 def convert_to_json(**kwargs):
@@ -77,6 +78,7 @@ class Product(Base):
 class Discount(Base):
     __tablename__ = "discounts"
     discount_id = Column(Integer, primary_key=True, autoincrement=True)
+    # discount_name = Column(Text, nullable=False)
     product_id = Column(Integer, ForeignKey("products.product_id"))
     discount_percentage = Column(Float)
     start_date = Column(DateTime)
@@ -106,41 +108,21 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"))
     order_date = Column(DateTime, server_default=func.now())
     total_price = Column(Numeric)
-    shipping_address = Column(String)
-    payment_method = Column(String)
+    order_status = Column(String, nullable=False)
     user = relationship("User", backref="orders")
-    status_id = Column(Integer, ForeignKey("order_statuses.status_id"))
-    order_status_rel = relationship("OrderStatus", backref="order_statuses")
-
-
-class OrderStatus(Base):
-    __tablename__ = "order_statuses"
-    status_id = Column(Integer, primary_key=True, autoincrement=True)
-    status = Column(String)
-
-    # Add relationship to Order
-    orders = relationship("Order", backref="order_status")
+    payment_details = relationship(
+        "PaymentDetail", back_populates="order", overlaps="orders,paymentdetails"
+    )
 
 
 class OrderDetail(Base):
     __tablename__ = "order_details"
-    order_detail_id = Column(Integer, primary_key=True, autoincrement=True)
-    order_id = Column(Integer, ForeignKey("orders.order_id"))
-    product_id = Column(Integer, ForeignKey("products.product_id"))
-    quantity = Column(Integer)
-    unit_price = Column(Numeric)
+    order_detail_id = Column(Integer, primary_key=True)
+    order_id = Column(Integer, ForeignKey("orders.order_id"), nullable=False)
+    product_id = Column(Integer, nullable=False)
+    qty = Column(Integer, nullable=False)
+    order_price = Column(Numeric, nullable=False)
     order = relationship("Order", backref="order_details")
-    product = relationship("Product", backref="order_details")
-
-
-class OrderStatusHistory(Base):
-    __tablename__ = "order_status_history"
-    history_id = Column(Integer, primary_key=True, autoincrement=True)
-    order_id = Column(Integer, ForeignKey("orders.order_id"))
-    status_id = Column(Integer, ForeignKey("order_statuses.status_id"))
-    status_date = Column(DateTime, server_default=func.now())
-    order = relationship("Order", backref="order_status_history")
-    status = relationship("OrderStatus")
 
 
 class Cart(Base):
@@ -177,7 +159,9 @@ class PaymentDetail(Base):
     status = Column(String)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, onupdate=func.now())
-    order = relationship("Order", backref="payment_details")
+    order = relationship(
+        "Order", back_populates="payment_details", overlaps="orders,paymentdetails"
+    )
 
 
 class Token(Base):

@@ -10,6 +10,7 @@ from work_with_databases.work_with_order_service import *
 from work_with_databases.work_with_user_and_sesion_service import *
 from work_with_databases.work_with_brand_and_category_service import *
 from work_with_databases.work_with_comment_and_ranking_service import *
+from work_with_databases.admin_services_homepage import *
 
 from base_codes.get_token import generate_token
 from base_codes.gettime import gettime2, add_time_to_datetime, convert_to_datetime
@@ -130,18 +131,18 @@ from base_codes.hash_function import *
 # a = get_product_details(product_id=1)
 # print(a)
 
-b = compress_order_items(
-    product_ids=[1, 2, 3], quantities=[2, 1, 2], unit_prices=[400, 600, 500]
-)
-a = add_order(
-    order_items=b,
-    order_status="đang chờ xác nhận",
-    payment_method="paypay",
-    shipping_address="test",
-    total_price="200000",
-    user_id=2,
-)
-print(a)
+# b = compress_order_items(
+#     product_ids=[1, 2, 3], quantities=[2, 1, 2], unit_prices=[400, 600, 500]
+# )
+# a = add_order(
+#     order_items=b,
+#     order_status="đang chờ xác nhận",
+#     payment_method="paypay",
+#     shipping_address="test",
+#     total_price="200000",
+#     user_id=2,
+# )
+# print(a)
 
 # a = edit_order(order_id=1, order_status="Đang giao", payment_method="Momo")
 # print(a)
@@ -262,3 +263,95 @@ print(a)
 # ]
 # a = add_order_statuses(list_order_statuses)
 # print(a)
+
+# Sử dụng hàm create_order
+# user_id = 3
+# order_details_example = [
+#     {"product_id": 1, "qty": 2, "order_price": 100.00},
+#     {"product_id": 2, "qty": 1, "order_price": 200.00},
+# ]
+
+# create_order(user_id=user_id, order_details=order_details_example)
+#     print("Order Price:", detail.order_price)
+
+# a = update_order_status(new_status="shipping", order_id=1)
+# print(a)
+
+# Ví dụ sử dụng hàm
+# stats = get_statistics("quarter")
+# print(stats)
+
+# Giả sử bạn có dữ liệu từ hàm get_data_by_period
+# period = "month"
+# revenue_data, order_data = get_data_for_lineChart_by_period(period)
+
+# # Chuyển đổi dữ liệu thành định dạng JSON cho Chart.js
+# chart_labels = list(revenue_data.keys())
+# revenue_values = list(revenue_data.values())
+# order_values = list(order_data.values())
+
+# chart_data = {
+#     "labels": chart_labels,
+#     "datasets": [
+#         {
+#             "label": "Doanh thu",
+#             "data": revenue_values,
+#             "borderColor": "rgba(75, 192, 192, 1)",
+#             "borderWidth": 1,
+#             "fill": False,
+#         },
+#         {
+#             "label": "Đơn hàng",
+#             "data": order_values,
+#             "borderColor": "rgba(153, 102, 255, 1)",
+#             "borderWidth": 1,
+#             "fill": False,
+#         },
+#     ],
+# }
+
+
+# chart_data_json = json.dumps(chart_data, use_decimal=True, ensure_ascii=False)
+# print(chart_data_json)
+
+# Giả sử bạn có dữ liệu từ hàm get_data_by_period
+# period = "month"
+# revenue_data, order_data, product_data = get_data_for_pieChart_by_period(period)
+
+# # Chuyển đổi dữ liệu thành định dạng JSON cho Chart.js
+# chart_labels = list(revenue_data.keys())
+# revenue_values = list(revenue_data.values())
+# order_values = list(order_data.values())
+
+# product_labels = list(product_data.keys())
+# product_values = list(product_data.values())
+
+
+# pie_chart_data = {
+#     "labels": product_labels,
+#     "datasets": [
+#         {
+#             "data": product_values,
+#             "backgroundColor": [
+#                 "rgba(255, 99, 132, 0.2)",
+#                 "rgba(54, 162, 235, 0.2)",
+#                 "rgba(255, 206, 86, 0.2)",
+#                 "rgba(75, 192, 192, 0.2)",
+#             ],
+#             "borderColor": [
+#                 "rgba(255, 99, 132, 1)",
+#                 "rgba(54, 162, 235, 1)",
+#                 "rgba(255, 206, 86, 1)",
+#                 "rgba(75, 192, 192, 1)",
+#             ],
+#             "borderWidth": 1,
+#         }
+#     ],
+# }
+
+# pie_chart_data_json = json.dumps(pie_chart_data, use_decimal=True, ensure_ascii=False)
+
+# print(pie_chart_data_json)
+
+chart_data = get_data_for_barChart_data_by_period("week")
+print(chart_data)

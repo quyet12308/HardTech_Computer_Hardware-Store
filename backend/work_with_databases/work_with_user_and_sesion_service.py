@@ -239,7 +239,7 @@ def get_user_id_from_token(token_value):
 
         # Kiểm tra nếu token đã hết hạn
         if token.expiration_date <= datetime.now():
-            raise Exception("Mã đã hết hạn")
+            return {"status": False, "message": ""}
 
         return {"status": True, "message": token.user_id}
 

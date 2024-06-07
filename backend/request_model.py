@@ -75,9 +75,10 @@ class FilterProductsHomepageRequest(BaseModel):
     brand_name: str
 
 
-class PlaceOrderRequest(BaseModel):
+class CreateOrderRequest(BaseModel):
     token_login_session: str
     user_id: str
+    list_order_items: list
 
 
 class AddNewProductRequest(BaseModel):
@@ -101,3 +102,17 @@ class EditProductRequest(BaseModel):
     brand_id: int
     quantity: int
     image: str
+
+
+class UpdateOrderStatusRequest(BaseModel):
+    token_login_session: str
+    new_order_status: str
+    order_id: str
+
+
+class AdminHomepageRequest(BaseModel):
+    token_login_session: str
+    timeframe: str
+
+class AdminProductManagementPreviewRequest(BaseModel):
+    token_login_session: str

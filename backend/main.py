@@ -12,6 +12,8 @@ from work_with_databases.work_with_products_and_discount_service import *
 from work_with_databases.work_with_comment_and_ranking_service import *
 from work_with_databases.work_with_cart_service import *
 from work_with_databases.work_with_brand_and_category_service import *
+from work_with_databases.work_with_order_service import *
+from work_with_databases.admin_services_homepage import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *
@@ -64,6 +66,8 @@ async def login(login_data: LoginRequest):
                         "status": True,
                         "token": token_login_session,
                         "avata_img": get_user_infor_using_userid["message"]["img"],
+                        "is_admin": is_admin_user(user_id=check_user_exists["message"]),
+                        "user_name": get_user_infor_using_userid["message"]["username"],
                     }
                 }
         else:
@@ -632,17 +636,98 @@ async def filter_products_homepage(request_data: FilterProductsHomepageRequest):
 
 # oder
 @app.post("/api/place-order")
-async def place_order(request_data: PlaceOrderRequest):
+async def place_order(request_data: CreateOrderRequest):
     token_login_session = request_data.token_login_session
     user_id = request_data.user_id
-    products = request_data.products
+    list_order_items = request_data.list_order_items
 
-    order_id = place_order(user_id, products)
+    # order_id = place_order(user_id, products)
 
-    return {"response": {"order_id": order_id, "message": "Order placed successfully"}}
+    # return {"response": {"order_id": order_id, "message": "Order placed successfully"}}
 
 
-# admin product manager
+##############################################################################
+############################## admin homepage management #####################
+##############################################################################
+
+
+@app.post("/api/admin/admin-homepage")
+async def admin_homepage(request_data: AdminHomepageRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        timeframe: str = request_data.timeframe
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                data_4_parameter = get_statistics(timeframe=timeframe)
+                data_lineChart = get_data_for_lineChart_by_period(period=timeframe)
+                data_pieChart = get_data_for_pieChart_by_period(period=timeframe)
+                data_barChart = get_data_for_barChart_data_by_period(
+                    time_period=timeframe
+                )
+
+                if (
+                    data_4_parameter is not None
+                    and data_barChart is not None
+                    and data_lineChart is not None
+                    and data_pieChart is not None
+                ):
+                    return {
+                        "response": {
+                            "status": True,
+                            "message": {
+                                "data_4_parameter": data_4_parameter,
+                                "data_lineChart": data_lineChart,
+                                "data_pieChart": data_pieChart,
+                                "data_barChart": data_barChart,
+                            },
+                        }
+                    }
+
+                else:
+
+                    return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+##############################################################################
+############################## admin product management ######################
+##############################################################################
+
+@app.get("/api/admin/admin_product_management_preview")
+async def admin_product_management_preview(request_data: AdminProductManagementPreviewRequest):
+    token_login_session = request_data.token_login_session
+
+
 # api add product
 @app.post("/api/admin/add-new-product")
 async def add_new_product(request_data: AddNewProductRequest):
@@ -750,6 +835,68 @@ async def edit_product(request_data: EditProductRequest):
                     }
                 else:
                     print(f"Lỗi {editproductdata['message']}")
+                    return {
+                        "response": {
+                            "status": False,
+                            "message": responses["co_loi_xay_ra"],
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+##############################################################################
+############################## admin order management ########################
+##############################################################################
+
+
+@app.put("/api/admin/update-order-status-product")
+async def edit_product(request_data: UpdateOrderStatusRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        new_order_status = request_data.new_order_status
+        order_id = request_data.order_id
+
+        # check admin
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                updateorderstatus = update_order_status(
+                    order_id=order_id, new_status=new_order_status
+                )
+                if updateorderstatus["status"]:
+                    return {
+                        "response": {
+                            "status": True,
+                            "message": responses[
+                                "cap_nhat_trang_thai_don_hang_thanh_cong"
+                            ],
+                        }
+                    }
+                else:
+                    print(f"Lỗi {updateorderstatus['message']}")
                     return {
                         "response": {
                             "status": False,

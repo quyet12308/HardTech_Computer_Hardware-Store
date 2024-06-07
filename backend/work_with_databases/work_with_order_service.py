@@ -22,112 +22,102 @@ def compress_order_items(product_ids, quantities, unit_prices):
         return {"status": False, "message": message}
 
 
-def add_order(
-    user_id, order_status, total_price, shipping_address, payment_method, order_items
-):
-    if order_items["status"] == False:
-        return {"status": False, "message": order_items["message"]}
-    else:
-        # Tạo engine và phiên làm việc
+def compress_order_items(dict_order_item: dict, compressed_items: list):
+
+    return compressed_items.append(dict_order_item)
+
+
+def create_order(user_id, order_details):
+    """
+    Thêm một đơn hàng mới vào cơ sở dữ liệu.
+
+    Args:
+        user_id (int): ID của người dùng tạo đơn hàng.
+        order_details (list of dict): Danh sách các chi tiết đơn hàng, mỗi chi tiết là một dict có các keys:
+                                      - product_id (int)
+                                      - qty (int)
+                                      - order_price (numeric)
+    """
+    try:
         engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
         Session = sessionmaker(bind=engine)
         session = Session()
-
-        # Tạo đối tượng đơn hàng mới
-        order = Order(
-            user_id=user_id,
-            order_status=order_status,
-            total_price=total_price,
-            shipping_address=shipping_address,
-            payment_method=payment_method,
+        # Tính tổng giá của đơn hàng
+        total_price = sum(item["qty"] * item["order_price"] for item in order_details)
+        order_status = "already paid"
+        # Tạo đối tượng Order
+        new_order = Order(
+            user_id=user_id, order_status=order_status, total_price=total_price
         )
+        session.add(new_order)
+        session.commit()  # Lưu để lấy order_id
 
-        # Thêm đơn hàng vào phiên làm việc
-        session.add(order)
-
-        # Commit thay đổi để lấy order_id mới được tạo
-        session.commit()
-        order_item_datas = order_items["message"]
-        # Lặp qua các mục trong đơn hàng và tạo đối tượng chi tiết đơn hàng
-        for item in order_item_datas:
-            product_id = int(item["product_id"])
-            quantity = int(item["quantity"])
-            unit_price = int(item["unit_price"])
-
-            # Tạo đối tượng chi tiết đơn hàng mới
-            order_detail = OrderDetail(
-                order_id=order.order_id,
-                product_id=product_id,
-                quantity=quantity,
-                unit_price=unit_price,
+        # Tạo các đối tượng OrderDetail
+        for item in order_details:
+            new_order_detail = OrderDetail(
+                order_id=new_order.order_id,
+                product_id=item["product_id"],
+                qty=item["qty"],
+                order_price=item["order_price"],
             )
+            session.add(new_order_detail)
 
-            # Thêm chi tiết đơn hàng vào phiên làm việc
-            session.add(order_detail)
+        # Lưu các chi tiết đơn hàng
+        session.commit()
+        return {"status": True, "message": "Đơn hàng được thêm thành công!"}
+    except Exception as e:
+        session.rollback()
+        return {"status": False, "message": f"Có lỗi xảy ra: {e}"}
+    finally:
+        session.close()
 
-        # Commit thay đổi cuối cùng
+
+def update_order_status(order_id, new_status):
+    """
+    Cập nhật trạng thái của một đơn đặt hàng.
+
+    Parameters:
+    - order_id (int): ID của đơn đặt hàng cần cập nhật.
+    - new_status (str): Trạng thái mới cho đơn đặt hàng.
+
+    Returns:
+    - order (Order): Đối tượng Order đã được cập nhật.
+    """
+    try:
+        engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        # Tìm order theo order_id
+        order = session.query(Order).filter_by(order_id=order_id).one_or_none()
+
+        if order is None:
+            print(f"Không tìm thấy đơn đặt hàng với ID: {order_id}")
+            return {
+                "status": False,
+                "message": "Có lỗi xảy ra: Không tìm thấy đơn hàng id {}".format(
+                    order_id
+                ),
+            }
+
+        # Cập nhật trạng thái của order
+        order.order_status = new_status
         session.commit()
 
-        message = "Đã thêm đơn hàng thành công."
-        return {"status": True, "message": message}
+        print(
+            f"Đã cập nhật trạng thái của đơn đặt hàng ID: {order_id} thành {new_status}"
+        )
+        return {
+            "status": True,
+            "message": "Đơn hàng được cập nhật trạng thái thành công!",
+        }
 
+    except Exception as e:
+        session.rollback()
+        print(f"Có lỗi xảy ra khi cập nhật trạng thái đơn đặt hàng: {e}")
+        return {"status": False, "messgae": f"Có lỗi xảy ra: {e}"}
 
-def edit_order(
-    order_id,
-    user_id=None,
-    order_status=None,
-    total_price=None,
-    shipping_address=None,
-    payment_method=None,
-    order_items=None,
-):
-    # Tạo engine và phiên làm việc
-    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
-
-    # Tìm đơn hàng cần chỉnh sửa
-    order = session.query(Order).get(order_id)
-
-    if not order:
-        return {"status": False, "message": "Đơn hàng không tồn tại."}
-
-    # Cập nhật thông tin đơn hàng
-    if user_id is not None:
-        order.user_id = user_id
-    if order_status is not None:
-        order.order_status = order_status
-    if total_price is not None:
-        order.total_price = total_price
-    if shipping_address is not None:
-        order.shipping_address = shipping_address
-    if payment_method is not None:
-        order.payment_method = payment_method
-
-    # Thêm lại chi tiết đơn hàng mới
-    if order_items is not None:
-        # Xóa chi tiết đơn hàng cũ
-        session.query(OrderDetail).filter(OrderDetail.order_id == order_id).delete()
-        order_item_datas = order_items["message"]
-        for item in order_item_datas:
-            product_id = int(item["product_id"])
-            quantity = int(item["quantity"])
-            unit_price = int(item["unit_price"])
-
-            order_detail = OrderDetail(
-                order_id=order_id,
-                product_id=product_id,
-                quantity=quantity,
-                unit_price=unit_price,
-            )
-
-            session.add(order_detail)
-
-    # Commit thay đổi cuối cùng
-    session.commit()
-
-    message = "Đã chỉnh sửa đơn hàng thành công."
-    return {"status": True, "message": message}
+    finally:
+        session.close()
 
 
 def delete_order(order_id):
@@ -152,23 +142,3 @@ def delete_order(order_id):
     else:
         message = "Không tìm thấy đơn hàng."
         return {"status": False, "message": message}
-
-
-def add_order_statuses(status_list):
-    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
-
-    message = ""
-    for status in status_list:
-        existing_status = session.query(OrderStatus).filter_by(status=status).first()
-        if existing_status:
-            session.close()
-            return {"status": False, "message": f"Trạng thái '{status}' đã tồn tại."}
-
-        new_status = OrderStatus(status=status)
-        session.add(new_status)
-
-    session.commit()
-    session.close()
-    return {"status": True, "message": "Thêm trạng thái đơn hàng thành công."}

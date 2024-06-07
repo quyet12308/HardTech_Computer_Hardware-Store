@@ -12,6 +12,7 @@ responses = {
     "sai_mat_khau": "Wrong password",
     "tai_khoan_chua_duoc_dang_ky": "Account is not registered",
     "cap_nhat_mat_khau_moi_thanh_cong": "New password updated successfully",
+    "cap_nhat_trang_thai_don_hang_thanh_cong": "Update order status successfully",
     "sai_code": "Wrong code",
     "cam_on_dong_gop_cua_ban": "Thank you for your contribution",
     "sua_thong_tin_thanh_cong": "Information processing successfully",

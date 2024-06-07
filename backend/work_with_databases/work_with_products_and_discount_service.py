@@ -252,7 +252,7 @@ def get_product_overview(limit=None, order_by=None, reverse=False, category_name
             "image": product.image,
             "price": product.price,
             "category_id": product.category_id,
-            "category_name": product.category.category_name,
+            "category_name": product.category_name,
             "created_at": product.created_at,
             "updated_at": product.updated_at,
             "discount": None,
