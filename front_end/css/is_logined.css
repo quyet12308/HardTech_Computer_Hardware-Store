@@ -1,0 +1,25 @@
+#is_logined_dispaly{
+    display: flex;
+    align-items: center;
+}
+
+#is_logined_dispaly img{
+    height: 20px;
+    width: 20px;
+}
+
+#submenu_login {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1;
+    top: 100%;
+    right: 0;
+  }
+  
+  #is_logined_display:hover #submenu_login {
+    display: block;
+  }

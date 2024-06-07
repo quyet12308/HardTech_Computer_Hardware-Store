@@ -66,3 +66,9 @@ button:hover {
     justify-content: center;
     background-color: #f8f8f8
 }
+
+#errorContainer {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }

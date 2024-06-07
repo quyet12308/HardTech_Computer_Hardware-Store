@@ -1,7 +1,7 @@
 const products = [
-    {  name: "Sản phẩm A", brand: "Hãng 1", category: "Thể loại 1", quantity: 15, price: 1500000 },
-        {  name: "Sản phẩm B", brand: "Hãng 2", category: "Thể loại 2", quantity: 5, price: 800000 },
-        { name: "Sản phẩm C", brand: "Hãng 1", category: "Thể loại 3", quantity: 25, price: 3000000 },
+    {  name: "Sản phẩm A", brand: "Hãng 1", category: "Thể loại 1", quantity: 15,discount: 10, price: 1500000 },
+        {  name: "Sản phẩm B", brand: "Hãng 2", category: "Thể loại 2", quantity: 5,discount: 20, price: 800000 },
+        { name: "Sản phẩm C", brand: "Hãng 1", category: "Thể loại 3", quantity: 25,discount: 30, price: 3000000 },
         // Thêm dữ liệu sản phẩm tại đây
     ];
 
@@ -39,6 +39,7 @@ const products = [
                 <td>${product.brand}</td>
                 <td>${product.category}</td>
                 <td>${product.quantity}</td>
+                <td>${product.discount}</td>
                 <td>${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
                 <td>
                     <button class="button" onclick="editProduct(${index + 1})">Sửa</button>

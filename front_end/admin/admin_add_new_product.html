@@ -56,6 +56,20 @@
                 <input type="number" id="productQuantity" required>
             </div>
 
+            <div class="form-group">
+                <label for="discountPercentage">% Giảm Giá Sản Phẩm (nếu có):</label>
+                <input type="number" id="discountPercentage" value="0" min="0" max="100" step="1">
+            </div>
+
+            <div class="form-group" id="discountDates" style="display: none;">
+                <label for="discountStartDate">Ngày Bắt Đầu Giảm Giá:</label>
+                <input type="date" id="discountStartDate">
+                <label for="discountEndDate">Ngày Kết Thúc Giảm Giá:</label>
+                <input type="date" id="discountEndDate">
+            </div>
+
+            <div id="errorMessages" style="color: red;"></div>
+
             <button type="submit">Thêm Sản Phẩm</button>
         </form>
     </div>

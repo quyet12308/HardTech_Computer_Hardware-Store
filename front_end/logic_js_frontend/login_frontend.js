@@ -50,12 +50,16 @@ document.addEventListener('DOMContentLoaded',  function() {
       email = a.email
       is_admin = a.is_admin
       avata_img = a.avata_img
+      user_name = a.user_name
       sessionStorage.setItem('tokek_for_login_session', token);
       sessionStorage.setItem("avatar_img",avata_img)
+      sessionStorage.setItem("user_name",user_name)
       if (is_admin){
+        sessionStorage.setItem("is_admin",true)
         window.location.href = "admin/admin_hompage.html"
       }
       else{
+        sessionStorage.setItem("is_admin",false)
         window.location.href = "index.html"
       }
       

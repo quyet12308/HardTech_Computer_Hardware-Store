@@ -82,8 +82,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	 float:right;
  }
  .account_desc li{
+	color: white;
+	margin: 0 6px;
 	 display:inline;
 	 border-left:1px dotted #CCC;
+ }
+
+ .account_desc li:hover {
+	color: red;
  }
  .account_desc li:first-child{
 	 border:none;

@@ -1,4 +1,6 @@
+
 document.addEventListener('DOMContentLoaded',  function() {
+
     let header = document.querySelector('.header');
   header.innerHTML = `
   <div class="headertop_desc">
@@ -6,21 +8,8 @@ document.addEventListener('DOMContentLoaded',  function() {
            <p><span>Need help?</span> call us <a href="tel:+1234567890">123-456-7890</a>
            </span></p>
       </div>
-      <div class="account_desc">
-          <ul>
-          <li><a href="#">Checkout</a></li>
-          <li><a href="../register.html">Register</a></li>
-          <li><a href="../login.html">Login</a></li>
-          <li class="header__navbar-user"><a href="../user_info.html">
-          <img src="../images/about_img.jpg" alt="">	My Account
-          </a>
-              <ul class="header__navbar-user-menu hover-animation">
-                  <li class="header__navbar-user-item">
-                      <a href="../user_info.html">Tài khoản của tôi</a>
-                  <li class="header__navbar-user-item header__navbar-user-item--separate">
-                      <a href="">Đăng xuất</a>
-                  </li>
-          </ul>
+      <div class="account_desc" id="is_logined">
+          
       </div>
       <div class="clear"></div>
   </div>
