@@ -124,47 +124,47 @@ def delete_product(product_id):
     return {"status": True, "message": message}
 
 
-def get_product_details(product_id=None, product_name=None):
-    # Tạo engine và phiên làm việc
-    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
+# def get_product_details(product_id=None, product_name=None):
+#     # Tạo engine và phiên làm việc
+#     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
 
-    query = session.query(Product, Category, Brand).join(Category).join(Brand)
+#     query = session.query(Product, Category, Brand).join(Category).join(Brand)
 
-    if product_id is not None:
-        query = query.filter(Product.product_id == product_id)
-    elif product_name is not None:
-        query = query.filter(Product.product_name == product_name)
-    else:
-        message = "Vui lòng cung cấp ID hoặc tên sản phẩm."
-        return {"status": False, "message": message}
+#     if product_id is not None:
+#         query = query.filter(Product.product_id == product_id)
+#     elif product_name is not None:
+#         query = query.filter(Product.product_name == product_name)
+#     else:
+#         message = "Vui lòng cung cấp ID hoặc tên sản phẩm."
+#         return {"status": False, "message": message}
 
-    result = query.first()
+#     result = query.first()
 
-    if not result:
-        message = "Không tìm thấy sản phẩm."
-        return {"status": False, "message": message}
+#     if not result:
+#         message = "Không tìm thấy sản phẩm."
+#         return {"status": False, "message": message}
 
-    product, category, brand = result
+#     product, category, brand = result
 
-    product_details = {
-        "product_id": product.product_id,
-        "product_name": product.product_name,
-        "price": product.price,
-        "description": product.description,
-        "category": {
-            "category_id": category.category_id,
-            "category_name": category.category_name,
-        },
-        "brand": {"brand_id": brand.brand_id, "brand_name": brand.brand_name},
-        "quantity": product.quantity,
-        "image": product.image,
-        "created_at": product.created_at,
-        "updated_at": product.updated_at,
-    }
+#     product_details = {
+#         "product_id": product.product_id,
+#         "product_name": product.product_name,
+#         "price": product.price,
+#         "description": product.description,
+#         "category": {
+#             "category_id": category.category_id,
+#             "category_name": category.category_name,
+#         },
+#         "brand": {"brand_id": brand.brand_id, "brand_name": brand.brand_name},
+#         "quantity": product.quantity,
+#         "image": product.image,
+#         "created_at": product.created_at,
+#         "updated_at": product.updated_at,
+#     }
 
-    return {"status": True, "product_details": product_details}
+#     return {"status": True, "product_details": product_details}
 
 
 def get_product_detail(product_id):

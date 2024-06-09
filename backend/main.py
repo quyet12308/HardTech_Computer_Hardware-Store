@@ -14,6 +14,7 @@ from work_with_databases.work_with_cart_service import *
 from work_with_databases.work_with_brand_and_category_service import *
 from work_with_databases.work_with_order_service import *
 from work_with_databases.admin_services_homepage import *
+from work_with_databases.admin_services_product_management import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *
@@ -723,14 +724,136 @@ async def admin_homepage(request_data: AdminHomepageRequest):
 ############################## admin product management ######################
 ##############################################################################
 
-@app.get("/api/admin/admin_product_management_preview")
-async def admin_product_management_preview(request_data: AdminProductManagementPreviewRequest):
-    token_login_session = request_data.token_login_session
+
+@app.post("/api/admin/admin_product_management_preview")
+async def admin_product_management_preview(
+    request_data: AdminProductManagementPreviewRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                all_product = get_all_products_admin_product_management()
+                print(all_product)
+                if all_product:
+                    return {
+                        "response": {
+                            "message": all_product,
+                            "status": True,
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.delete("/api/admin/delete_product")
+async def delete_product_admin_product_management(
+    request_data: AdminProductManagementDeleteProductRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        product_id = request_data.product_id
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                check_delete_product = delete_product(product_id=product_id)
+                if check_delete_product["status"]:
+                    return {
+                        "response": {
+                            "message": responses["da_xoa_san_pham_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    print(check_delete_product["message"])
+                    return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.get("/api/admin/get_brands_and_catagories")
+async def get_brands_and_catagories_product_management():
+    brands_and_catagories = get_unique_category_and_brand_names()
+    if brands_and_catagories:
+        # print(brands_and_catagories)
+        return {
+            "response": {
+                "message": brands_and_catagories,
+                "status": True,
+            }
+        }
+    else:
+        return {
+            "response": {
+                "message": responses["co_loi_xay_ra"],
+                "status": False,
+            }
+        }
 
 
 # api add product
 @app.post("/api/admin/add-new-product")
-async def add_new_product(request_data: AddNewProductRequest):
+async def add_new_product_admin_product_management(request_data: AddNewProductRequest):
+
     if request_data:
         token_login_session = request_data.token_login_session
         product_name: str = request_data.product_name
@@ -740,6 +863,9 @@ async def add_new_product(request_data: AddNewProductRequest):
         brand_id: int = request_data.brand_id
         quantity: int = request_data.quantity
         image: str = request_data.image
+        discount_enddate = request_data.discount_enddate
+        discount_percentage = request_data.discount_percentage
+        discount_startdate = request_data.discount_startdate
 
         # check admin
         check_login_session = get_user_id_from_token(token_value=token_login_session)
@@ -748,13 +874,16 @@ async def add_new_product(request_data: AddNewProductRequest):
             user_id = check_login_session["message"]
             is_admin = is_admin_user(user_id=user_id)
             if is_admin:
-                addproduct = add_product(
+                addproduct = add_new_product(
                     product_name=product_name,
                     image=image,
                     brand_id=brand_id,
                     category_id=category_id,
                     description=description,
                     price=price,
+                    discount_percentage=discount_percentage,
+                    end_date=discount_enddate,
+                    start_date=discount_startdate,
                     quantity=quantity,
                 )
                 if addproduct["status"]:
@@ -786,6 +915,470 @@ async def add_new_product(request_data: AddNewProductRequest):
                 }
             }
 
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.get("/api/admin/get_product_detail")
+async def get_product_detail_admin_product_management():
+    return
+
+
+@app.get("/api/admin/get_all_brands_admin_brand_management")
+async def get_all_brands_admin_brand_management():
+    data = get_all_brands()
+    if data is not None:
+        return {
+            "response": {
+                "status": True,
+                "message": data,
+            }
+        }
+    else:
+        {
+            "response": {
+                "status": False,
+                "message": responses["co_loi_xay_ra"],
+            }
+        }
+
+
+@app.post("/api/admin/add_new_brand")
+async def add_new_brand_product_management(
+    request_data: AdminAddNewBrandProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        brand_name: str = request_data.brand_name
+        description = request_data.description
+        img = request_data.img
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                check_add_brand_product_management = add_brand_product_management(
+                    img=img, brand_name=brand_name, description=description
+                )
+                if check_add_brand_product_management["status"]:
+                    return {
+                        "response": {
+                            "message": responses["da_them_brand_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    print(check_add_brand_product_management["message"])
+                    return {
+                        "response": {
+                            "message": check_add_brand_product_management["message"],
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.post("/api/admin/get_brand_detail")
+async def get_brand_detail_admin_product_managetmant(
+    request_data: AdmiGetBrandDetailProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        brand_id: str = request_data.brand_id
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                brand_detail = get_brand_details(brand_id=brand_id)
+                if brand_detail:
+
+                    return {
+                        "response": {
+                            "message": brand_detail,
+                            "status": True,
+                        }
+                    }
+                else:
+                    raise HTTPException(status_code=404, detail="Brand not found")
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+# delete brand
+@app.delete("/api/admin/delete_brand")
+async def delete_brand_product_management(
+    request_data: AdmiDeleteBrandProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        brand_id: str = request_data.brand_id
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                delete_brand_product_management_with_id(brand_id=brand_id)
+                return {
+                    "response": {
+                        "message": responses["da_xoa_brand_thanh_cong"],
+                        "status": True,
+                    }
+                }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.put("/api/admin/edit_brand")
+async def edit_brand_admin_product_management(
+    request_data: AdmiEditBrandProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        brand_id: str = request_data.brand_id
+        brand_name = request_data.brand_name
+        brand_img = request_data.brand_img
+        brand_description = request_data.brand_description
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                check_update_brand = update_brand(
+                    brand_id=brand_id,
+                    brand_name=brand_name,
+                    description=brand_description,
+                    img=brand_img,
+                )
+                if check_update_brand["status"]:
+                    return {
+                        "response": {
+                            "message": responses["da_cap_nhat_brand_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "message": check_update_brand["message"],
+                            "status": False,
+                        }
+                    }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.get("/api/admin/get_all_categories")
+async def get_all_categories_admin_prodcut_management():
+    all_categories = get_all_categories()
+    if all_categories:
+
+        return {
+            "response": {
+                "message": all_categories,
+                "status": True,
+            }
+        }
+    else:
+        return {
+            "response": {
+                "message": responses["co_loi_xay_ra"],
+                "status": False,
+            }
+        }
+
+
+@app.post("/api/admin/get_a_category")
+async def get_a_categoryadmin_prodcut_management(
+    request_data: AdminGetACatagoryProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        catagory_id = request_data.catagory_id
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                category = get_category(category_id=catagory_id)
+                if category:
+                    return {
+                        "response": {
+                            "message": category,
+                            "status": True,
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "message": responses["co_loi_xay_ra"],
+                            "status": False,
+                        }
+                    }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.post("/api/admin/add_new_category")
+async def add_new_category_admin_product_management(
+    request_data: AdminAddNewCatagoryProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        catagory_name = request_data.catagory_name
+        catagory_description = request_data.catagory_description
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                check_add_category = add_category(
+                    category_name=catagory_name, description=catagory_description
+                )
+                if check_add_category["status"]:
+                    return {
+                        "response": {
+                            "message": responses["da_them_the_loai_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "message": check_add_category["message"],
+                            "status": False,
+                        }
+                    }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.put("/api/admin/edit_category")
+async def edit_category_admin_product_management(
+    request_data: AdminEditCatagoryProductManagementRequest,
+):
+    print(request_data)
+    if request_data:
+        token_login_session = request_data.token_login_session
+        catagory_id = request_data.catagory_id
+        catagory_name = request_data.catagory_name
+        catagory_description = request_data.catagory_description
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                check_edit_category = edit_category_data(
+                    category_id=catagory_id,
+                    new_category_name=catagory_name,
+                    new_description=catagory_description,
+                )
+                if check_edit_category["status"]:
+                    return {
+                        "response": {
+                            "message": responses["da_cap_nhat_the_loai_thanh_cong"],
+                            "status": True,
+                        }
+                    }
+                else:
+                    return {
+                        "response": {
+                            "message": check_edit_category["message"],
+                            "status": False,
+                        }
+                    }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
+@app.delete("/api/admin/delete_category")
+async def delete_category_admin_product_management(
+    request_data: AdminDeleteCatagoryProductManagementRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        catagory_id = request_data.catagory_id
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                delete_catagory_product_management_with_id(category_id=catagory_id)
+
+                return {
+                    "response": {
+                        "message": responses["da_xoa_the_loai_thanh_cong"],
+                        "status": True,
+                    }
+                }
+
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
     else:
         return {
             "response": {

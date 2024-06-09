@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class LoginRequest(BaseModel):
@@ -84,12 +85,15 @@ class CreateOrderRequest(BaseModel):
 class AddNewProductRequest(BaseModel):
     token_login_session: str
     product_name: str
-    price: float
     description: str
+    price: float
+    quantity: int
     category_id: int
     brand_id: int
-    quantity: int
     image: str
+    discount_percentage: Optional[int] = None
+    discount_startdate: Optional[str] = None
+    discount_enddate: Optional[str] = None
 
 
 class EditProductRequest(BaseModel):
@@ -114,5 +118,59 @@ class AdminHomepageRequest(BaseModel):
     token_login_session: str
     timeframe: str
 
+
 class AdminProductManagementPreviewRequest(BaseModel):
     token_login_session: str
+
+
+class AdminProductManagementDeleteProductRequest(BaseModel):
+    token_login_session: str
+    product_id: str
+
+
+class AdminAddNewBrandProductManagementRequest(BaseModel):
+    token_login_session: str
+    brand_name: str
+    description: str
+    img: str
+
+
+class AdmiDeleteBrandProductManagementRequest(BaseModel):
+    token_login_session: str
+    brand_id: str
+
+
+class AdmiEditBrandProductManagementRequest(BaseModel):
+    token_login_session: str
+    brand_id: str
+    brand_name: Optional[str]
+    brand_img: Optional[str]
+    brand_description: Optional[str]
+
+
+class AdmiGetBrandDetailProductManagementRequest(BaseModel):
+    token_login_session: str
+    brand_id: str
+
+
+class AdminAddNewCatagoryProductManagementRequest(BaseModel):
+    token_login_session: str
+    catagory_name: str
+    catagory_description: str
+
+
+class AdminEditCatagoryProductManagementRequest(BaseModel):
+    token_login_session: str
+    catagory_id: int
+    catagory_name: str
+    catagory_description: str
+
+
+class AdminDeleteCatagoryProductManagementRequest(BaseModel):
+    token_login_session: str
+    catagory_id: str
+
+
+class AdminGetACatagoryProductManagementRequest(BaseModel):
+    token_login_session: str
+    catagory_id: str

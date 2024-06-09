@@ -209,16 +209,38 @@ def query_category_by_name(category_name):
         return {"status": False, "messgae": message}
 
 
+# def get_unique_category_and_brand_names():
+#     # Tạo engine để kết nối đến CSDL
+#     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+#     category_names = session.query(Category.category_name).distinct().all()
+#     brand_names = session.query(Brand.brand_name).distinct().all()
+
+#     category_names = [name[0] for name in category_names]
+#     brand_names = [name[0] for name in brand_names]
+
+#     # return category_names, brand_names
+#     return {"category_names": category_names, "brand_names": brand_names}
+
+
 def get_unique_category_and_brand_names():
     # Tạo engine để kết nối đến CSDL
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
-    category_names = session.query(Category.category_name).distinct().all()
-    brand_names = session.query(Brand.brand_name).distinct().all()
 
-    category_names = [name[0] for name in category_names]
-    brand_names = [name[0] for name in brand_names]
+    categories = (
+        session.query(Category.category_id, Category.category_name).distinct().all()
+    )
+    brands = session.query(Brand.brand_id, Brand.brand_name).distinct().all()
 
-    # return category_names, brand_names
-    return {"category_names": category_names, "brand_names": brand_names}
+    category_list = [
+        {"id": category_id, "name": category_name}
+        for category_id, category_name in categories
+    ]
+    brand_list = [
+        {"id": brand_id, "name": brand_name} for brand_id, brand_name in brands
+    ]
+
+    return {"categories": category_list, "brands": brand_list}

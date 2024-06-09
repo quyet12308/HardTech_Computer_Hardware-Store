@@ -99,7 +99,15 @@ class Brand(Base):
     brand_name = Column(String)
     description = Column(Text)
     img = Column(String)
+
     # url_web = Column(String)  # Thêm cột "url" vào bảng "brands"
+    def to_dict(self):
+        return {
+            "brand_id": self.brand_id,
+            "brand_name": self.brand_name,
+            "description": self.description,
+            "img": self.img,
+        }
 
 
 class Order(Base):

@@ -11,6 +11,7 @@ from work_with_databases.work_with_user_and_sesion_service import *
 from work_with_databases.work_with_brand_and_category_service import *
 from work_with_databases.work_with_comment_and_ranking_service import *
 from work_with_databases.admin_services_homepage import *
+from work_with_databases.admin_services_product_management import *
 
 from base_codes.get_token import generate_token
 from base_codes.gettime import gettime2, add_time_to_datetime, convert_to_datetime
@@ -94,7 +95,7 @@ from base_codes.hash_function import *
 # a = delete_table_data(DATA_BASE_PATH, "payment_details")
 # print(a)
 
-# b = delete_table_data(DATA_BASE_PATH, "cart_item")
+# b = delete_table_data(DATA_BASE_PATH, "products")
 # print(b)
 
 # a = edit_brand_data(new_brand_name="AMD", brand_id=1)
@@ -353,5 +354,28 @@ from base_codes.hash_function import *
 
 # print(pie_chart_data_json)
 
-chart_data = get_data_for_barChart_data_by_period("week")
-print(chart_data)
+# chart_data = get_data_for_barChart_data_by_period("week")
+# print(chart_data)
+
+# a = get_all_products_admin_product_management()
+# print(a)
+
+# a = get_product_details(product_id=2)
+# print(a)
+
+# a = get_all_brands()
+# print(a)
+
+# a = add_new_product(
+#     price=2,
+#     description="test",
+#     brand_id=2,
+#     category_id=2,
+#     discount_percentage=20,
+#     end_date="2024-06-10",
+#     image="image",
+#     product_name="test3",
+#     quantity=3,
+#     start_date="2024-06-05",
+# )
+# print(a)
