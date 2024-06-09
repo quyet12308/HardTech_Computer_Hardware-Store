@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Quản Lý Sản Phẩm</title>
     <link rel="stylesheet" href="./admin_css/admin_product_management_preview.css">
+    <script type="module" src="./admin_js/admin_product_management_preview.js"></script>
 </head>
 <body>
 
@@ -42,7 +43,7 @@
             <option value="2000000-5000000">2,000,000 - 5,000,000</option>
             <option value=">5000000">> 5,000,000</option>
         </select>
-        <button class="button" onclick="filterProducts()">Lọc</button>
+        <button class="button" id="filter_btn">Lọc</button>
     </div>
     
     <table>
@@ -63,7 +64,7 @@
         </tbody>
     </table>
 </div>
-<script src="./admin_js/admin_product_management_preview.js"></script>
+
 
 </body>
 </html>

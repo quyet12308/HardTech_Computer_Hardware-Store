@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert(response_data.message)
       }
       document.getElementById('time-period').addEventListener('change',async function() {
-        const selectedPeriod = this.value;
+        let selectedPeriod = this.value;
         // Ở đây bạn có thể gọi hàm để cập nhật biểu đồ với thời gian được chọn
         alert(selectedPeriod)
         let url_api_homepage = module.url_api_homepage;

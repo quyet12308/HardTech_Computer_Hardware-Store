@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thêm Mới Sản Phẩm</title>
     <link rel="stylesheet" href="./admin_css/admin_add_new_product.css">
+    <script type="module" src="./admin_js/admin_add_new_product.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container_add_new_product">
         <h1>Thêm Mới Sản Phẩm</h1>
         <form id="productForm">
             <div class="form-group">
                 <label for="productImage">Chọn Ảnh:</label>
-                <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)">
+                <input type="file" id="productImage" accept="image/*" >
                 <div id="imagePreview"></div>
             </div>
 
@@ -34,20 +35,14 @@
             <div class="form-group">
                 <label for="productBrand">Hãng Sản Xuất:</label>
                 <select id="productBrand" required>
-                    <option value="" disabled selected>Chọn hãng sản xuất</option>
-                    <option value="Brand1">Hãng 1</option>
-                    <option value="Brand2">Hãng 2</option>
-                    <option value="Brand3">Hãng 3</option>
+                    
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="productCategory">Thể Loại:</label>
                 <select id="productCategory" required>
-                    <option value="" disabled selected>Chọn thể loại</option>
-                    <option value="Category1">Thể Loại 1</option>
-                    <option value="Category2">Thể Loại 2</option>
-                    <option value="Category3">Thể Loại 3</option>
+                    
                 </select>
             </div>
 
@@ -74,6 +69,6 @@
         </form>
     </div>
 
-    <script src="./admin_js/admin_add_new_product.js"></script>
+    
 </body>
 </html>

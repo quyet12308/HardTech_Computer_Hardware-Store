@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý Hãng Sản Xuất</title>
   <link rel="stylesheet" href="./admin_css/admin_brands_management.css">
+  <script type="module" src="./admin_js/admin_brands_management.js"></script>
 </head>
 <body>
 
@@ -32,17 +33,6 @@
     <textarea id="newDescription" placeholder="Mô Tả" required></textarea>
     <button type="submit">Thêm Hãng</button>
   </form>
-
-  <h2>Sửa Hãng Sản Xuất</h2>
-  <form id="editManufacturerForm" class="edit-form">
-    <input type="hidden" id="editIndex">
-    <input type="file" id="editImage" accept="image/*">
-    <input type="text" id="editName" placeholder="Tên Hãng" required>
-    <textarea id="editDescription" placeholder="Mô Tả" required></textarea>
-    <button type="submit">Cập Nhật</button>
-  </form>
-
-  <script src="./admin_js/admin_brands_management.js"></script>
 
 </body>
 </html>
