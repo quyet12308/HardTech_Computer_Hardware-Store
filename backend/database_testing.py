@@ -379,3 +379,7 @@ from base_codes.hash_function import *
 #     start_date="2024-06-05",
 # )
 # print(a)
+
+# user_id = 4
+# cart_info = get_cart_info(user_id)
+# print(cart_info)

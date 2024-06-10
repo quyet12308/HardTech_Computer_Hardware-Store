@@ -283,8 +283,8 @@ async def forgot_password_reset_password(
 
 
 # api show product in hompage
-@app.get("/api/homepage/list-products-and-hompage-infor")
-async def get_list_products_for_homepage():
+@app.get("/api/homepage/hompage_layout")
+async def hompage_layout():
     list_products = {}
     list_product_newest = get_product_overview(
         order_by="created_at",
@@ -298,12 +298,13 @@ async def get_list_products_for_homepage():
             limit=10,
             reverse=True,
         )
-    category_and_brand_names = get_unique_category_and_brand_names()
+
+    categories_and_brands = get_unique_category_and_brand_names()
     return {
         "response": {
             "message": {
                 "list_products": list_products,
-                "category_and_brand_names": category_and_brand_names,
+                "categories_and_brands": categories_and_brands,
             },
             "status": True,
         }
@@ -494,6 +495,39 @@ async def add_product_to_cart(request_data: AddProducttoCartRequest):
             }
 
 
+@app.post("/api/cartpage/get_cart_infor")
+async def get_cart_infor_with_user_id(request_data: GetCartInforRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            get_cart_infor_request = get_cart_info(user_id=user_id)
+            if get_cart_infor_request:
+                return {
+                    "response": {
+                        "message": get_cart_infor_request,
+                        "status": True,
+                    }
+                }
+            else:
+
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
 # edit cart quantity
 @app.put("/api/cartpage/update-cart-item-quantity")
 async def update_cart_item_quantity1(request_data: UpdateCartItemQuantityRequest):
@@ -648,7 +682,7 @@ async def place_order(request_data: CreateOrderRequest):
 
 
 ##############################################################################
-############################## admin homepage management #####################
+############################## admin management ##############################
 ##############################################################################
 
 
@@ -738,7 +772,7 @@ async def admin_product_management_preview(
             is_admin = is_admin_user(user_id=user_id)
             if is_admin:
                 all_product = get_all_products_admin_product_management()
-                print(all_product)
+                # print(all_product)
                 if all_product:
                     return {
                         "response": {

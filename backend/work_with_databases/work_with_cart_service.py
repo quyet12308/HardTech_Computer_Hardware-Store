@@ -1,4 +1,6 @@
 from Database_initialization_and_structure import *
+from sqlalchemy.orm import joinedload
+from sqlalchemy import create_engine, and_
 
 ###################################################################################
 ########## interact with the cart and cart_item table in database #################
@@ -116,3 +118,62 @@ def remove_product_from_cart(user_id, product_id):
 
     message = "Đã xóa sản phẩm khỏi giỏ hàng thành công."
     return {"status": True, "message": message}
+
+
+def get_discounted_price(product):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    current_time = datetime.now()
+    discount = (
+        session.query(Discount)
+        .filter(
+            and_(
+                Discount.product_id == product.product_id,
+                Discount.start_date <= current_time,
+                Discount.end_date >= current_time,
+            )
+        )
+        .first()
+    )
+
+    if discount:
+        discounted_price = float(product.price) * (
+            1 - discount.discount_percentage / 100
+        )
+        return discounted_price
+    return float(product.price)
+
+
+def get_cart_info(user_id):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    # Truy vấn giỏ hàng của user
+    cart = session.query(Cart).filter(Cart.user_id == user_id).first()
+
+    if not cart:
+        return None
+
+    # Truy vấn các mục giỏ hàng và thông tin sản phẩm tương ứng
+    cart_items = (
+        session.query(CartItem)
+        .options(joinedload(CartItem.product))
+        .filter(CartItem.cart_id == cart.id)
+        .all()
+    )
+
+    cart_info = []
+    for item in cart_items:
+        product = item.product
+        discounted_price = get_discounted_price(product)
+        product_info = {
+            "id_product": product.product_id,
+            "product_name": product.product_name,  # lấy tên sản phẩm
+            "price": discounted_price,  # lấy giá sau khi đã giảm
+            "image": product.image,
+            "quantity": item.quantity,
+        }
+        cart_info.append(product_info)
+
+    return cart_info

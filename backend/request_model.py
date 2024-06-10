@@ -53,7 +53,7 @@ class DeleteAccountRequest(BaseModel):
 class AddProducttoCartRequest(BaseModel):
     token_login_session: str
     product_id: str
-    quantity: str
+    quantity: int
 
 
 class UpdateCartItemQuantityRequest(BaseModel):
@@ -69,6 +69,10 @@ class RemoveProductFromCartRequest(BaseModel):
 
 class SearchProductsByKeywordRequest(BaseModel):
     keyword: str
+
+
+class GetCartInforRequest(BaseModel):
+    token_login_session: str
 
 
 class FilterProductsHomepageRequest(BaseModel):

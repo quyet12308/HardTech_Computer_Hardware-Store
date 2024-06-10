@@ -41,7 +41,7 @@ order = {
     "embed_data": json.dumps({}),
     "item": json.dumps([{}]),
     "amount": 50000,
-    "description": "đơn hàng của lâm" + str(transID),
+    "description": "đơn hàng của nhóm 10" + str(transID),
     "bank_code": "zalopayapp",
 }
 

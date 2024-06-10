@@ -101,8 +101,30 @@ def edit_product_data(
         return {"status": True, "message": message}
 
 
+# def delete_product(product_id):
+#     # Tạo engine và phiên làm việc
+#     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+
+#     # Lấy đối tượng sản phẩm cần xóa
+#     product = session.query(Product).filter_by(product_id=product_id).first()
+
+#     if not product:
+#         message = f"Không tìm thấy sản phẩm với ID {product_id}."
+#         return {"status": False, "message": message}
+
+#     # Xóa sản phẩm khỏi phiên làm việc
+#     session.delete(product)
+
+#     # Commit thay đổi
+#     session.commit()
+
+#     message = f"Đã xóa sản phẩm với ID {product_id}."
+#     return {"status": True, "message": message}
+
+
 def delete_product(product_id):
-    # Tạo engine và phiên làm việc
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -112,6 +134,13 @@ def delete_product(product_id):
 
     if not product:
         message = f"Không tìm thấy sản phẩm với ID {product_id}."
+        return {"status": False, "message": message}
+
+    # Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
+    cart_item_exists = session.query(CartItem).filter_by(product_id=product_id).first()
+    if cart_item_exists:
+        print(1)
+        message = f"Sản phẩm với ID {product_id} đang tồn tại trong giỏ hàng."
         return {"status": False, "message": message}
 
     # Xóa sản phẩm khỏi phiên làm việc
@@ -220,6 +249,58 @@ def calculate_average_rating(comments):
     return average_rating
 
 
+# def get_product_overview(limit=None, order_by=None, reverse=False, category_name=None):
+#     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+
+#     query = session.query(Product)
+
+#     if category_name is not None:
+#         query = query.join(Product.category).filter(
+#             Category.category_name == category_name
+#         )
+
+#     if order_by is not None:
+#         if reverse:
+#             order_by = text(f"{order_by} DESC")
+#         else:
+#             order_by = text(order_by)
+#         query = query.order_by(order_by)
+
+#     if limit is not None:
+#         query = query.limit(limit)
+
+#     products = query.all()
+#     overview = []
+
+#     for product in products:
+#         product_data = {
+#             "product_id": product.product_id,
+#             "product_name": product.product_name,
+#             "image": product.image,
+#             "price": product.price,
+#             "category_id": product.category_id,
+#             "category_name": product.category.category_name,
+#             "created_at": product.created_at,
+#             "updated_at": product.updated_at,
+#             "discount": None,
+#         }
+
+#         discount = (
+#             session.query(Discount).filter_by(product_id=product.product_id).first()
+#         )
+#         if discount:
+#             product_data["discount"] = discount.discount_percentage
+
+#         overview.append(product_data)
+
+#     session.close()
+
+
+# return overview
+
+
 def get_product_overview(limit=None, order_by=None, reverse=False, category_name=None):
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
@@ -245,6 +326,8 @@ def get_product_overview(limit=None, order_by=None, reverse=False, category_name
     products = query.all()
     overview = []
 
+    current_date = datetime.now()
+
     for product in products:
         product_data = {
             "product_id": product.product_id,
@@ -252,15 +335,22 @@ def get_product_overview(limit=None, order_by=None, reverse=False, category_name
             "image": product.image,
             "price": product.price,
             "category_id": product.category_id,
-            "category_name": product.category_name,
+            "category_name": product.category.category_name,
             "created_at": product.created_at,
             "updated_at": product.updated_at,
-            "discount": None,
+            "discount": 0,  # Default to 0
         }
 
         discount = (
-            session.query(Discount).filter_by(product_id=product.product_id).first()
+            session.query(Discount)
+            .filter(
+                Discount.product_id == product.product_id,
+                Discount.start_date <= current_date,
+                Discount.end_date >= current_date,
+            )
+            .first()
         )
+
         if discount:
             product_data["discount"] = discount.discount_percentage
 
