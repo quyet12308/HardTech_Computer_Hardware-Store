@@ -18,91 +18,17 @@
 <script src="../layout/header.js"></script>
 <script src="../layout/footer.js"></script>
 <script src="./logic_js_frontend/check_login.js"></script>
+<script type="module" src="./logic_js_frontend/cart_logic.js"></script>
+<!-- <script src="./js/cart.js"></script> -->
 </head>
 <body>
     <header class="header"></header>
     <div class="bg_color">
         <div class="breadcrumb"></div>
         <div class=" wrap">
-            <div class="cart__container">
+            <div class="cart__container" id="cart_product_content_container">
                 <!-- phần tên phân loại trg giỏ hàng -->
-                <div class="cart__form">
-                    <div class="cart__category">
-                        <input type="checkbox" name="" id="cart__check-all">
-                        <div class="cart__category-name">Sản phẩm</div>
-                        <div class="cart__category-price">Giá</div>
-                        <div class="cart__category-ticket">Số lượng</div>
-                        <div class="cart__category-operate">Thao tác</div>
-                    </div>
-                </div>
                 
-                <!-- thông tin tour trong giỏ hàng -->
-                <div class="cart__form">
-                    <div class="cart__content">
-                        <a href="./preview.html">
-                            <div class="cart__content-main">
-                                <input type="checkbox" name="" class = "cart__check">
-                                <img src="./images/Gigabyte RTX 4070 AORUS MASTER.jpg" class="cart__content-img" alt="">
-                            <div class="cart__content-name"> Card Màn Hình Gigabyte RTX 4070 AORUS MASTER - NK</div>
-                        </div>
-                        </a>
-                            <div class="cart__content-price">18.890.000 đ</div>
-                            <div class="cart__quantity-input">
-                                <button class="btn-minus">-</button>
-                                <input type="text" class="quantity-value" value="1" pattern="[0-9]*" inputmode="numeric">
-                                <button class="btn-plus">+</button>
-                              </div>
-                            <div class="cart__content-delete">Xóa</div>
-                    </div> 
-                </div>
-                    <div class="cart__form">
-                        <div class="cart__content">
-                            <div class="cart__content-main">
-                                <input type="checkbox" name="" class = "cart__check">
-                                <img src="./images/CPU AMD Ryzen 9 5950X.jpg" class="cart__content-img" alt="">
-                                <div class="cart__content-name">CPU AMD Ryzen 9 5950X (16 Nhân / 32 Luồng | 3.4GHz Boost 4.9GHz | 72MB Cache | PCIe 4.0)
-                                </div>
-                            </div>
-                                <div class="cart__content-price">8.700.000 đ</div>
-                                <div class="cart__quantity-input">
-                                    <button class="btn-minus">-</button>
-                                    <input type="text" class="quantity-value" value="1" pattern="[0-9]*" inputmode="numeric">
-                                    <button class="btn-plus">+</button>
-                                  </div>
-                                <div class="cart__content-delete">Xóa</div>
-                        </div> 
-                    </div>
-                    <div class="cart__form">
-                        <div class="cart__content">
-                            <div class="cart__content-main">
-                                <input type="checkbox" name="" class = "cart__check">
-                                <img src="./images/Mainboard Asus TUF Gaming.png" class="cart__content-img" alt="">
-                                <div class="cart__content-name"> Mainboard Asus TUF Gaming B760M-E DDR4
-                                </div>
-                            </div>
-                                <div class="cart__content-price">3.390.000 đ</div>
-                                <div class="cart__quantity-input">
-                                    <button class="btn-minus">-</button>
-                                    <input type="text" class="quantity-value" value="1" pattern="[0-9]*" inputmode="numeric">
-                                    <button class="btn-plus">+</button>
-                                  </div>
-                                <div class="cart__content-delete">Xóa</div>
-                        </div> 
-                    </div>
-                <!-- phần thông tin cuối cùng -->
-                <div class="cart__form">
-                    <div class="cart__cast">
-                        <div class="cart__cast-amount">
-                            <span>Số sản phẩm trong giỏ hàng:</span>
-                            <div class="cart__cast-amount-num">3</div>
-                        </div>
-                        <div class="cart__price">
-                            <span>Tổng thanh toán:</span> 
-                            <div class="cart__price-sum">50.000.000đ</div>
-                        </div>
-                        <a href="./order.html"><div class="cart__cast-pay-btn btn">Đặt Hàng</div></a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -112,7 +38,7 @@
 </body>
 <script src="../layout/header.js"></script>
 <script src="../layout/footer.js"></script>
-<script src="./js/cart.js"></script>
+
 <script src="./layout/breadcrumbs.js"></script>
 <script src="./js/script.js"></script>
 

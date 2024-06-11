@@ -18,6 +18,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <script src="../layout/header.js"></script>
 <script src="../layout/footer.js"></script>
 <script src="./logic_js_frontend/check_login.js"></script>
+<script type="module" src="./logic_js_frontend/home_page_layout.js"></script>
 </head>
 <body>
  
@@ -29,7 +30,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <div class="wrap">   
 	<div class="header_slide">
 			<div class="header_bottom_left">				
-				<div class="categories">
+				<div class="categories" id="categories_list">
 				  <ul>
 				  	<h3>Categories</h3>
 				      <li><a href="./category_products/vga_card.html">VGA - Card Màn Hình</a></li>
@@ -113,319 +114,39 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     		</div>
     		<div class="clear"></div>
     	</div>
-	      <div class="section group">
-				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-						<h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-					</a>	 
-					<div class="price-details">
-						<div class="discounted_detail">
-							<div class="original_price-main">69.000.000đ</div>
-							<div class="discounted_persent-main">10%</div>
-						</div>
-						<div class="discounted_price-main">61.900.000đ</div>
-							 <div class="clear"></div>
-					</div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="../preview.html"><img src="./images/CPU AMD Ryzen 9 5950X.jpg" alt="" />
-					   <h2>CPU AMD Ryzen 9 5950X (16 Nhân / 32 Luồng | 3.4GHz Boost 4.9GHz | 72MB Cache | PCIe 4.0) </h2>
-				   </a>	 
-				   <div class="price-details">
-					<div class="discounted_detail">
-						<div class="original_price-main">17.990.00đ</div>
-						<div class="discounted_persent-main">52%</div>
-					</div>
-					<div class="discounted_price-main">8.700.000đ</div>
-						 <div class="clear"></div>
-				</div>
-			   	</div>
-				   <div class="grid_1_of_4 images_1_of_4">
-					<a href="../preview.html"><img src="./images/CPU AMD Ryzen 9 5950X.jpg" alt="" />
-					   <h2>CPU AMD Ryzen 9 5950X (16 Nhân / 32 Luồng | 3.4GHz Boost 4.9GHz | 72MB Cache | PCIe 4.0) </h2>
-				   </a>	 
-				   <div class="price-details">
-					<div class="discounted_detail">
-						<div class="original_price-main">17.990.00đ</div>
-						<div class="discounted_persent-main">52%</div>
-					</div>
-					<div class="discounted_price-main">8.700.000đ</div>
-						 <div class="clear"></div>
-				</div>
-			   	</div>	
-				   <div class="grid_1_of_4 images_1_of_4">
-					<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-					   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-				   </a>	 
-				   <div class="price-details">
-					   <div class="discounted_detail">
-						   <div class="original_price-main">69.000.000đ</div>
-						   <div class="discounted_persent-main">10%</div>
-					   </div>
-					   <div class="discounted_price-main">61.900.000đ</div>
-							<div class="clear"></div>
-				   </div>
-			   </div>
-			   <div class="grid_1_of_4 images_1_of_4">
-				<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-				   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-			   </a>	 
-			   <div class="price-details">
-				   <div class="discounted_detail">
-					   <div class="original_price-main">69.000.000đ</div>
-					   <div class="discounted_persent-main">10%</div>
-				   </div>
-				   <div class="discounted_price-main">61.900.000đ</div>
-						<div class="clear"></div>
-			   </div>
-		   </div>
-		   <div class="grid_1_of_4 images_1_of_4">
-			<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-			   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-		   </a>	 
-		   <div class="price-details">
-			   <div class="discounted_detail">
-				   <div class="original_price-main">69.000.000đ</div>
-				   <div class="discounted_persent-main">10%</div>
-			   </div>
-			   <div class="discounted_price-main">61.900.000đ</div>
-					<div class="clear"></div>
-		   </div>
-	   </div>
-	   <div class="grid_1_of_4 images_1_of_4">
-		<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-		   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-	   </a>	 
-	   <div class="price-details">
-		   <div class="discounted_detail">
-			   <div class="original_price-main">69.000.000đ</div>
-			   <div class="discounted_persent-main">10%</div>
-		   </div>
-		   <div class="discounted_price-main">61.900.000đ</div>
-				<div class="clear"></div>
-	   </div>
-   </div>
-   <div class="grid_1_of_4 images_1_of_4">
-	<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-	   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-   </a>	 
-   <div class="price-details">
-	   <div class="discounted_detail">
-		   <div class="original_price-main">69.000.000đ</div>
-		   <div class="discounted_persent-main">10%</div>
-	   </div>
-	   <div class="discounted_price-main">61.900.000đ</div>
-			<div class="clear"></div>
-   </div>
-</div>
-<div class="grid_1_of_4 images_1_of_4">
-	<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-	   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-   </a>	 
-   <div class="price-details">
-	   <div class="discounted_detail">
-		   <div class="original_price-main">69.000.000đ</div>
-		   <div class="discounted_persent-main">10%</div>
-	   </div>
-	   <div class="discounted_price-main">61.900.000đ</div>
-			<div class="clear"></div>
-   </div>
-</div>
-<div class="grid_1_of_4 images_1_of_4">
-	<a href="../preview.html"><img src="./images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt="" />
-	   <h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X </h2>
-   </a>	 
-   <div class="price-details">
-	   <div class="discounted_detail">
-		   <div class="original_price-main">69.000.000đ</div>
-		   <div class="discounted_persent-main">10%</div>
-	   </div>
-	   <div class="discounted_price-main">61.900.000đ</div>
-			<div class="clear"></div>
-   </div>
-</div>
+	      <div class="section group" id="newest_products">
+				
 			</div>
 			<!-- sản phảm mới -->
 			
 			<!-- Vga - card màn hình -->
-			<div class="content_bottom content_cSs">
-				<div class="heading">
-				<h3>VGA - card màn hình</h3>
-				</div>
-				<div class="see">
-					<p><a href="#">See all Products</a></p>
-				</div>
-				<div class="clear"></div>
+			<div class="content_bottom content_cSs" id="product_1_list_heading">
+				
 			</div>
-				<div class="section group">
-					<div class="grid_1_of_4 images_1_of_4">
-						 <a href="../preview.html"><img src="./images/Card Màn Hình ZOTAC GAMING RTX 4070 SUPER Twin Edge OC 12GB GDDR6X.png" alt="" /></a>					
-						 <h2>Card Màn Hình ZOTAC GAMING RTX 4070 SUPER Twin Edge OC 12GB GDDR6X </h2>
-						<div class="price-details">
-						   <div class="price-number">
-								<p><span class="rupees">16.300.000đ</span></p>
-							</div>
-								 <div class="clear"></div>
-						</div>
-					</div>
-					<div class="grid_1_of_4 images_1_of_4">
-						<a href="preview.html"><img src="images/new-pic2.jpg" alt="" /></a>
-						 <h2>Lorem Ipsum is simply </h2>
-						 <div class="price-details">
-						   <div class="price-number">
-								<p><span class="rupees">$599.99</span></p>
-							</div>
-									   
-								 <div class="clear"></div>
-						</div>
-					</div>
-					<div class="grid_1_of_4 images_1_of_4">
-						<a href="preview.html"><img src="images/new-pic4.jpg" alt="" /></a>
-						 <h2>Lorem Ipsum is simply </h2>
-						<div class="price-details">
-						   <div class="price-number">
-								<p><span class="rupees">$799.99</span></p>
-							</div>
-									   
-								 <div class="clear"></div>
-						</div>
-					</div>
-					<div class="grid_1_of_4 images_1_of_4">
-					 <a href="preview.html"><img src="images/new-pic3.jpg" alt="" /></a>
-						 <h2>Lorem Ipsum is simply </h2>					 
-						 <div class="price-details">
-						   <div class="price-number">
-								<p><span class="rupees">$899.99</span></p>
-							</div>
-									   
-								 <div class="clear"></div>
-						</div>
-					</div>
-					<div class="grid_1_of_4 images_1_of_4">
-						<a href="preview.html"><img src="images/new-pic3.jpg" alt="" /></a>
-							<h2>Lorem Ipsum is simply </h2>					 
-							<div class="price-details">
-							  <div class="price-number">
-								   <p><span class="rupees">$899.99</span></p>
-							   </div>
-										  
-									<div class="clear"></div>
-						   </div>
-					   </div>
+				<div class="section group" id="product_1_list_content">
+					
 				</div>
 				<!-- Cpu - bộ vi xử lí -->
-				<div class="content_bottom content_cSs">
-					<div class="heading">
-					<h3>Cpu - bộ vi xử lí</h3>
-					</div>
-					<div class="see">
-						<p><a href="#">See all Products</a></p>
-					</div>
-					<div class="clear"></div>
+				<div class="content_bottom content_cSs" id="product_2_list_heading">
+					
 				</div>
-					<div class="section group">
-						<div class="grid_1_of_4 images_1_of_4">
-							 <a href="preview.html"><img src="images/new-pic1.jpg" alt="" /></a>					
-							 <h2>Lorem Ipsum is simply </h2>
-							<div class="price-details">
-							   <div class="price-number">
-									<p><span class="rupees">$849.99</span></p>
-								</div>
-										   
-									 <div class="clear"></div>
-							</div>
-						</div>
-						<div class="grid_1_of_4 images_1_of_4">
-							<a href="preview.html"><img src="images/new-pic2.jpg" alt="" /></a>
-							 <h2>Lorem Ipsum is simply </h2>
-							 <div class="price-details">
-							   <div class="price-number">
-									<p><span class="rupees">$599.99</span></p>
-								</div>
-										   
-									 <div class="clear"></div>
-							</div>
-						</div>
-						<div class="grid_1_of_4 images_1_of_4">
-							<a href="preview.html"><img src="images/new-pic4.jpg" alt="" /></a>
-							 <h2>Lorem Ipsum is simply </h2>
-							<div class="price-details">
-							   <div class="price-number">
-									<p><span class="rupees">$799.99</span></p>
-								</div>
-										   
-									 <div class="clear"></div>
-							</div>
-						</div>
-						<div class="grid_1_of_4 images_1_of_4">
-						 <a href="preview.html"><img src="images/new-pic3.jpg" alt="" /></a>
-							 <h2>Lorem Ipsum is simply </h2>					 
-							 <div class="price-details">
-							   <div class="price-number">
-									<p><span class="rupees">$899.99</span></p>
-								</div>
-										   
-									 <div class="clear"></div>
-							</div>
-						</div>
-						<div class="grid_1_of_4 images_1_of_4">
-							<a href="preview.html"><img src="images/new-pic3.jpg" alt="" /></a>
-								<h2>Lorem Ipsum is simply </h2>					 
-								<div class="price-details">
-								  <div class="price-number">
-									   <p><span class="rupees">$899.99</span></p>
-								   </div>
-											  
-										<div class="clear"></div>
-							   </div>
-						   </div>
+					<div class="section group" id="product_2_list_content">
+						
 					</div>
 					<!-- Main - bo mạch chủ -->
-					<div class="content_bottom content_cSs">
-						<div class="heading">
-						<h3>Main - Bo mạch chủ</h3>
-						</div>
-						<div class="see">
-							<p><a href="#">See all Products</a></p>
-						</div>
-						<div class="clear"></div>
+					<div class="content_bottom content_cSs" id="product_3_list_heading">
+						
 					</div>
-						<div class="section group">
-							<div class="grid_1_of_4 images_1_of_4">
-								 <a href="preview.html"><img src="images/new-pic1.jpg" alt="" /></a>					
-								 <h2>Lorem Ipsum is simply </h2>
-								<div class="price-details">
-								   <div class="price-number">
-										<p><span class="rupees">$849.99</span></p>
-									</div>
-											   
-										 <div class="clear"></div>
-								</div>
-							</div>
+						<div class="section group" id="product_3_list_content">
+							
 							
 						</div>
 						<!-- Ram - bộ nhớ trong -->
-						<div class="content_bottom content_cSs">
-							<div class="heading">
-							<h3>Ram - bộ nhớ trong</h3>
-							</div>
-							<div class="see">
-								<p><a href="#">See all Products</a></p>
-							</div>
-							<div class="clear"></div>
+						<div class="content_bottom content_cSs" id="product_4_list_heading">
+							
 						</div>
-							<div class="section group">
-								<div class="grid_1_of_4 images_1_of_4">
-									 <a href="preview.html"><img src="images/new-pic1.jpg" alt="" /></a>					
-									 <h2>Lorem Ipsum is simply </h2>
-									<div class="price-details">
-									   <div class="price-number">
-											<p><span class="rupees">$849.99</span></p>
-										</div>
-												   
-											 <div class="clear"></div>
-									</div>
-								</div>
+							<div class="section group" id="product_4_list_content">
+								
 								
 							</div>
 <!-- wrap end div -->

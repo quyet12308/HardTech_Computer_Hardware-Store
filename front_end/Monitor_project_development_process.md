@@ -96,4 +96,8 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
 - bị vướng thêm ở cái vụ edit brand , nó khi ấn không điền các thông tin đã có vào form 
 
 ## Ngày 9/6/2024
-- tạm bỏ qua phần edit product
+- tạm bỏ qua phần edit product để làm phần user trước đẻ kịp mai kiểm tra
+- chưa làm được phần quản lý order
+
+## Ngày 10/6/2024
+- tính làm phần vụ 

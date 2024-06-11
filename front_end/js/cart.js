@@ -1,4 +1,6 @@
-// Lấy reference của master checkbox và danh sách các item checkbox
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Lấy reference của master checkbox và danh sách các item checkbox
 const masterCheckbox = document.getElementById('cart__check-all');
 const itemCheckboxes = document.querySelectorAll('.cart__check');
 
@@ -49,3 +51,5 @@ quantityValues.forEach(input => {
     event.target.value = event.target.value.replace(/\D/g, '');
   });
 });
+});
+

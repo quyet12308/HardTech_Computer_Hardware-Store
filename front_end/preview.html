@@ -21,176 +21,145 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <script src="../layout/header.js"></script>
 <script src="../layout/footer.js"></script>
 <script src="./logic_js_frontend/check_login.js"></script>
+<script type="module" src="./logic_js_frontend/preview_product_detail.js"></script>
 </head>
 <body>
 	<header class="header"></header>
 	<div class="breadcrumb"></div>
   <div class="wrap">
  <div class="main">
-    <div class="content">
-    	<!-- <div class="content_top">
-    		<div class="back-links">
-    		<p><a href="index.html">Home</a> >>>> <a href="#">Electronics</a></p>
-    	    </div>
-    		<div class="clear"></div>
-    	</div> -->
-    	<div class="section group">
-				<div class="cont-desc ">
-				  <div class="product-details">				
-					<div class="grid images_3_of_2">
-						<div id="container">
-						<div id="products_example">
-							<div id="products">
-							  <div class="slides_container">
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt=" " />
-								</div>
-								<!-- <div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-1.jpg" alt=" " />
-								</div>
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-2.jpg" alt=" " />
-								</div>
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-3.jpg" alt=" " />
-								</div>
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-4.jpg" alt=" " />
-								</div>
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-5.jpg" alt=" " />
-								</div>
-								<div class="slide">
-								  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-6.jpg" alt=" " />
-								  </div>
-								 -->
-							  </div>
-							  <!-- <div class="pagination">
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-1.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-2.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-3.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-4.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-5.jpg" alt=" " /></a>
-								<a href="#" class="thumb active"><img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X-6.jpg" alt=" " /></a>
-								
-							  </div> -->
+    <div class="content" id="content_product_detail">
+    	<!-- <div class="section group">
+			<div class="cont-desc ">
+			  <div class="product-details">				
+				<div class="grid images_3_of_2">
+					<div id="container">
+					<div id="products_example">
+						<div id="products">
+						  <div class="slides_container">
+							<div class="slide">
+							  <img src="images/Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X1.jpg" alt=" " />
 							</div>
+							
 						  </div>
-					</div>
+						  
+						</div>
+					  </div>
 				</div>
-				<div class="desc span_3_of_2">
-					<h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X</h2>
-					<div class="basic_product-info">
-						<div class="item_basic">Mã Sản Phẩm:
-							<div class="product_ID">C-2313313</div>
-						</div>
-						<div class="item_basic">Đánh giá:
-								<div class="review-stars">
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-									<i class="fa-solid fa-star"></i>
-								  </div>
-						</div>
-					</div>
-					<div class="price">
-						<p>Giá:</p>
-						<div class="discounted_price">61.900.000 đ</div>
-						<div class="original_price">69.000.000 đ</div>
-						<div class="discounted_amount">Tiết kiệm 7.100.000đ</div>
-					</div>
-					<div class="available">
-						<p>Số lượng :</p>
-						<div class="cart__quantity-input">
-							<button class="btn-minus">-</button>
-							<input type="text" class="quantity-value" value="1" pattern="[0-9]*" inputmode="numeric">
-							<button class="btn-plus">+</button>
-						</div>
-						<div class="available_quantity">
-							<span>24 </span>sản phẩm có sẵn
-						</div>
-					</div>
-					<div class="pay_button">
-						<div class="add_cart-btn">
-							<a href="#">
-								<i class="fa-solid fa-cart-plus"></i>
-								Thêm vào giỏ hàng
-							</a>
-						</div>					
-						<div class="buy_now-btn">
-							<a href="./cart.html">
-								Mua ngay
-							</a>
-						</div>					
-						<div class="clear"></div>
-					</div>
-					<div class="product_policy">
-						<p>Yên tâm mua hàng</p>
-						<div class="group_1-row">
-							<div class="product_policy-detail">
-								<i class="fa-solid fa-wallet"></i>
-								<p>Cam kết giá tốt trên thị trường</p>
-							</div>
-							<div class="product_policy-detail">
-								<i class="fa-solid fa-copyright"></i>
-								<p>Sản phẩm mới 100%</p>
-							</div>
-						</div>
-						<div class="group_2-row">
-							<div class="product_policy-detail">
-								<i class="fa-solid fa-right-left"></i>
-								<p>Lỗi 1 đổi 1 ngay lập tức</p>
-							</div>
-							<div class="product_policy-detail">
-								<i class="fa-solid fa-handshake-angle"></i>
-								<p>Hỗ trợ thanh toán - Thủ tục nhanh gọn</p>
-							</div>
-						</div>
-					</div>
 			</div>
-			<div class="clear"></div>
-		  </div>
-				<div class="resp-tabs-container">
-					<div class="product_desc">
-						<p>thông số sản phẩm</p>
-						<ul>
-							<li class="product_desc-detail">Nhân đồ họa: NVIDIA GeForce RTX 4090</li>
-							<li class="product_desc-detail">Bus tiêu chuẩn: PCI Express 4.0	</li>
-							<li class="product_desc-detail">Xung nhịp: Chế độ OC: 2640 MHz; Chế độ mặc định: 2610 MHz (Boost Clock)	</li>
-							<li class="product_desc-detail">Nhân CUDA: 16384</li>
-							<li class="product_desc-detail">Tốc độ bộ nhớ: 21 Gbps</li>
-						</ul>
-					</div>	
-
-				<div class="review">
-					<h4>Đánh giá sản phẩm được viết bởi<a href="#">Nguyễn Tùng lâm</a></h4>
-					 
-					 <p>tạm ổn</p>
-				  <div class="your-review">
-				  	 <h3>How Do You Rate This Product?</h3>
-				  	  <p>Write Your Own Review?</p>
-				  	  <form>
-					    	<div>
-						    	<span><label>Nickname<span class="red">*</span></label></span>
-						    	<span><input type="text" value=""></span>
-						    </div>
-						    <div><span><label>Summary of Your Review<span class="red">*</span></label></span>
-						    	<span><input type="text" value=""></span>
-						    </div>						
-						    <div>
-						    	<span><label>Review<span class="red">*</span></label></span>
-						    	<span><textarea> </textarea></span>
-						    </div>
-						   <div>
-						   		<span><input type="submit" value="SUBMIT REVIEW"></span>
-						  </div>
-					    </form>
-				  	 </div>				
+			<div class="desc span_3_of_2">
+				<h2>Card Màn Hình ASUS ROG Strix GeForce RTX 4090 OC White Edition 24GB GDDR6X</h2>
+				<div class="basic_product-info">
+					<div class="item_basic">Mã Sản Phẩm:
+						<div class="product_ID">C-2313313</div>
+					</div>
+					<div class="item_basic">Đánh giá:
+							<div class="review-stars">
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+							  </div>
+					</div>
 				</div>
-		 </div>
-	 </div>
+				<div class="price">
+					<p>Giá:</p>
+					<div class="discounted_price">61.900.000 đ</div>
+					<div class="original_price">69.000.000 đ</div>
+					<div class="discounted_amount">Tiết kiệm 7.100.000đ</div>
+				</div>
+				<div class="available">
+					<p>Số lượng :</p>
+					<div class="cart__quantity-input">
+						<button class="btn-minus">-</button>
+						<input type="text" class="quantity-value" value="1" pattern="[0-9]*" inputmode="numeric">
+						<button class="btn-plus">+</button>
+					</div>
+					<div class="available_quantity">
+						<span>24 </span>sản phẩm có sẵn
+					</div>
+				</div>
+				<div class="pay_button">
+					<div class="add_cart-btn">
+						<a href="#">
+							<i class="fa-solid fa-cart-plus"></i>
+							Thêm vào giỏ hàng
+						</a>
+					</div>					
+					<div class="buy_now-btn">
+						<a href="./cart.html">
+							Mua ngay
+						</a>
+					</div>					
+					<div class="clear"></div>
+				</div>
+				<div class="product_policy">
+					<p>Yên tâm mua hàng</p>
+					<div class="group_1-row">
+						<div class="product_policy-detail">
+							<i class="fa-solid fa-wallet"></i>
+							<p>Cam kết giá tốt trên thị trường</p>
+						</div>
+						<div class="product_policy-detail">
+							<i class="fa-solid fa-copyright"></i>
+							<p>Sản phẩm mới 100%</p>
+						</div>
+					</div>
+					<div class="group_2-row">
+						<div class="product_policy-detail">
+							<i class="fa-solid fa-right-left"></i>
+							<p>Lỗi 1 đổi 1 ngay lập tức</p>
+						</div>
+						<div class="product_policy-detail">
+							<i class="fa-solid fa-handshake-angle"></i>
+							<p>Hỗ trợ thanh toán - Thủ tục nhanh gọn</p>
+						</div>
+					</div>
+				</div>
+		</div>
+		<div class="clear"></div>
+	  </div>
+			<div class="resp-tabs-container">
+				<div class="product_desc">
+					<p>thông số sản phẩm</p>
+					<ul>
+						<li class="product_desc-detail">Nhân đồ họa: NVIDIA GeForce RTX 4090</li>
+						<li class="product_desc-detail">Bus tiêu chuẩn: PCI Express 4.0	</li>
+						<li class="product_desc-detail">Xung nhịp: Chế độ OC: 2640 MHz; Chế độ mặc định: 2610 MHz (Boost Clock)	</li>
+						<li class="product_desc-detail">Nhân CUDA: 16384</li>
+						<li class="product_desc-detail">Tốc độ bộ nhớ: 21 Gbps</li>
+					</ul>
+				</div>	
+
+			<div class="review">
+				<h4>Đánh giá sản phẩm được viết bởi<a href="#">Nguyễn Tùng lâm</a></h4>
+				 
+				 <p>tạm ổn</p>
+			  <div class="your-review">
+				   <h3>How Do You Rate This Product?</h3>
+					<p>Write Your Own Review?</p>
+					<form>
+						<div>
+							<span><label>Nickname<span class="red">*</span></label></span>
+							<span><input type="text" value=""></span>
+						</div>
+						<div><span><label>Summary of Your Review<span class="red">*</span></label></span>
+							<span><input type="text" value=""></span>
+						</div>						
+						<div>
+							<span><label>Review<span class="red">*</span></label></span>
+							<span><textarea> </textarea></span>
+						</div>
+					   <div>
+							   <span><input type="submit" value="SUBMIT REVIEW"></span>
+					  </div>
+					</form>
+				   </div>				
+			</div>
+	 </div> -->
+    	
+	</div>
 		
    <div class="content_bottom">
     		<div class="heading">

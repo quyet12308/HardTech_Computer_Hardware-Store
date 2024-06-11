@@ -1,9 +1,9 @@
-let cartIcon = document.querySelector('.header__cart-icon')
+// let cartIcon = document.querySelector('.header__cart-icon')
 
-cartIcon.addEventListener("click", () =>{
-	window.location.href = "/cart.html";
+// cartIcon.addEventListener("click", () =>{
+// 	window.location.href = "/cart.html";
 
-})
+// })
 
 
 

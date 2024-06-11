@@ -4,27 +4,13 @@ export const method_post = "POST"
 export const method_put = "PUT"
 export const method_delete = "DELETE"
 
-let base_url_api_backend = "http://localhost:8030"
-
-
 // url api
 
-export const url_api_homepage = `${base_url_api_backend}/api/admin/admin-homepage`
-export const url_api_product_management_preview =  `${base_url_api_backend}/api/admin/admin_product_management_preview`
-export const url_api_product_management_delete_product =  `${base_url_api_backend}/api/admin/delete_product`
-export const url_api_product_management_get_product_detail =  `${base_url_api_backend}/api/admin/get_product_detail`
-export const url_api_product_management_get_all_brands_admin_brand_management =  `${base_url_api_backend}/api/admin/get_all_brands_admin_brand_management`
-export const url_api_product_management_add_new_brand_admin_brand_management =  `${base_url_api_backend}/api/admin/add_new_brand`
-export const url_api_product_management_delete_brand_admin_brand_management =  `${base_url_api_backend}/api/admin/delete_brand`
-export const url_api_product_management_get_brand_detail_admin_brand_management =  `${base_url_api_backend}/api/admin/get_brand_detail`
-export const url_api_product_management_edit_brand_admin_brand_management =  `${base_url_api_backend}/api/admin/edit_brand`
-export const url_api_product_management_get_all_categories_admin_brand_management =  `${base_url_api_backend}/api/admin/get_all_categories`
-export const url_api_product_management_add_new_category_admin_brand_management =  `${base_url_api_backend}/api/admin/add_new_category`
-export const url_api_product_management_edit_category_admin_brand_management =  `${base_url_api_backend}/api/admin/edit_category`
-export const url_api_product_management_delete_category_admin_brand_management =  `${base_url_api_backend}/api/admin/delete_category`
-export const url_api_product_management_get_a_category_admin_brand_management =  `${base_url_api_backend}/api/admin/get_a_category`
-export const url_api_product_management_add_new_product =  `${base_url_api_backend}/api/admin/add-new-product`
-export const url_api_product_management_get_brands_and_catagories =  `${base_url_api_backend}/api/admin/get_brands_and_catagories`
+export const url_api_hompage_layout = "http://localhost:8030/api/homepage/hompage_layout"
+export const url_api_preview_product_detail = "http://localhost:8030/api/homepage/show-detailed-products"
+export const url_api_add_product_to_cart = "http://localhost:8030/api/cartpage/add-product-to-cart"
+export const url_api_get_cart_infor = "http://localhost:8030/api/cartpage/get_cart_infor"
+
 
 
 
