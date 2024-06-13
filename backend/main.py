@@ -3,9 +3,11 @@ from fastapi import Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Dict
 import uvicorn
-from fastapi.middleware.cors import (
-    CORSMiddleware,
-)
+
+# from fastapi.middleware.cors import (
+#     CORSMiddleware,
+# )
+from starlette.middleware.cors import CORSMiddleware
 from Database_initialization_and_structure import *
 from work_with_databases.work_with_user_and_sesion_service import *
 from work_with_databases.work_with_products_and_discount_service import *
