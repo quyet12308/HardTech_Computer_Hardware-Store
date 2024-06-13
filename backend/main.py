@@ -36,6 +36,7 @@ app.add_middleware(
     allow_origins=[
         "http://127.0.0.1:5500",
         "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app",
+        "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app",
     ],  #  chỉ định các nguồn mà bạn muốn chấp nhận yêu cầu từ server
     allow_credentials=True,
     allow_methods=["*"],
