@@ -1,3 +1,10 @@
+// url base hosting web back-end
+export let base_url_api_backend = `http://localhost:8030`
+// export let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app`
+
+// url base hosting web front-end
+export let url_base_front_hosting = `http://127.0.0.1:5500` // local
+// export let url_base_front_hosting = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app` // local
 
 // method
 export const method_post = "POST"
@@ -5,11 +12,12 @@ export const method_put = "PUT"
 export const method_delete = "DELETE"
 
 // url api
-
-export const url_api_hompage_layout = "http://localhost:8030/api/homepage/hompage_layout"
-export const url_api_preview_product_detail = "http://localhost:8030/api/homepage/show-detailed-products"
-export const url_api_add_product_to_cart = "http://localhost:8030/api/cartpage/add-product-to-cart"
-export const url_api_get_cart_infor = "http://localhost:8030/api/cartpage/get_cart_infor"
+// user
+export const url_api_login = `${base_url_api_backend}/api/login`
+export const url_api_hompage_layout =  `${base_url_api_backend}/api/homepage/hompage_layout`
+export const url_api_preview_product_detail =  `${base_url_api_backend}/api/homepage/show-detailed-products`
+export const url_api_add_product_to_cart =  `${base_url_api_backend}/api/cartpage/add-product-to-cart`
+export const url_api_get_cart_infor =  `${base_url_api_backend}/api/cartpage/get_cart_infor`
 
 
 
@@ -82,3 +90,45 @@ export const convertToBase64 = (file) => {
         reader.onerror = (error) => reject(error);
     });
 };
+
+export function formatNumber(number) {
+  // Chuyển số thành chuỗi và đảm bảo nó là một số nguyên dương
+  number = Math.abs(parseInt(number, 10));
+
+  // Kiểm tra nếu số là NaN hoặc không phải là số
+  if (isNaN(number)) {
+    return '';
+  }
+
+  // Chuyển số thành chuỗi và đảm bảo độ dài chuỗi lớn hơn 3
+  let numberString = number.toString();
+  while (numberString.length < 3) {
+    numberString = '0' + numberString;
+  }
+
+  // Tạo một mảng để lưu trữ các phần tử chuỗi
+  let parts = [];
+
+  // Chia chuỗi thành các phần tử có độ dài 3 và lưu vào mảng
+  while (numberString.length > 3) {
+    parts.unshift(numberString.slice(-3));
+    numberString = numberString.slice(0, -3);
+  }
+
+  // Thêm phần tử cuối cùng vào mảng
+  parts.unshift(numberString);
+
+  // Kết hợp các phần tử lại với nhau, giữa các phần tử có dấu chấm
+  return parts.join('.');
+}
+
+export let check_user_logined = ()=>{
+  let login_session_token =  sessionStorage.getItem('tokek_for_login_session')
+  if (login_session_token) {
+    // Người dùng đã đăng nhập
+    return true;
+  } else {
+    // Người dùng chưa đăng nhập
+    return false;
+  }
+}

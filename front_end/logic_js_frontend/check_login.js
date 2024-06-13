@@ -1,5 +1,6 @@
 
-  
+import * as module from './module.js';
+
 document.addEventListener('DOMContentLoaded', function() {
   
     // session
@@ -71,8 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.removeItem('tokek_for_login_session');
         sessionStorage.removeItem('user_name_login');
         sessionStorage.removeItem('avatar_img');
-  
-        location.reload();
+        window.location.href = "login.html"
+        // location.reload();
       });
   
       // user info

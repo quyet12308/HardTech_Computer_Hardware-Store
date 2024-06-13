@@ -9,20 +9,7 @@ let brand_id = module.getQueryParameter('brand_id');
 document.addEventListener('DOMContentLoaded', async function () {
 
     let container = document.querySelector("#container")
-    if (token_admin === null) {
-        alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
-        window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
-    } else if (token_admin === "false") {
-        // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
-        alert("Bạn không đủ quyền truy cập trang này.");
-        window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
-    } else if (token_admin === "true") {
-
-    }
-    else {
-        // Trường hợp không mong muốn, có thể xử lý thêm nếu cần
-        console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
-    }
+    module.check_is_admin_logined()
     let url_api_product_management_get_brand_detail_admin_brand_management = module.url_api_product_management_get_brand_detail_admin_brand_management;
     let post_method = module.method_post
     let data = {

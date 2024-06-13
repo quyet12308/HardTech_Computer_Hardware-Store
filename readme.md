@@ -45,40 +45,6 @@ cd .. ; cd backend ; code .
 pip install -r requirements.txt
 ```
 - Ở đây tôi mặc định là các bạn đã có môi trường python và công cụ quản lý gói pip rồi nhá (nếu chưa thì có thể lên gg tải về, chỉ cần tải xong ấn next => next ... là được, nhưng phải nhớ tích vào ô thêm vào đường dẫn của hệ thống trước khi cài đặt nhá)
-- Tiếp đó cần vào trong thư mục base_codes và tạo file backend\base_codes\security_info.py 
-    - File security_info.py là 1 file bảo mật cho các apikey , password .... cho các dịch vụ của bên thứ 3 nên tôi sẽ ko public nó lên git 
-    - Sau đó hãy điền nội dung sau vào file 
-    ```cmd
-    urls = {"test_url": ""}
-
-    passwords = {
-        "outlook": "",
-        "gmail_application_password": "",
-    }
-
-    emails = {
-        "gmail": "",
-        "outlook": "",
-        "email_test_to_send": "quyet12306@gmail.com",
-        "email_admin": "quyet12306@gmail.com",
-    }
-
-    api_key = {
-        "openweather": "",
-        "X-RapidAPI-Key": "",
-    }
-
-    host = {"X-RapidAPI-Host": ""}
-    ```
-    - Trong đó :
-        1. urls chưa dùng đến nên hiện chưa phải điền
-        2. outlook trong passwords là để điền mật khẩu email outlook làm mail server
-        3. gmail_application_password trong passwords là để điền mật khẩu email gmail làm mail server(chọn 1 trong 2 là được nhưng khuyến khích dùng outlook vì tôi cũng đang dùng , còn nếu bạn dùng gmail thì có lẽ sẽ phải sửa lại code đôi chút)
-        4. gmail trong emails là địa chỉ gmail dùng làm mail server
-        5. outlook trong emails là địa chỉ outlook dùng làm mail server
-        6. 2 cái bên dưới các bạn nhìn tên là cũng đoán được rồi phải không ? nó là dùng để test khi gửi email và địa chỉ email admin sẽ nhận phản hồi 
-        7. api_key hiện chưa dùng đến nên có thể không phải điền gì
-        8. host cũng chưa dùng đến
 - Sau đó chạy file main.py để hệ thống backend chạy là được có thể chạy nó bằng lệnh sau
 ```cmd
 python main.py

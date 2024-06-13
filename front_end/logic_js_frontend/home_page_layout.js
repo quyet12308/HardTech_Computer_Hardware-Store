@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
             
             
             for (let new_product of new_products){
+                let old_price = module.formatNumber(new_product.price)
+                let new_price = module.formatNumber(new_product.price -(new_product.price * (new_product.discount/100)))
                 let new_product_html =  `
                     <div class="grid_1_of_4 images_1_of_4">
                         <a href="#" class="product_detail" data-id-product="${new_product.product_id}"><img src="${new_product.image}" alt="" />
@@ -54,10 +56,10 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
                         </a>	 
                         <div class="price-details">
                             <div class="discounted_detail">
-                                <div class="original_price-main">${new_product.price}đ</div>
+                                <div class="original_price-main">${old_price}đ</div>
                                 <div class="discounted_persent-main">${new_product.discount}%</div>
                             </div>
-                            <div class="discounted_price-main">${new_product.price -(new_product.price * (new_product.discount/100)) }đ</div>
+                            <div class="discounted_price-main">${old_price }đ</div>
                                 <div class="clear"></div>
                         </div>
                     </div>
@@ -76,13 +78,14 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
 				<div class="clear"></div>
             `
             for (let product of product_type_0){
+                let price = module.formatNumber(product.price)
                 let product_type_0_html = `
                     <div class="grid_1_of_4 images_1_of_4">
 						 <a href="#" class="product_detail" data-id-product="${product.product_id}"><img src="${product.image}" alt="" /></a>					
 						 <h2>${product.product_name} </h2>
 						<div class="price-details">
 						   <div class="price-number">
-								<p><span class="rupees">${product.price}đ</span></p>
+								<p><span class="rupees">${price}đ</span></p>
 							</div>
 								 <div class="clear"></div>
 						</div>
@@ -101,13 +104,14 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
 				<div class="clear"></div>
             `
             for (let product of product_type_1){
+                let price = module.formatNumber(product.price)
                 let product_type_1_html = `
                     <div class="grid_1_of_4 images_1_of_4">
 						 <a href="#" class="product_detail" data-id-product="${product.product_id}"><img src="${product.image}" alt="" /></a>					
 						 <h2>${product.product_name} </h2>
 						<div class="price-details">
 						   <div class="price-number">
-								<p><span class="rupees">${product.price}đ</span></p>
+								<p><span class="rupees">${price}đ</span></p>
 							</div>
 								 <div class="clear"></div>
 						</div>
@@ -126,13 +130,14 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
 				<div class="clear"></div>
             `
             for (let product of product_type_2){
+                let price = module.formatNumber(product.price)
                 let product_type_2_html = `
                     <div class="grid_1_of_4 images_1_of_4">
 						 <a href="#" class="product_detail" data-id-product="${product.product_id}"><img src="${product.image}" alt="" /></a>					
 						 <h2>${product.product_name} </h2>
 						<div class="price-details">
 						   <div class="price-number">
-								<p><span class="rupees">${product.price}đ</span></p>
+								<p><span class="rupees">${price}đ</span></p>
 							</div>
 								 <div class="clear"></div>
 						</div>
@@ -151,13 +156,14 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
 				<div class="clear"></div>
             `
             for (let product of product_type_3){
+                let price = module.formatNumber(product.price)
                 let product_type_3_html = `
                     <div class="grid_1_of_4 images_1_of_4">
 						 <a href="#" class="product_detail" data-id-product="${product.product_id}"><img src="${product.image}" alt="" /></a>					
 						 <h2>${product.product_name} </h2>
 						<div class="price-details">
 						   <div class="price-number">
-								<p><span class="rupees">${product.price}đ</span></p>
+								<p><span class="rupees">${price}đ</span></p>
 							</div>
 								 <div class="clear"></div>
 						</div>
@@ -190,6 +196,6 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
 
 function redirectToProductDetail(productId) {
     // Replace 'product-detail.html' with the actual URL of your product detail page
-    let productDetailUrl = `http://127.0.0.1:5500/preview.html?id=${productId}`;
+    let productDetailUrl = `${module.url_base_front_hosting}/preview.html?id=${productId}`;
     window.location.href = productDetailUrl;
 }

@@ -4,10 +4,13 @@ export const method_post = "POST"
 export const method_put = "PUT"
 export const method_delete = "DELETE"
 
+// let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app`
 let base_url_api_backend = "http://localhost:8030"
 
 
 // url api
+
+// admin
 
 export const url_api_homepage = `${base_url_api_backend}/api/admin/admin-homepage`
 export const url_api_product_management_preview =  `${base_url_api_backend}/api/admin/admin_product_management_preview`
@@ -25,7 +28,6 @@ export const url_api_product_management_delete_category_admin_brand_management =
 export const url_api_product_management_get_a_category_admin_brand_management =  `${base_url_api_backend}/api/admin/get_a_category`
 export const url_api_product_management_add_new_product =  `${base_url_api_backend}/api/admin/add-new-product`
 export const url_api_product_management_get_brands_and_catagories =  `${base_url_api_backend}/api/admin/get_brands_and_catagories`
-
 
 
 
@@ -96,3 +98,21 @@ export const convertToBase64 = (file) => {
         reader.onerror = (error) => reject(error);
     });
 };
+
+export let check_is_admin_logined = ()=>{
+  let token_admin = sessionStorage.getItem("is_admin")
+  if (token_admin === null) {
+    alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
+    window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
+  } else if (token_admin === "false") {
+      // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
+      alert("Bạn không đủ quyền truy cập trang này.");
+      window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
+  } else if (token_admin === "true") {
+
+  }
+  else {
+      // Trường hợp không mong muốn, có thể xử lý thêm nếu cần
+      console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
+  }
+}

@@ -39,3 +39,6 @@ Returned: Đơn hàng đã được trả lại bởi khách hàng sau khi đã 
     ```
     Và đẩy nó lại lên git
 - Test lại web thì thấy lỗi ở phần hàm get_product_overview do không lấy được cái product_name . Mà hiện tịa hết thời gian làm cái này rồi , nên tạm gác nó lại về tối nay làm sau 
+
+## Ngày 13/6/2024 
+- có thử đẩy web lên hosting vercel nhưng nó bị lỗi cái cors và bị giới hạn truyền tải mãi ko fix được nên hiện tại sẽ tạm từ bỏ nó để tập trung vào các chức năng chính trước

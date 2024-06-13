@@ -184,6 +184,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (isNaN(discount_percentage)) {
             discount_percentage = 0;
         }
+        let discounted_price = module.formatNumber(price - (price * discount_percentage))
+        let original_price = module.formatNumber(price)
+        let discounted_amount = module.formatNumber(price * discount_percentage)
 
         let content_html_detail_product = `
             <div class="section group">
@@ -220,9 +223,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                         <div class="price">
                             <p>Giá:</p>
-                            <div class="discounted_price">${ price - (price * discount_percentage)} đ</div>
-                            <div class="original_price">${price} đ</div>
-                            <div class="discounted_amount">Tiết kiệm ${price * discount_percentage }đ</div>
+                            <div class="discounted_price">${ discounted_price} đ</div>
+                            <div class="original_price">${original_price} đ</div>
+                            <div class="discounted_amount">Tiết kiệm ${discounted_amount }đ</div>
                         </div>
                         <div class="available">
                             <p>Số lượng :</p>
@@ -242,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     Thêm vào giỏ hàng
                                 </a>
                             </div>					
-                            <div class="buy_now-btn">
+                            <div class="buy_now-btn" id="buy_now_btn">
                                 <a href="./cart.html">
                                     Mua ngay
                                 </a>
@@ -311,9 +314,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Thêm sự kiện click cho nút Thêm vào giỏ hàng
         document.getElementById('add_to_cart_btn').addEventListener('click', function (event) {
             event.preventDefault();
-            let quantity = parseInt(document.querySelector('.quantity-value').value);
-            addProductToCart(quantity, product_id);
+            let check_user_logined = module.check_user_logined()
+            if (check_user_logined){
+                let quantity = parseInt(document.querySelector('.quantity-value').value);
+                addProductToCart(quantity, product_id);
+            }
+            else{
+                alert("Bạn cần đăng nhập để thêm vào giỏ hàng")
+                window.location.href = `${module.url_base_front_hosting}/login.html`
+            }
+            
+            
         });
+        document.getElementById('buy_now_btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            let check_user_logined = module.check_user_logined()
+            if(check_user_logined){
+                let quantity = parseInt(document.querySelector('.quantity-value').value);
+                addProductToCart(quantity, product_id);
+                window.location.href = `${module.url_base_front_hosting}/cart.html`
+            }
+            else{
+                alert("Bạn cần đăng nhập để mua hàng")
+                window.location.href = `${module.url_base_front_hosting}/login.html`
+            }
+            
+        });
+        
 
     } else {
         alert(response_data.message);

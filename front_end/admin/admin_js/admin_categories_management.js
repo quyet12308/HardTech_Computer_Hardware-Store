@@ -16,20 +16,7 @@ let post_method = module.method_post
 let currentCategoryId = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
-  if (token_admin === null) {
-    alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
-    window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
-  } else if (token_admin === "false") {
-      // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
-      alert("Bạn không đủ quyền truy cập trang này.");
-      window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
-  } else if (token_admin === "true") {
-
-  }
-  else {
-      // Trường hợp không mong muốn, có thể xử lý thêm nếu cần
-      console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
-  }
+  module.check_is_admin_logined()
   
   let response_data = await module.get_data_from_server(url_api_product_management_get_all_categories_admin_brand_management)
   if (response_data.status){

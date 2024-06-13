@@ -10,24 +10,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     log_out.addEventListener("click",()=>{
         sessionStorage.removeItem("is_admin")
         sessionStorage.removeItem("tokek_for_login_session")
-        window.location.href = "http://127.0.0.1:5500/login.html";
+        window.location.href = `${module.base_url_api_backend}/login.html`;
     })
 
-    // Kiểm tra nếu token_admin không tồn tại (null hoặc undefined)
-    if (token_admin === null) {
-        alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
-        window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
-    } else if (token_admin === "false") {
-        // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
-        alert("Bạn không đủ quyền truy cập trang này.");
-        window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
-    } else if (token_admin === "true") {
-
-    }
-    else {
-        // Trường hợp không mong muốn, có thể xử lý thêm nếu cần
-        console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
-    }
+    module.check_is_admin_logined()
 
     let url_api_homepage = module.url_api_homepage;
     let post_method = module.method_post

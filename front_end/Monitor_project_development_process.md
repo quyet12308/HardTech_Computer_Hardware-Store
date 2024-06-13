@@ -100,4 +100,7 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
 - chưa làm được phần quản lý order
 
 ## Ngày 10/6/2024
-- tính làm phần vụ 
+- tính làm phần vụ ...
+
+## Ngày 13/6/2024
+- hình như nó bị lỗi , nếu là ngời dùng mới chưa có giỏ hàng thì sẽ không thể ấn mua ngay được , mà phải ấn trước thêm vào giỏ hàng => để fix sau

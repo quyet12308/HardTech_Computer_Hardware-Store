@@ -17,17 +17,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         let total_price = 0
         for (let product_infor of cart_infors ){
             let price = parseInt(product_infor.price)
+            let price_string = module.formatNumber(parseInt(product_infor.price))
             let product_html = `
                 <div class="cart__form">
                     <div class="cart__content">
-                        <a href="./preview.html">
+                        <a href="#" class="show_product_detail" data_id_product="${product_infor.id_product}">
                             <div class="cart__content-main">
                                 <input type="checkbox" name="" class = "cart__check">
                                 <img src="${product_infor.image}" class="cart__content-img" alt="">
                             <div class="cart__content-name"> ${product_infor.product_name}</div>
                         </div>
                         </a>
-                            <div class="cart__content-price"> ${product_infor.price} đ</div>
+                            <div class="cart__content-price"> ${price_string} đ</div>
                             <div class="cart__quantity-input">
                                 <button class="btn-minus">-</button>
                                 <input type="text" class="quantity-value" value="${product_infor.quantity}" pattern="[0-9]*" inputmode="numeric">
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                         <div class="cart__price">
                             <span>Tổng thanh toán:</span> 
-                            <div class="cart__price-sum">${total_price}đ</div>
+                            <div class="cart__price-sum">${module.formatNumber(total_price)}đ</div>
                         </div>
                         <a href="#" id="payment_btn"><div class="cart__cast-pay-btn btn">Đặt Hàng</div></a>
                     </div>
@@ -69,6 +70,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         `
         cart_product_content_container.innerHTML = cart_content_html
+
+        document.querySelectorAll('.show_product_detail').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                let productId = this.getAttribute('data_id_product');
+                // redirectToProductDetail(productId);
+                window.location.href = `${module.url_base_front_hosting}/preview.html?id=${productId}`
+            });
+        });
 
         const masterCheckbox = document.getElementById('cart__check-all');
         const itemCheckboxes = document.querySelectorAll('.cart__check');

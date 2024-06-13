@@ -3,7 +3,7 @@ import * as module from './admin_module.js';
 let token_admin = sessionStorage.getItem("is_admin")
 let login_session_token =  sessionStorage.getItem('tokek_for_login_session')
 let editProduct =  ({id_product})=> {
-    window.location.href = `http://127.0.0.1:5500/admin/admin_edit_product.html?id_product=${id_product}`;  
+    window.location.href = `${module.base_url_api_backend}/admin/admin_edit_product.html?id_product=${id_product}`;  
     // Thêm chức năng chỉnh sửa sản phẩm tại đây
 }
 
@@ -35,20 +35,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     let filter_btn = document.querySelector("#filter_btn")
 
-    if (token_admin === null) {
-        alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
-        window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
-    } else if (token_admin === "false") {
-        // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
-        alert("Bạn không đủ quyền truy cập trang này.");
-        window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
-    } else if (token_admin === "true") {
-
-    }
-    else {
-        // Trường hợp không mong muốn, có thể xử lý thêm nếu cần
-        console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
-    }
+    module.check_is_admin_logined()
     let post_method = module.method_post
     let data = {
         token_login_session:login_session_token
@@ -166,13 +153,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (priceFilter) {
                 filteredProducts = filteredProducts.filter(product => {
                     switch (priceFilter) {
-                        case '<1000000':
+                        case '<1.000.000':
                             return product.price < 1000000;
-                        case '1000000-2000000':
+                        case '1.000.000-2.000.000':
                             return product.price >= 1000000 && product.price <= 2000000;
-                        case '2000000-5000000':
+                        case '2.000.000-5.000.000':
                             return product.price > 2000000 && product.price <= 5000000;
-                        case '>5000000':
+                        case '>5.000.000':
                             return product.price > 5000000;
                         default:
                             return true;
