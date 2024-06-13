@@ -21,11 +21,14 @@ from base_codes.gettime import *
 from setting import *
 from base_codes.string_python_en import responses
 from base_codes.get_code import generate_random_6_digit_number
-from email_with_python.send_emails_using_oulook_server import *
+
+# from email_with_python.send_emails_using_oulook_server import *
+from email_with_python.check_send_email_using_gmail_server import *
 from base_codes.security_info import *
 from request_model import *
 
 app = FastAPI()  # khởi tạo app fastapi
+
 
 # Cấu hình CORS
 app.add_middleware(
@@ -35,6 +38,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+async def hello_backend():
+    return "hello backend"
 
 
 @app.post("/api/login")
@@ -118,9 +126,9 @@ async def register_send_verification_email(
                 send_email_confirm_registration(
                     username=username,
                     code=code_randum,
-                    password=passwords["outlook"],
+                    password=passwords["gmail_application_password"],
                     to_email=email,
-                    email=emails["outlook"],
+                    email=emails["gmail"],
                     minutes=WAITING_TIME_FOR_CODE_IN_EMAIL,
                 )  # gửi email
                 add_authentication_code(
@@ -215,10 +223,10 @@ async def forgot_password(request_data: ForgotPasswordForgotPasswordRequest):
             )  # lưu data vào catcha
             send_email_forgot_password(
                 code=code,
-                password=passwords["outlook"],
+                password=passwords["gmail_application_password"],
                 to_email=email,
                 username=username,
-                email=emails["outlook"],
+                email=emails["gmail"],
                 minutes=WAITING_TIME_FOR_CODE_IN_EMAIL,
             )  # giử email quên mật khẩu
             return {

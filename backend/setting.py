@@ -1,4 +1,4 @@
-DATA_BASE_PATH = "databases/ecommerce_database_2.db"
+DATA_BASE_PATH = "databases/ecommerce_database.db"
 
 WAITING_TIME_FOR_CODE_IN_EMAIL = 3  # minutes
 

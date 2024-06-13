@@ -11,10 +11,16 @@ app = FastAPI()
 
 
 class VNPayConfig:
+    # vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+    # vnp_ReturnUrl = "http://localhost:8000/payment/success/"
+    # vnp_TmnCode = "JA7DXVX3"
+    # secretKey = "HH642VNWNWCBE6LX3GOLA7EWERLYLYUS"
+    # vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
+
     vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
     vnp_ReturnUrl = "http://localhost:8000/payment/success/"
-    vnp_TmnCode = "JA7DXVX3"
-    secretKey = "HH642VNWNWCBE6LX3GOLA7EWERLYLYUS"
+    vnp_TmnCode = "4YJ7C2ZE"
+    secretKey = "5P125QEMH1XPV04GU2OVCDWTVYN95M2K"
     vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
 
     @staticmethod
