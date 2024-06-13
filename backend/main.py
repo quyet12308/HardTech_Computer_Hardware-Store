@@ -33,7 +33,10 @@ app = FastAPI()  # khởi tạo app fastapi
 # Cấu hình CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  #  chỉ định các nguồn mà bạn muốn chấp nhận yêu cầu từ server
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app",
+    ],  #  chỉ định các nguồn mà bạn muốn chấp nhận yêu cầu từ server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
