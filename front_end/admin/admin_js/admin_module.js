@@ -4,8 +4,9 @@ export const method_post = "POST"
 export const method_put = "PUT"
 export const method_delete = "DELETE"
 
-// let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app`
-let base_url_api_backend = "http://localhost:8030"
+// let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app` // vercel
+let base_url_api_backend = `https://2b30-2405-4802-1e3-b900-e515-b127-1f75-f437.ngrok-free.app` // ngrok
+// let base_url_api_backend = "http://localhost:8030" // local
 
 
 // url api

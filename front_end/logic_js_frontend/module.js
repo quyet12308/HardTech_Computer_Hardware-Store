@@ -1,10 +1,11 @@
 // url base hosting web back-end
-export let base_url_api_backend = `http://localhost:8030`
+// export let base_url_api_backend = `http://localhost:8030` // local
 // export let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app`
+export let base_url_api_backend = `https://2b30-2405-4802-1e3-b900-e515-b127-1f75-f437.ngrok-free.app`
 
 // url base hosting web front-end
-export let url_base_front_hosting = `http://127.0.0.1:5500` // local
-// export let url_base_front_hosting = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app` // local
+// export let url_base_front_hosting = `http://127.0.0.1:5500` // local
+export let url_base_front_hosting = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app` // local
 
 // method
 export const method_post = "POST"
