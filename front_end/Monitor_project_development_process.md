@@ -104,3 +104,7 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
 
 ## Ngày 13/6/2024
 - hình như nó bị lỗi , nếu là ngời dùng mới chưa có giỏ hàng thì sẽ không thể ấn mua ngay được , mà phải ấn trước thêm vào giỏ hàng => để fix sau
+
+## ngày 14/6/2024 
+- nó bị lỗi khi sửa user thì cần phải sửa ảnh ko là bị lỗi => đã fix được , hóa ra là bị lỗi cái chỗ khác biệt giữa base64 và file . tức là nếu là file thì nó có thể chuyển qua base64 nhưng nếu là base64 thì ko được . và cả chỗ chọn file nữa
+

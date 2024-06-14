@@ -15,14 +15,17 @@
 
 <script src="../layout/header.js"></script>
 <script src="../layout/footer.js"></script>
-<script src="./logic_js_frontend/check_login.js"></script>
+<script type="module" src="./logic_js_frontend/check_login.js"></script>
+<script type="module" src="./logic_js_frontend/user_infor.js"></script>
+<!-- <script type="module" src="./js/user_info.js"></script> -->
+
 </head>
 <body>
     <header class="header"></header>
     <div class="breadcrumb"></div>
     <div class="wrap">
-        <div class="user_container">
-            <div class="user_title">
+        <div class="user_container" id="user_infor_container">
+            <!-- <div class="user_title">
                 <h6>Hồ sơ của tôi</h6>
                 <p>Quản lí thông tin hồ sơ để bảo mật tài khoản</p>
             </div>
@@ -58,7 +61,7 @@
                     </div>
                     <button id="choose_image-btn">Chọn ảnh</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     
@@ -68,5 +71,5 @@
 </body>
 
 <script src="../layout/breadcrumbs.js"></script>
-<script src="./js/user_info.js"></script>
+
 </html>

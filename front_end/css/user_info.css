@@ -90,3 +90,39 @@
    padding: 12px;
    margin-top: 40px;
 }
+
+/* quyet */
+.user_group {
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px; /* Khoảng cách dưới giữa các nhóm */
+}
+
+.user_group span {
+    margin-bottom: 5px; /* Khoảng cách dưới cho nhãn */
+}
+
+.user_input, 
+#province-select, 
+#district-select, 
+#ward-select {
+    width: 100%; /* Đảm bảo tất cả các trường nhập liệu và combobox chiếm toàn bộ chiều rộng */
+    margin-bottom: 10px; /* Khoảng cách dưới giữa các trường */
+    padding: 8px; /* Khoảng cách bên trong */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước tổng của phần tử */
+    border: 1px solid #ccc; /* Đường viền */
+    border-radius: 4px; /* Bo tròn góc */
+}
+
+#province-select, 
+#district-select, 
+#ward-select {
+    -webkit-appearance: none; /* Ẩn mũi tên mặc định trên iOS */
+    -moz-appearance: none; /* Ẩn mũi tên mặc định trên Firefox */
+    appearance: none; /* Ẩn mũi tên mặc định */
+    background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNHB4IiBoZWlnaHQ9IjIycHgiIHZpZXdCb3g9IjAgMCA0IDIyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yIDE4TDAgMTZMMiAxMkgwIDhMMCA1TDQgMTJMMyAyMEwyIDIwTDIgMjBaIiBmaWxsPSIjQkJCOEI4Ii8+PC9zdmc+') no-repeat right 10px center;
+    padding-right: 30px; /* Tạo khoảng trống cho mũi tên */
+}

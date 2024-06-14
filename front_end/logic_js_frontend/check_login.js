@@ -52,10 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </a>
           `
       }
-  
-      
-  
-      
+
       // display user
       let is_logined_display = document.querySelector("#is_logined_display");
       is_logined_display.addEventListener("click",()=>{
@@ -67,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
       })
   
       // log out
-      log_out = document.querySelector("#log_out");
+      let log_out = document.querySelector("#log_out");
       log_out.addEventListener("click",()=>{
         sessionStorage.removeItem('tokek_for_login_session');
         sessionStorage.removeItem('user_name_login');
@@ -79,9 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // user info
       let user_info = document.querySelector("#user_info");
       user_info.addEventListener("click",()=>{
+       
         window.location.href = "user_info.html"
-      
-  
       });
       
   });

@@ -18,6 +18,12 @@ export const url_api_hompage_layout =  `${base_url_api_backend}/api/homepage/hom
 export const url_api_preview_product_detail =  `${base_url_api_backend}/api/homepage/show-detailed-products`
 export const url_api_add_product_to_cart =  `${base_url_api_backend}/api/cartpage/add-product-to-cart`
 export const url_api_get_cart_infor =  `${base_url_api_backend}/api/cartpage/get_cart_infor`
+export const url_api_remove_product_from_cart =  `${base_url_api_backend}/api/cartpage/remove-product-from-cart`
+export const url_api_create_unpaid_orders =  `${base_url_api_backend}/api/create_unpaid_orders`
+export const url_api_get_order_detail_preview =  `${base_url_api_backend}/api/get_order_detail_preview`
+export const url_api_get_show_user_infor =  `${base_url_api_backend}/api/userpage/show-user-infor`
+export const url_api_edit_user_information =  `${base_url_api_backend}/api/userpage/edit-user-information`
+
 
 
 
@@ -91,6 +97,11 @@ export const convertToBase64 = (file) => {
     });
 };
 
+export function isBase64Image(src) {
+  return src.startsWith('data:image/');
+}
+
+
 export function formatNumber(number) {
   // Chuyển số thành chuỗi và đảm bảo nó là một số nguyên dương
   number = Math.abs(parseInt(number, 10));
@@ -131,4 +142,102 @@ export let check_user_logined = ()=>{
     // Người dùng chưa đăng nhập
     return false;
   }
+}
+
+export function convertStringToInt(inputString) {
+  // Loại bỏ tất cả các dấu chấm trong chuỗi
+  var stringWithoutDots = inputString.replace(/\./g, '');
+
+  // Chuyển đổi chuỗi thành số nguyên
+  var result = parseInt(stringWithoutDots, 10);
+
+  return result;
+}
+
+export async function populateAddressFields() {
+  // Hàm để lấy dữ liệu các địa chỉ (tỉnh/thành phố, quận/huyện, xã/phường) từ backend và đổ vào các dropdown
+  // Implement logic to fetch and populate address fields
+}
+
+export function validateEmail(email) {
+  // Kiểm tra định dạng email
+  let re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return re.test(email);
+}
+
+export function validatePhone(phone) {
+  // Kiểm tra định dạng số điện thoại
+  let re = /^[0-9]{10,11}$/;
+  return re.test(phone);
+}
+
+export let get_province_list = ()=>{
+  return fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
+        .then(response => response.json())
+        .then(data_tinh => {
+            if(data_tinh.error === 0) {
+                return data_tinh.data.map(val_tinh => ({
+                    id: val_tinh.id,
+                    name: val_tinh.full_name
+                }));
+            } else {
+                throw new Error('Failed to fetch Tinh/Thanh');
+            }
+        });
+}
+
+export let get_dstrict_list = (idtinh) => {
+  return fetch(`https://esgoo.net/api-tinhthanh/2/${idtinh}.htm`)
+        .then(response => response.json())
+        .then(data_quan => {
+            if(data_quan.error === 0) {
+                return data_quan.data.map(val_quan => ({
+                    id: val_quan.id,
+                    name: val_quan.full_name
+                }));
+            } else {
+                throw new Error('Failed to fetch Quan/Huyen');
+            }
+        });
+}
+
+export let get_ward_list = (idquan)=>{
+  return fetch(`https://esgoo.net/api-tinhthanh/3/${idquan}.htm`)
+        .then(response => response.json())
+        .then(data_phuong => {
+            if(data_phuong.error === 0) {
+                return data_phuong.data.map(val_phuong => ({
+                    id: val_phuong.id,
+                    name: val_phuong.full_name
+                }));
+            } else {
+                throw new Error('Failed to fetch Phuong/Xa');
+            }
+        });
+}
+
+export function encodeAddress({local,ward,dstrict,province}) {
+  let address = {
+    local: local,
+    ward: ward,
+    dstrict: dstrict,
+    province: province
+  };
+  console.log(address)
+  return JSON.stringify(address);
+}
+
+export function decodeAddress(jsonAddress) {
+  let address = JSON.parse(jsonAddress);
+  let local = address.local;
+  let ward = address.ward;
+  let dstrict = address.dstrict;
+  let province = address.province;
+
+  return {
+    local: local,
+    ward: ward,
+    dstrict: dstrict,
+    province: province
+  };
 }
