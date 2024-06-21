@@ -384,7 +384,7 @@ let post_method = module.method_post;
 let delete_method = module.method_delete;
 
 let url_api_get_order_detail_preview = module.url_api_get_order_detail_preview;
-let url_api_create_order = module.url_api_create_order;
+let url_api_create_url_for_payment = module.url_api_create_url_for_payment;
 
 let login_session_token = sessionStorage.getItem('tokek_for_login_session');
 let order_id = module.getQueryParameter('id');
@@ -475,31 +475,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p class="order_title">Phương thức thanh toán</p>
             <div class="payment-options">
                 <div class="option">
-                    <input type="radio" id="momo_payment" name="payment-method" value="Momo">
+                    <input type="radio" id="momo_payment" name="payment-method" value="momo">
                     <label for="momo_payment">Thanh toán bằng Momo
                         <img src="./images/momo.png" alt="">
                     </label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="vnpay_payment" name="payment-method" value="VNpay">
+                    <input type="radio" id="vnpay_payment" name="payment-method" value="vnpay">
                     <label for="vnpay_payment">Thanh toán bằng VNpay
                         <img src="./images/icon-payment-vnpay.png" alt="">
                     </label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="stripe_payment" name="payment-method" value="Stripe">
+                    <input type="radio" id="stripe_payment" name="payment-method" value="stripe">
                     <label for="stripe_payment">Thanh toán bằng Stripe
                         <img src="./images/stripe.jpg" alt="">
                     </label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="paypal_payment" name="payment-method" value="Paypal">
+                    <input type="radio" id="paypal_payment" name="payment-method" value="paypal">
                     <label for="paypal_payment">Thanh toán bằng Paypal
                         <img src="./images/PayPal_Logo_2007.png" alt="">
                     </label>
                 </div>
                 <div class="option">
-                    <input type="radio" id="zalopay_payment" name="payment-method" value="Zalopay">
+                    <input type="radio" id="zalopay_payment" name="payment-method" value="zalopay">
                     <label for="zalopay_payment">Thanh toán bằng Zalopay
                         <img src="./images/zalopay.png" alt="">
                     </label>
@@ -578,42 +578,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             let username = document.querySelector("#username").value;
             let phone = document.querySelector("#phone").value;
-            let email = document.querySelector("#email").value;
             let address = document.querySelector("#address").value;
             let province = document.querySelector("#province").value;
             let district = document.querySelector("#district").value;
             let ward = document.querySelector("#ward").value;
             let note = document.querySelector("#note").value || "Không ghi chú";
 
+            // let redirecturl = module.redirecturl
+            // if (payment_method.value == "stripe"){
+            //     redirecturl = `${redirecturl}?status=1&order_id=${order_id}`
+            // }
+
             let order_data = {
-                username: username,
-                phone: phone,
-                email: email,
-                address: module.encodeAddress({
-                    local: address,
-                    province: province,
-                    district: district,
-                    ward: ward
-                }),
+                user_name: username,
+                phone_number: phone,
+                order_id: order_id,
+                address: module.combineAddress({soNha:address, xa:ward, huyen:district, tinh:province}),
                 note: note,
                 payment_method: payment_method.value,
-                products: order_details.map(product => ({
-                    id: product.id,
-                    name: product.product_name,
-                    quantity: product.qty,
-                    price: product.order_price,
-                    total_price: parseInt(product.order_price) * parseInt(product.qty)
-                })),
-                total_price: total_price,
+                redirecturl: module.redirecturl,
                 token_login_session: login_session_token
             };
 
-            let order_response = await module.request_data_to_server({ url: url_api_create_order, data: order_data, method: post_method });
+            let order_response = await module.request_data_to_server({ url: url_api_create_url_for_payment, data: order_data, method: post_method });
             if (order_response.status) {
-                alert("Đơn hàng đã được tạo thành công!");
+                console.log(order_response)
+                let url_payment = order_response.message
+                console.log(url_payment)
+                console.log(typeof url_payment)
+                sessionStorage.setItem("payment_method",payment_method.value)
+                // alert(order_response.message)
+                window.location.href = `${url_payment}`
+                // alert("Đơn hàng đã được tạo thành công!");
                 // Redirect or perform further actions
             } else {
-                alert("Tạo đơn hàng thất bại: " + order_response.message);
+                alert("Thanh toán thất bại do lỗi: " + order_response.message);
             }
         });
     } else {

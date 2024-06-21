@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa Đơn Thanh Toán</title>
+    <link rel="stylesheet" href="./css/in_bill.css">
+
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+    <script type="module" src="./logic_js_frontend/in_bill_logic.js"></script>
+</head>
+<body>
+    <div class="invoice" id="invoice">
+        <div class="header">
+            <img src="./images/HardTech.jpg" alt="Shop Logo" class="shop-logo">
+            <h1>HardTech</h1>
+            <p>Số Hotline: 0123456789</p>
+            <p>Ngày in bill: <span id="print-date"></span></p>
+        </div>
+        <div class="customer-info">
+            <p>Tên Khách Hàng: <span id="customer-name"></span></p>
+            <p>Địa Chỉ Nhận Hàng: <span id="customer-address"></span></p>
+            <p>Phương Thức Thanh Toán: <span id="payment-method"></span></p>
+            <p>Chú ý đơn hàng: <span id="note-order"></span></p>
+        </div>
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng</th>
+                    <th>Đơn Giá</th>
+                    <th>Thành Tiền</th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <!-- Dữ liệu sản phẩm sẽ được chèn vào đây -->
+            </tbody>
+        </table>
+        <div class="total">
+            <p>Tổng Số Tiền: <span id="total-amount-number"></span> VNĐ</p>
+            <p>Bằng Chữ: <span id="total-amount-text"></span></p>
+        </div>
+        <div class="thanks">
+            <p>Cảm ơn quý khách đã mua sắm tại cửa hàng chúng tôi!</p>
+        </div>
+    </div>
+    <button id="btn_download_pdf">Tải xuống PDF</button>
+    <button id="btn_go_homepage">Về Trang Chủ</button>
+
+</body>
+</html>

@@ -20,10 +20,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (response_data.status){
         container.innerHTML = `
             <form id="editBrandForm" enctype="multipart/form-data">
+            <p>Hình Ảnh</p>
                     <img id="brandImage" src="${response_data.message.img}" alt="Brand Image">
                     <input type="file" id="imageInput" accept="image/*" style="display: none;">
                     <button type="button" onclick="document.getElementById('imageInput').click()">Change Image</button>
+            <p>Tên Hãng Sản Xuất</p>
+
                     <input type="text" id="brandName" placeholder="Brand Name" value="${response_data.message.brand_name}">
+            <p>Mô Tả</p>
+
                     <textarea id="brandDescription" placeholder="Brand Description">${response_data.message.description}</textarea>
                     <button type="submit">Submit</button>
                 </form>

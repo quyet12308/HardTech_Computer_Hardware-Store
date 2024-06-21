@@ -5,7 +5,7 @@ body {
   background-color: #f4f4f4;
 }
 .header {
-  background-color: #007bff;
+  background-color: red;
   color: white;
   padding: 10px 20px;
   text-align: center;
@@ -45,7 +45,7 @@ th, td {
   border: 1px solid #ddd;
 }
 th {
-  background-color: #007bff;
+  background-color: red;
   color: white;
 }
 .btn-update {

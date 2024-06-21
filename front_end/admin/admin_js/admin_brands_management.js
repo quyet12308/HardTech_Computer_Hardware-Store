@@ -25,7 +25,7 @@ let  deleteManufacturer = async ({brand_id,brand_name}) => {
 }
 
 let editManufacturer = ({brand_id})=> {
-  window.location.href = `${module.base_url_api_backend}/admin/admin_edit_brand.html?brand_id=${brand_id}`;
+  window.location.href = `${module.base_url_api_front_end}/admin/admin_edit_brand.html?brand_id=${brand_id}`;
 }
 
 document.getElementById('addManufacturerForm').addEventListener('submit', async function(event) {

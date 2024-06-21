@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Quản Lý Sản Phẩm</title>
+    <link rel="stylesheet" href="./admin_css/admin_base.css">
     <link rel="stylesheet" href="./admin_css/admin_product_management_preview.css">
     <script type="module" src="./admin_js/admin_product_management_preview.js"></script>
 </head>
@@ -11,6 +12,7 @@
 
 <div class="navbar">
     <a href="./admin_hompage.html">Trang Chủ</a>
+    <a href="./admin_product_management_preview.html">Quản Lý Sản Phẩm</a>
     <a href="./admin_add_new_product.html">Thêm Mới Sản Phẩm</a>
     <a href="./admin_brands_management.html">Quản Lý Hãng Sản Xuất</a>
     <a href="./admin_categories_management.html">Quản Lý Thể Loại</a>
@@ -22,7 +24,7 @@
     <div class="filter-container">
         <input type="text" id="nameFilter" placeholder="Lọc theo tên sản phẩm">
         <select id="brandFilter">
-            <option value="">Lọc theo hãng sản xuất</option>
+            <option class="red" value="">Lọc theo hãng sản xuất</option>
             <!-- Add options dynamically -->
         </select>
         <select id="categoryFilter">

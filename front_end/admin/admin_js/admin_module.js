@@ -5,10 +5,10 @@ export const method_put = "PUT"
 export const method_delete = "DELETE"
 
 // let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app` // vercel
-let base_url_api_backend = `https://2b30-2405-4802-1e3-b900-e515-b127-1f75-f437.ngrok-free.app` // ngrok
-// let base_url_api_backend = "http://localhost:8030" // local
+// let base_url_api_backend = `https://b5f5-118-68-165-131.ngrok-free.app` // ngrok
+export let base_url_api_backend = "http://localhost:8030" // local
 
-
+export let base_url_api_front_end = `http://127.0.0.1:5500`
 // url api
 
 // admin
@@ -104,11 +104,11 @@ export let check_is_admin_logined = ()=>{
   let token_admin = sessionStorage.getItem("is_admin")
   if (token_admin === null) {
     alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
-    window.location.href = "http://127.0.0.1:5500/login.html"; // Chuyển hướng tới trang đăng nhập
+    window.location.href = `${base_url_api_front_end}/login.html`; // Chuyển hướng tới trang đăng nhập
   } else if (token_admin === "false") {
       // Kiểm tra nếu token_admin là false (lưu ý là giá trị trong sessionStorage là chuỗi)
       alert("Bạn không đủ quyền truy cập trang này.");
-      window.location.href = "http://127.0.0.1:5500/index.html"; // Chuyển hướng tới trang home
+      window.location.href = `${base_url_api_front_end}/index.html` ; // Chuyển hướng tới trang home
   } else if (token_admin === "true") {
 
   }

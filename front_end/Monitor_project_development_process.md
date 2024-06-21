@@ -108,3 +108,9 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
 ## ngày 14/6/2024 
 - nó bị lỗi khi sửa user thì cần phải sửa ảnh ko là bị lỗi => đã fix được , hóa ra là bị lỗi cái chỗ khác biệt giữa base64 và file . tức là nếu là file thì nó có thể chuyển qua base64 nhưng nếu là base64 thì ko được . và cả chỗ chọn file nữa
 
+## Ngày 21/6/2024 
+- éo hiểu sao lúc dữ liệu truyền từ backend sang front-end lại phải gọi 2 lần message làm tốn mất mấy lần test trên zalopay (khi nào rảnh check lại nó ở file order.js cái chỗ chyển hướng đến url payment)
+- check cẩn thận trạng thái của giao dịch vì nó có thể hủy chứ ko được khi chuyển hướng về trang của mình là mặc định thành công vd url sau là hủy 
+    ```cmd
+    http://127.0.0.1:5500/in_bill.html?amount=13980000&appid=2553&apptransid=240621_11&bankcode=&checksum=63f4b8f943d4f8aebcc60da77295a8887d2ccb56e549662c61bd444c8dff3293&discountamount=0&pmcid=0&status=-49
+    ```

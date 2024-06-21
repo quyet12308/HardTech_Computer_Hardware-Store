@@ -1,11 +1,13 @@
 // url base hosting web back-end
-// export let base_url_api_backend = `http://localhost:8030` // local
+export let base_url_api_backend = `http://localhost:8030` // local
 // export let base_url_api_backend = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app`
-export let base_url_api_backend = `https://2b30-2405-4802-1e3-b900-e515-b127-1f75-f437.ngrok-free.app`
-
+// export let base_url_api_backend = `https://b5f5-118-68-165-131.ngrok-free.app`
+export let authToken = `eyJjZG5CYXNlIjoiaHR0cHM6Ly9jZG4ubmdyb2suY29tLyIsImNvZGUiOiI2MDI0IiwiaG9zdHBvcnQiOiJnZW50bGUtc2hhcnAtZmlsbHkubmdyb2stZnJlZS5hcHAiLCJtZXNzYWdlIjoiWW91IGFyZSBhYm91dCB0byB2aXNpdCBnZW50bGUtc2hhcnAtZmlsbHkubmdyb2stZnJlZS5hcHAsIHNlcnZlZCBieSAxMTguNjguMTY1LjEzMS4gVGhpcyB3ZWJzaXRlIGlzIHNlcnZlZCBmb3IgZnJlZSB0aHJvdWdoIG5ncm9rLmNvbS4gWW91IHNob3VsZCBvbmx5IHZpc2l0IHRoaXMgd2Vic2l0ZSBpZiB5b3UgdHJ1c3Qgd2hvZXZlciBzZW50IHRoZSBsaW5rIHRvIHlvdS4iLCJzZXJ2aW5nSVAiOiIxMTguNjguMTY1LjEzMSIsInRpdGxlIjoiT0sifQ`
 // url base hosting web front-end
-// export let url_base_front_hosting = `http://127.0.0.1:5500` // local
-export let url_base_front_hosting = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app` // local
+export let url_base_front_hosting = `http://127.0.0.1:5500` // local
+// export let url_base_front_hosting = `https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app` // local
+
+export let redirecturl = `${url_base_front_hosting}/in_bill.html`
 
 // method
 export const method_post = "POST"
@@ -24,6 +26,8 @@ export const url_api_create_unpaid_orders =  `${base_url_api_backend}/api/create
 export const url_api_get_order_detail_preview =  `${base_url_api_backend}/api/get_order_detail_preview`
 export const url_api_get_show_user_infor =  `${base_url_api_backend}/api/userpage/show-user-infor`
 export const url_api_edit_user_information =  `${base_url_api_backend}/api/userpage/edit-user-information`
+export const url_api_create_url_for_payment =  `${base_url_api_backend}/api/create_url_for_payment`
+export const url_api_update_order_status_when_user_payment_success =  `${base_url_api_backend}/api/update_order_status_when_user_payment_success`
 
 
 
@@ -39,7 +43,8 @@ export let request_data_to_server = async ({data,url,method}) => {
     const requestOptions = {
       method: method,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        // 'Authorization': `Bearer ${authToken}`
       },
       body: JSON.stringify(data) 
     };
@@ -70,18 +75,47 @@ export let request_data_to_server = async ({data,url,method}) => {
       });
   };
 
+// export let get_data_from_server = async (url) => {
+//     try {
+//       const response = await fetch(url);
+//       const data = await response.json();
+//       console.log(data);
+//       console.log(typeof data);
+//       return data.response;
+//     } catch (error) {
+//       console.error("Lỗi khi gửi yêu cầu đến máy chủ:", error);
+//       throw error;
+//     }
+//   };
+
 export let get_data_from_server = async (url) => {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`  // Thay thế 'Bearer' bằng loại xác thực mà bạn sử dụng
+      }
+    });
+    const text = await response.text(); // Lấy dữ liệu dưới dạng text
+
+    console.log("Raw response from server:", text); // In ra dữ liệu thô nhận được từ máy chủ
+
+    // Thử chuyển đổi dữ liệu thô sang JSON
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      console.log(typeof data);
+      const data = JSON.parse(text);
+      console.log("Parsed JSON data:", data);
+      console.log("Data type:", typeof data);
       return data.response;
-    } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu đến máy chủ:", error);
-      throw error;
+    } catch (jsonError) {
+      console.error("Lỗi khi chuyển đổi sang JSON:", jsonError);
+      throw jsonError;
     }
-  };
+  } catch (error) {
+    console.error("Lỗi khi gửi yêu cầu đến máy chủ:", error);
+    throw error;
+  }
+};
+
 
 export function getQueryParameter(name) {
   let params = new URLSearchParams(window.location.search);
@@ -242,3 +276,68 @@ export function decodeAddress(jsonAddress) {
     province: province
   };
 }
+
+export let combineAddress = ({soNha, xa, huyen, tinh}) =>{
+  // Tạo một mảng chứa các phần của địa chỉ
+  const addressParts = [soNha, xa, huyen, tinh];
+
+  // Lọc bỏ các phần trống hoặc undefined
+  const filteredAddressParts = addressParts.filter(part => part);
+
+  // Kết hợp các phần còn lại bằng dấu phẩy
+  const combinedAddress = filteredAddressParts.join(', ');
+
+  return combinedAddress;
+}
+
+
+
+export function convertNumberToWords(number) {
+  const units = ["", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+  const tens = ["", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi"];
+  const hundreds = ["", "một trăm", "hai trăm", "ba trăm", "bốn trăm", "năm trăm", "sáu trăm", "bảy trăm", "tám trăm", "chín trăm"];
+    if (number === 0) return "không";
+
+    const numberStr = number.toString();
+    let result = "";
+    
+    let i = numberStr.length;
+    let index = 0;
+    
+    while (i > 0) {
+        let currentDigit = parseInt(numberStr.charAt(numberStr.length - i));
+        
+        if (index % 3 === 0) {
+            if (i >= 3) result += hundreds[currentDigit] + " ";
+            else if (i === 2) result += tens[currentDigit] + " ";
+            else if (i === 1) result += units[currentDigit] + " ";
+        } else if (index % 3 === 1) {
+            if (currentDigit === 1 && i === 2) {
+                result = result.trim();
+                result += " mười ";
+            } else if (i >= 2) {
+                result += tens[currentDigit] + " ";
+            } else {
+                if (currentDigit === 1) {
+                    result += "mười ";
+                } else if (currentDigit === 0) {
+                    result += "lẻ ";
+                } else {
+                    result += units[currentDigit] + " ";
+                }
+            }
+        } else {
+            if (i >= 2) {
+                result += units[currentDigit] + " ";
+            }
+        }
+
+        i--;
+        index++;
+    }
+
+    return result.trim() + " ngàn";
+}
+
+// Ví dụ sử dụng
+// console.log(convertNumberToWords(350000)); // hai trăm mười ba ngàn
