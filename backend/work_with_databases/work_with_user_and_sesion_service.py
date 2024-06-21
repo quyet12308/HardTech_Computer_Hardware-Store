@@ -31,17 +31,30 @@ def get_user_id_by_username(username):
 
 
 # check user is taken
-def is_username_taken(username):
-    # Tạo engine và phiên làm việc
+# def is_username_taken(username):
+#     # Tạo engine và phiên làm việc
+#     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+
+#     # Kiểm tra xem tên người dùng đã tồn tại trong cơ sở dữ liệu hay chưa
+#     existing_user = session.query(User).filter_by(username=username).first()
+
+#     # Trả về True nếu tên người dùng đã được sử dụng, False nếu chưa
+#     return existing_user is not None
+
+
+def is_username_taken(username, exclude_user_id=None):
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    # Kiểm tra xem tên người dùng đã tồn tại trong cơ sở dữ liệu hay chưa
-    existing_user = session.query(User).filter_by(username=username).first()
+    query = session.query(User).filter(User.username == username)
+    if exclude_user_id:
+        query = query.filter(User.user_id != exclude_user_id)
 
-    # Trả về True nếu tên người dùng đã được sử dụng, False nếu chưa
-    return existing_user is not None
+    user = query.first()
+    return user is not None
 
 
 # add user
@@ -105,6 +118,40 @@ def delete_user(user_id):
         return {"status": False, "message": message}
 
 
+# def creat_new_data_for_update_user(
+#     username=None,
+#     fullname=None,
+#     phone_number=None,
+#     address=None,
+#     img=None,
+#     password=None,
+# ):
+#     new_data = {}
+
+#     if username is not None:
+#         check_username = is_username_taken(username=username)
+#         if check_username:
+#             message = (
+#                 f"Tên người dùng '{username}' đã được sử dụng, vui lòng chọn tên khác."
+#             )
+#             return {"status": False, "message": message}
+#         else:
+#             new_data["username"] = username
+
+#     if fullname is not None:
+#         new_data["fullname"] = fullname
+#     if phone_number is not None:
+#         new_data["phone_number"] = phone_number
+#     if address is not None:
+#         new_data["address"] = address
+#     if img is not None:
+#         new_data["img"] = img
+#     if password is not None:
+#         new_data["password"] = password
+
+#     return {"status": True, "message": new_data}
+
+
 def creat_new_data_for_update_user(
     username=None,
     fullname=None,
@@ -112,11 +159,12 @@ def creat_new_data_for_update_user(
     address=None,
     img=None,
     password=None,
+    user_id=None,
 ):
     new_data = {}
 
     if username is not None:
-        check_username = is_username_taken(username=username)
+        check_username = is_username_taken(username=username, exclude_user_id=user_id)
         if check_username:
             message = (
                 f"Tên người dùng '{username}' đã được sử dụng, vui lòng chọn tên khác."

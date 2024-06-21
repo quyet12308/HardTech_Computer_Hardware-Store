@@ -21,7 +21,7 @@ def add_payment(order_id, amount, provider, status):
 
     # Tạo một payment detail mới
     payment_detail = PaymentDetail(
-        order_id=order_id, amount=amount, provider=provider, status=status
+        order_id=order_id, amount=float(amount), provider=provider, status=status
     )
     session.add(payment_detail)
     session.commit()
@@ -48,7 +48,7 @@ def edit_payment(payment_id, amount=None, provider=None, status=None):
 
     # Cập nhật thông tin thanh toán nếu tham số được truyền vào
     if amount is not None:
-        payment.amount = amount
+        payment.amount = float(amount)
     if provider is not None:
         payment.provider = provider
     if status is not None:

@@ -117,6 +117,9 @@ class Order(Base):
     order_date = Column(DateTime, server_default=func.now())
     total_price = Column(Numeric)
     order_status = Column(String, nullable=False)
+    order_note = Column(String, nullable=False)
+    order_address = Column(String, nullable=False)
+    checksum = Column(String, nullable=False)
     user = relationship("User", backref="orders")
     payment_details = relationship(
         "PaymentDetail", back_populates="order", overlaps="orders,paymentdetails"
@@ -127,10 +130,11 @@ class OrderDetail(Base):
     __tablename__ = "order_details"
     order_detail_id = Column(Integer, primary_key=True)
     order_id = Column(Integer, ForeignKey("orders.order_id"), nullable=False)
-    product_id = Column(Integer, nullable=False)
+    product_id = Column(Integer, ForeignKey("products.product_id"), nullable=False)
     qty = Column(Integer, nullable=False)
     order_price = Column(Numeric, nullable=False)
     order = relationship("Order", backref="order_details")
+    product = relationship("Product")  # Thêm mối quan hệ này
 
 
 class Cart(Base):

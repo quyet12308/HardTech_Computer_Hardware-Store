@@ -4,10 +4,11 @@ from pydantic import BaseModel
 from typing import Dict
 import uvicorn
 
-# from fastapi.middleware.cors import (
-#     CORSMiddleware,
-# )
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import (
+    CORSMiddleware,
+)
+
+# from starlette.middleware.cors import CORSMiddleware
 from Database_initialization_and_structure import *
 from work_with_databases.work_with_user_and_sesion_service import *
 from work_with_databases.work_with_products_and_discount_service import *
@@ -16,7 +17,9 @@ from work_with_databases.work_with_cart_service import *
 from work_with_databases.work_with_brand_and_category_service import *
 from work_with_databases.work_with_order_service import *
 from work_with_databases.admin_services_homepage import *
+from work_with_databases.work_with_payment_service import *
 from work_with_databases.admin_services_product_management import *
+from payment_services import *
 from base_codes.hash_function import *
 from base_codes.get_token import generate_token
 from base_codes.gettime import *
@@ -33,13 +36,31 @@ app = FastAPI()  # khởi tạo app fastapi
 
 
 # Cấu hình CORS
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=[
+#         "http://127.0.0.1:5500",
+#         "http://127.0.0.1:5501",
+#         "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app",
+#         "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app",
+#         "https://2b30-2405-4802-1e3-b900-e515-b127-1f75-f437.ngrok-free.app",
+#     ],  #  chỉ định các nguồn mà bạn muốn chấp nhận yêu cầu từ server
+#     # allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://127.0.0.1:5500",
+        "http://127.0.0.1:5501",
+        "http://127.0.0.1:5502",
         "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10-oerf.vercel.app",
         "https://phat-trien-he-thong-thuong-mai-dien-tu-nhom-10.vercel.app",
-    ],  #  chỉ định các nguồn mà bạn muốn chấp nhận yêu cầu từ server
+        "https://gentle-sharp-filly.ngrok-free.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -364,7 +385,10 @@ async def show_user_infor(request_data: ShowUserInforRequest):
         user_comments = get_user_comments(user_id=user_id, limit=5)
         return {
             "response": {
-                "message": {"user_infor": user_infor, "user_comments": user_comments},
+                "message": {
+                    "user_infor": user_infor["message"],
+                    "user_comments": user_comments,
+                },
                 "status": True,
             }
         }
@@ -398,6 +422,7 @@ async def edit_user_information(request_data: EditUserInformationRequest):
                 fullname=fullname,
                 img=image,
                 username=username,
+                user_id=user_id,
             )
             if creat_new_data["status"]:
                 new_data = creat_new_data["message"]
@@ -418,10 +443,10 @@ async def edit_user_information(request_data: EditUserInformationRequest):
                         }
                     }
             else:
-                print(f"{updateuser['message']}")
+                print(f"{creat_new_data['message']}")
                 return {
                     "response": {
-                        "message": updateuser["message"],
+                        "message": creat_new_data["message"],
                         "status": False,
                     }
                 }
@@ -684,15 +709,261 @@ async def filter_products_homepage(request_data: FilterProductsHomepageRequest):
 
 
 # oder
-@app.post("/api/place-order")
-async def place_order(request_data: CreateOrderRequest):
-    token_login_session = request_data.token_login_session
-    user_id = request_data.user_id
-    list_order_items = request_data.list_order_items
+@app.post("/api/create_unpaid_orders")
+async def create_unpaid_orders(request_data: CreateOrderRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        list_order_items = request_data.list_order_items
 
-    # order_id = place_order(user_id, products)
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
 
-    # return {"response": {"order_id": order_id, "message": "Order placed successfully"}}
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            check_create_order = create_order(
+                user_id=user_id, order_details=list_order_items
+            )
+            if check_create_order["status"]:
+                return {
+                    "response": {
+                        "message": check_create_order["order_id"],
+                        "status": True,
+                    }
+                }
+            else:
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
+@app.post("/api/get_order_detail_preview")
+async def get_order_detail_preview(request_data: GetOrderDetailPreviewRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        order_id = request_data.order_id
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            get_order_infor = get_order_details(order_id=order_id)
+            if get_order_infor:
+                return {
+                    "response": {
+                        "message": get_order_infor,
+                        "status": True,
+                    }
+                }
+            else:
+                return {
+                    "response": {
+                        "message": responses["khong_tim_thay_don_hang"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
+@app.post("/api/create_url_for_payment")
+async def create_url_for_payment_api(request_data: CreateUrlForPaymentRequest):
+    if request_data:
+        address = request_data.address
+        order_id = request_data.order_id
+        phone_number = request_data.phone_number
+        note = request_data.note
+        payment_method = request_data.payment_method
+        token_login_session = request_data.token_login_session
+        user_name = request_data.user_name
+        redirecturl = request_data.redirecturl
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            data_order = get_order_details_2(order_id=order_id)
+
+            if data_order["products"]:
+                total_price = data_order["total_price"]
+                description = f"Khách hàng {user_name} thanh toán cho đơn hàng id {order_id} của shop Hardtech"
+
+                url_payment = create_url_for_payment(
+                    user_id=user_id,
+                    amount=total_price,
+                    description=description,
+                    order_id=order_id,
+                    payment_method=payment_method,
+                    phone_number=phone_number,
+                    redirect_url=redirecturl,
+                    user_name=user_name,
+                )
+                print(url_payment)
+                if url_payment["status"]:
+
+                    check_update_order = update_order_after_payment_success(
+                        order_id=order_id,
+                        order_address=address,
+                        order_note=note,
+                        checksum=url_payment["message"]["check_sum"],
+                    )
+                    if check_update_order["status"]:
+
+                        return {
+                            "response": {
+                                "message": url_payment["message"]["order_url"],
+                                "status": True,
+                            }
+                        }
+                    else:
+                        return {
+                            "response": {
+                                "message": check_update_order["message"],
+                                "status": False,
+                            }
+                        }
+                else:
+                    return {
+                        "response": {
+                            "message": "",
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["khong_tim_thay_don_hang"],
+                        "status": False,
+                    }
+                }
+
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+
+
+@app.post("/api/update_order_status_when_user_payment_success")
+async def update_order_status_when_user_payment_success(
+    request_data: UpdateOrderStatusWhenUserPaymentSuccessRequest,
+):
+    if request_data:
+        token_login_session = request_data.token_login_session
+        checksum = request_data.checksum
+        payment_method = request_data.payment_method
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            check_update_order_status_using_checksum = (
+                update_order_status_using_checksum(checksum=checksum, new_status="paid")
+            )
+            if check_update_order_status_using_checksum["status"]:
+                check_get_order_info_by_checksum = get_order_info_by_checksum(
+                    checksum=checksum,
+                )
+                if check_get_order_info_by_checksum["status"]:
+                    check_get_order_id = get_order_id_by_checksum(checksum=checksum)
+                    check_add_payment = add_payment(
+                        amount=check_get_order_info_by_checksum["message"]["user_info"][
+                            "order_total_price"
+                        ],
+                        provider=payment_method,
+                        order_id=check_get_order_id["message"],
+                        status="paid",
+                    )
+                    if check_add_payment["status"]:
+                        return {
+                            "response": {
+                                "message": check_get_order_info_by_checksum["message"],
+                                "status": True,
+                            }
+                        }
+                    else:
+                        return {
+                            "response": {
+                                "message": check_add_payment["message"],
+                                "status": False,
+                            }
+                        }
+                else:
+                    return {
+                        "response": {
+                            "message": check_get_order_info_by_checksum["message"],
+                            "status": False,
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": check_update_order_status_using_checksum["message"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    return
+
+
+# @app.post("/api/payment_for_order")
+# async def payment_for_order(request_data: PaymentForOrderRequest):
+#     if request_data:
+#         token_login_session = request_data.token_login_session
+#         order_id = request_data.order_id
+#         new_order_status = request_data.new_order_status
+
+#         check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+#         if check_login_session["status"]:
+#             user_id = check_login_session["message"]
+#             check_update_new_order_status = update_order_status(new_status=new_order_status,order_id=order_id)
+#             if check_update_new_order_status["status"]:
+#                 return {
+#                     "response": {
+#                         "message": "",
+#                         "status": True,
+#                     }
+#                 }
+#             else:
+#                 return {
+#                     "response": {
+#                         "message": responses["khong_tim_thay_don_hang"],
+#                         "status": False,
+#                     }
+#                 }
+#         else:
+#             return {
+#                 "response": {
+#                     "message": responses["phien_dang_nhap_het_han"],
+#                     "status": False,
+#                 }
+#             }
+
+# order_id = place_order(user_id, products)
+
+# return {"response": {"order_id": order_id, "message": "Order placed successfully"}}
 
 
 ##############################################################################

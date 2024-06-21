@@ -29,6 +29,7 @@ responses = {
     "da_xoa_san_pham_thanh_cong": "Product successfully removed",
     "du_lieu_yeu_cau_khong_hop_le": "Invalid request data",
     "khong_tim_thay_san_pham": "No products found",
+    "khong_tim_thay_don_hang": "No order found",
     "xoa_tai_khoan_thanh_cong": "Account deleted successfully",
     "da_them_san_pham_thanh_cong": "Product added successfully",
     "ten_san_pham_da_ton_tai": "Product name already exists",

@@ -1,69 +1,99 @@
-# import requests
+from work_with_payment_services.main_momo_service import *
+from work_with_payment_services.main_paypal_service import *
+from work_with_payment_services.main_stripe_service import *
+from work_with_payment_services.main_vnpay_service import *
+from work_with_payment_services.main_zalopay_service import *
+from work_with_payment_services.convert_money import *
 
-# headers = {
-#     "Content-Type": "application/json",
-#     "Authorization": "Bearer access_token$sandbox$59drszcdbjr6qktw$e79debd0a5c6ab0c60fe6770b85eb9ec",
-#     # "Authorization": "Basic AagNCkpM0282tL9fF7OwKcjo8IoHchNQb2SAlxtWfPHeRZ2ricbbv5cjydCMgOdrZr4OT9Rr68BtlOV9:EJ3Aj2GXoiqlsOCmG5jzwt55pAaKH470ENXiR8Q9AndWZWpukvMUBIX8vPCWxMTCfAOSEds5ED7tJgMd",
-# }
 
-# response = requests.get(
-#     "https://api-m.sandbox.paypal.com/v2/payments/authorizations/83PKG4TRLBLCA",
-#     headers=headers,
-# )
-# # In mã phản hồi HTTP
-# print(f"HTTP Response Code: {response.status_code}")
+def create_url_for_payment(
+    payment_method: str,
+    amount: int,
+    description: str,
+    redirect_url: str,
+    order_id: int,
+    user_id: int,
+    user_name: str,
+    phone_number: int,
+    email: str = None,
+    full_name: str = None,
+):
+    if payment_method == "zalopay":
 
-# # In chi tiết lỗi
-# print(f"Error Message: {response.text}")
+        order_url = create_zalopay_order(
+            amount=amount,
+            description=description,
+            email=email,
+            full_name=full_name,
+            order_id=order_id,
+            phone_number=phone_number,
+            redirect_url=redirect_url,
+            user_id=user_id,
+            user_name=user_name,
+        )
+        if order_url:
+            return {
+                "status": True,
+                "message": {
+                    "order_url": order_url["result"]["order_url"],
+                    "check_sum": order_url["checksum"],
+                },
+            }
+        else:
+            return {"status": False, "message": ""}
+    elif payment_method == "momo":
+        payment_url = create_momo_payment_url(
+            amount=amount,
+            ipn_url="https://webhook.site/your-ipn-url",
+            order_id=order_id,
+            order_info=description,
+            redirect_url=redirect_url,
+        )
+        if payment_url["status"]:
+            return {
+                "status": True,
+                "message": {
+                    "order_url": payment_url["message"]["payment_url"],
+                    "check_sum": payment_url["message"]["check_sum"],
+                },
+            }
+        else:
+            return {"status": False, "message": ""}
 
-# coding=utf-8
-# Python 3.6
-
-from time import time
-from datetime import datetime
-import json, hmac, hashlib, urllib.request, urllib.parse, random
-
-config = {
-    "app_id": 2553,
-    "key1": "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL",
-    "key2": "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz",
-    "endpoint": "https://sb-openapi.zalopay.vn/v2/create",
-}
-transID = random.randrange(1000000)
-print(random.randrange(1000000))
-order = {
-    "app_id": config["app_id"],
-    "app_trans_id": "{:%y%m%d}_{}".format(
-        datetime.today(), transID
-    ),  # mã giao dich có định dạng yyMMdd_xxxx
-    "app_user": "user123",
-    "app_time": int(round(time() * 1000)),  # miliseconds
-    "embed_data": json.dumps({}),
-    "item": json.dumps([{}]),
-    "amount": 50000,
-    "description": "đơn hàng của nhóm 10" + str(transID),
-    "bank_code": "zalopayapp",
-}
-
-# app_id|app_trans_id|app_user|amount|apptime|embed_data|item
-data = "{}|{}|{}|{}|{}|{}|{}".format(
-    order["app_id"],
-    order["app_trans_id"],
-    order["app_user"],
-    order["amount"],
-    order["app_time"],
-    order["embed_data"],
-    order["item"],
-)
-
-order["mac"] = hmac.new(
-    config["key1"].encode(), data.encode(), hashlib.sha256
-).hexdigest()
-
-response = urllib.request.urlopen(
-    url=config["endpoint"], data=urllib.parse.urlencode(order).encode()
-)
-result = json.loads(response.read())
-
-for k, v in result.items():
-    print("{}: {}".format(k, v))
+    elif payment_method == "paypal":
+        payment_url = create_paypal_payment_url(
+            amount=convert_money_from_vnd_to_usd(amount_vnd=amount),
+            cancel_url="http://127.0.0.1:5500/cancel_payment.html",
+            return_url=redirect_url,
+            description=description,
+        )
+        if payment_url["status"]:
+            return {
+                "status": True,
+                "message": {
+                    "order_url": payment_url["message"]["payment_url"],
+                    "check_sum": payment_url["message"]["check_sum"],
+                },
+            }
+        else:
+            return {"status": False, "message": ""}
+    elif payment_method == "stripe":
+        payment_url = create_stripe_payment_url(
+            amount=(convert_money_from_vnd_to_usd(amount_vnd=amount) * 100),
+            success_url=redirect_url,
+            cancel_url="http://127.0.0.1:5500/cancel_payment.html",
+            order_id=order_id,
+            product_name=description,
+        )
+        if payment_url["status"]:
+            return {
+                "status": True,
+                "message": {
+                    "order_url": payment_url["message"]["payment_url"],
+                    "check_sum": payment_url["message"]["check_sum"],
+                },
+            }
+        else:
+            return {"status": False, "message": ""}
+    else:
+        return {"status": False, "message": "No support this payment method"}

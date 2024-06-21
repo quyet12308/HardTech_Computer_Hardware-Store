@@ -82,8 +82,12 @@ class FilterProductsHomepageRequest(BaseModel):
 
 class CreateOrderRequest(BaseModel):
     token_login_session: str
-    user_id: str
     list_order_items: list
+
+
+class GetOrderDetailPreviewRequest(BaseModel):
+    token_login_session: str
+    order_id: int
 
 
 class AddNewProductRequest(BaseModel):
@@ -116,6 +120,29 @@ class UpdateOrderStatusRequest(BaseModel):
     token_login_session: str
     new_order_status: str
     order_id: str
+
+
+class PaymentForOrderRequest(BaseModel):
+    token_login_session: str
+    new_order_status: str
+    order_id: str
+
+
+class CreateUrlForPaymentRequest(BaseModel):
+    token_login_session: str
+    order_id: str
+    user_name: str
+    phone_number: str
+    address: str
+    note: str
+    payment_method: str
+    redirecturl: str
+
+
+class UpdateOrderStatusWhenUserPaymentSuccessRequest(BaseModel):
+    token_login_session: str
+    checksum: str
+    payment_method: str
 
 
 class AdminHomepageRequest(BaseModel):

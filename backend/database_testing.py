@@ -95,7 +95,7 @@ from base_codes.hash_function import *
 # a = delete_table_data(DATA_BASE_PATH, "payment_details")
 # print(a)
 
-# b = delete_table_data(DATA_BASE_PATH, "products")
+# b = delete_table_data(DATA_BASE_PATH, "orders")
 # print(b)
 
 # a = edit_brand_data(new_brand_name="AMD", brand_id=1)
@@ -213,7 +213,7 @@ from base_codes.hash_function import *
 # a = drop_table2(table_name="products")
 # print(a)
 
-# a = drop_table3(table_name="orders")
+# a = drop_table3(table_name="order_details")
 # print(a)
 
 # a = query_category_by_name(category_name="CPU")
@@ -383,3 +383,6 @@ from base_codes.hash_function import *
 # user_id = 4
 # cart_info = get_cart_info(user_id)
 # print(cart_info)
+
+# order_info = get_order_info_by_checksum(checksum="240621_13")
+# print(order_info)

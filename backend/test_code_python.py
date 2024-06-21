@@ -59,37 +59,50 @@ from Database_initialization_and_structure import *
 # # Gọi hàm để thực hiện thay đổi cấu trúc bảng
 # change_table_structure()
 
-from sqlalchemy import Column, Integer, String, Numeric, Text, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import DDL
+# from sqlalchemy import Column, Integer, String, Numeric, Text, ForeignKey, DateTime
+# from sqlalchemy.orm import relationship
+# from sqlalchemy.sql import func
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy import DDL
 
-Base = declarative_base()
-
-
-class Product(Base):
-    __tablename__ = "products"
-    product_id = Column(Integer, primary_key=True, autoincrement=True)
-    product_name = Column(String)
-    price = Column(Numeric)
-    description = Column(Text)
-    category_id = Column(Integer, ForeignKey("categories.category_id"))
-    brand_id = Column(Integer, ForeignKey("brands.brand_id"))
-    quantity = Column(Integer)
-    image = Column(String)
-    created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, onupdate=func.now())
-    img = Column(String)
-    category = relationship("Category", backref="products")
-    brand = relationship("Brand", backref="products")
+# Base = declarative_base()
 
 
-# Tạo một câu lệnh DDL để xóa cột 'img'
-drop_img_column = DDL("ALTER TABLE products DROP COLUMN img")
+# class Product(Base):
+#     __tablename__ = "products"
+#     product_id = Column(Integer, primary_key=True, autoincrement=True)
+#     product_name = Column(String)
+#     price = Column(Numeric)
+#     description = Column(Text)
+#     category_id = Column(Integer, ForeignKey("categories.category_id"))
+#     brand_id = Column(Integer, ForeignKey("brands.brand_id"))
+#     quantity = Column(Integer)
+#     image = Column(String)
+#     created_at = Column(DateTime, server_default=func.now())
+#     updated_at = Column(DateTime, onupdate=func.now())
+#     img = Column(String)
+#     category = relationship("Category", backref="products")
+#     brand = relationship("Brand", backref="products")
 
-# Tạo engine và liên kết với cơ sở dữ liệu
-engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
 
-# Tạo tất cả các bảng
-Base.metadata.create_all(engine, [drop_img_column])
+# # Tạo một câu lệnh DDL để xóa cột 'img'
+# drop_img_column = DDL("ALTER TABLE products DROP COLUMN img")
+
+# # Tạo engine và liên kết với cơ sở dữ liệu
+# engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+
+# # Tạo tất cả các bảng
+# Base.metadata.create_all(engine, [drop_img_column])
+
+from sqlalchemy import create_engine, inspect
+from Database_initialization_and_structure import Base, Order  # Import mô hình của bạn
+from setting import *
+
+engine = create_engine(
+    f"sqlite:///{DATA_BASE_PATH}"
+)  # Thay thế bằng chuỗi kết nối của bạn
+
+inspector = inspect(engine)
+columns = inspector.get_columns("orders")
+for column in columns:
+    print(column["name"])
