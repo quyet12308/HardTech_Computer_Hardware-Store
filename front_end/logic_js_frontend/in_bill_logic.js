@@ -50,6 +50,16 @@ document.addEventListener('DOMContentLoaded', async  ()=> {
             checksum = module.getQueryParameter("stripe_payid")
         }
     }
+    if (payment_method === "9pay"){
+        let payment_status = module.getQueryParameter('status');
+        if (payment_status != 1){
+            alert("Thanh toán thất bại")
+            window.location.href = `${module.url_base_front_hosting}/index.html`
+        }
+        else {
+            checksum = module.getQueryParameter("9payid")
+        }
+    }
 
 
     let data = {

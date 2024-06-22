@@ -499,6 +499,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </label>
                 </div>
                 <div class="option">
+                    <input type="radio" id="9pay_payment" name="payment-method" value="9pay">
+                    <label for="paypal_payment">Thanh toán bằng 9pay
+                        <img src="./images/PayPal_Logo_2007.png" alt="">
+                    </label>
+                </div>
+                <div class="option">
                     <input type="radio" id="zalopay_payment" name="payment-method" value="zalopay">
                     <label for="zalopay_payment">Thanh toán bằng Zalopay
                         <img src="./images/zalopay.png" alt="">
@@ -599,6 +605,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 redirecturl: module.redirecturl,
                 token_login_session: login_session_token
             };
+            console.log(order_data)
 
             let order_response = await module.request_data_to_server({ url: url_api_create_url_for_payment, data: order_data, method: post_method });
             if (order_response.status) {
