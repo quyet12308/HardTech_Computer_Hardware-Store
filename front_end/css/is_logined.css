@@ -1,12 +1,26 @@
-#is_logined_dispaly{
-    display: flex;
-    align-items: center;
-}
+ /* Check login  */
+ #is_logined_display{
+  position: relative;
+	display: flex; 
+	align-items: center;
+	justify-content: right;
+	cursor: pointer;
+ }
 
-#is_logined_dispaly img{
-    height: 20px;
-    width: 20px;
-}
+ #is_logined_display img {
+	height: 20px;
+ }
+
+ #is_logined_display p {
+	margin-left: 10px;
+	color: #fff; 
+	font-size: 18px;
+ }
+
+ #is_logined_display p:hover {
+  color: red;
+ }
+
 
 #submenu_login {
     display: none;
@@ -18,8 +32,27 @@
     z-index: 1;
     top: 100%;
     right: 0;
+    width: 200px;
+  }
+
+  #submenu_login ul {
+    /* display: flex; */
+  }
+
+  #submenu_login li {
+    color: black;
+  }
+
+  #submenu_login li:first-child{
+    /* border-bottom: 1px solid #5a5858; */
+  }
+
+  #submenu_login li:hover {
+    color: red;
   }
   
   #is_logined_display:hover #submenu_login {
     display: block;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2);
   }

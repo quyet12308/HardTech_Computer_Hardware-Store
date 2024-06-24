@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     </div>
                     <div class="tab-item">
                         <h3>Số doanh thu mới</h3>
-                        <p>${num_total_revenue}đ</p>
+                        <p>${module.formatNumber(num_total_revenue) }đ</p>
                     </div>
                     <div class="tab-item">
                         <h3>Số lượng sản phẩm mới nhập</h3>

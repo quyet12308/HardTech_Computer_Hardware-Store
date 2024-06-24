@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="option">
                     <input type="radio" id="9pay_payment" name="payment-method" value="9pay">
                     <label for="paypal_payment">Thanh toán bằng 9pay
-                        <img src="./images/PayPal_Logo_2007.png" alt="">
+                        <img src="./images/9pay.png" alt="">
                     </label>
                 </div>
                 <div class="option">

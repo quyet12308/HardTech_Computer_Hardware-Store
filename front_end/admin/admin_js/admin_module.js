@@ -117,3 +117,34 @@ export let check_is_admin_logined = ()=>{
       console.error("Giá trị không hợp lệ trong sessionStorage: is_admin");
   }
 }
+
+export function formatNumber(number) {
+  // Chuyển số thành chuỗi và đảm bảo nó là một số nguyên dương
+  number = Math.abs(parseInt(number, 10));
+
+  // Kiểm tra nếu số là NaN hoặc không phải là số
+  if (isNaN(number)) {
+    return '';
+  }
+
+  // Chuyển số thành chuỗi và đảm bảo độ dài chuỗi lớn hơn 3
+  let numberString = number.toString();
+  while (numberString.length < 3) {
+    numberString = '0' + numberString;
+  }
+
+  // Tạo một mảng để lưu trữ các phần tử chuỗi
+  let parts = [];
+
+  // Chia chuỗi thành các phần tử có độ dài 3 và lưu vào mảng
+  while (numberString.length > 3) {
+    parts.unshift(numberString.slice(-3));
+    numberString = numberString.slice(0, -3);
+  }
+
+  // Thêm phần tử cuối cùng vào mảng
+  parts.unshift(numberString);
+
+  // Kết hợp các phần tử lại với nhau, giữa các phần tử có dấu chấm
+  return parts.join('.');
+}

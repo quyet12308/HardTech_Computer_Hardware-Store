@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search</title>
+    <link rel="stylesheet" href="./css/search_product.css">
+    <script type="module" src="./logic_js_frontend/search_logic.js"></script>
+</head>
+<body>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search product name...">
+        <select id="manufacturerFilter">
+            <option value="">All Manufacturers</option>
+            <!-- Manufacturer options will be populated dynamically -->
+        </select>
+        <select id="priceFilter">
+            <option value="">All Prices</option>
+            <option value="0-500000">0 - 500,000</option>
+            <option value="500000-2000000">500,000 - 2,000,000</option>
+            <option value="2000000-5000000">2,000,000 - 5,000,000</option>
+            <option value="5000000">> 5,000,000</option>
+        </select>
+        <button id="filterBtn">Search</button>
+    </div>
+    <div class="product-grid" id="productGrid">
+        <!-- Product items will be displayed here -->
+    </div>
+
+    
+</body>
+</html>

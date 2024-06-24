@@ -114,3 +114,6 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
     ```cmd
     http://127.0.0.1:5500/in_bill.html?amount=13980000&appid=2553&apptransid=240621_11&bankcode=&checksum=63f4b8f943d4f8aebcc60da77295a8887d2ccb56e549662c61bd444c8dff3293&discountamount=0&pmcid=0&status=-49
     ```
+- Cái hcaptcha éo hiểu sao nó lại chặn future gì đó , nên hiện tại sẽ tạm bỏ qua nó => lúc nào rảnh fix lại sau
+
+- Cái brand chưa phích được trong cái search

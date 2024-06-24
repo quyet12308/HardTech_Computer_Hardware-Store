@@ -22,13 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
           console.log("có token")
           is_logined.innerHTML = 
           `
-          <div id="is_logined_display" style="display: flex; align-items: center;justify-content: right;cursor: pointer;">
-            <img src=${avatar_img} alt="" style="height: 20px;" id="avata_show">
-            <p style="margin-left: 10px;color: #fa9e1b;">${login_username}</p>
+          <div id="is_logined_display" >
+            <img src=${avatar_img} alt="" id="avata_show">
+            <p>${login_username}</p>
             <div id="submenu_login">
             <ul >
-              <li id="user_info">Thông tin người dùng</li>
-              <li id="log_out">Đăng Xuất</li>
+              <li id="user_info" >Thông tin người dùng</li>
+              <li id="my_order" >Thông tin đơn hàng</li>
+              <li id="log_out" >Đăng Xuất</li>
             </ul>
       </div>
           </div>
@@ -79,6 +80,11 @@ document.addEventListener('DOMContentLoaded', function() {
        
         window.location.href = "user_info.html"
       });
+
+      let my_order = document.querySelector("#my_order")
+      my_order.addEventListener("click",()=>{
+        window.location.href = "my_order.html"
+      })
       
   });
   

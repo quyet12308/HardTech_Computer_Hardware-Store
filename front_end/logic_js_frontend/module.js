@@ -28,6 +28,11 @@ export const url_api_get_show_user_infor =  `${base_url_api_backend}/api/userpag
 export const url_api_edit_user_information =  `${base_url_api_backend}/api/userpage/edit-user-information`
 export const url_api_create_url_for_payment =  `${base_url_api_backend}/api/create_url_for_payment`
 export const url_api_update_order_status_when_user_payment_success =  `${base_url_api_backend}/api/update_order_status_when_user_payment_success`
+export const url_api_delete_account =  `${base_url_api_backend}/api/userpage/delete-account`
+export const url_api_send_verification_email =  `${base_url_api_backend}/api/register/send-verification-email`
+export const url_api_create_account =  `${base_url_api_backend}/api/userpage/create-account`
+export const url_api_search_products_by_keyword =  `${base_url_api_backend}/api/search-products-by-keyword`
+
 
 
 

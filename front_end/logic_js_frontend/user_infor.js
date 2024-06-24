@@ -205,6 +205,7 @@ let put_method = module.method_put
 
 let url_api_get_show_user_infor = module.url_api_get_show_user_infor;
 let url_api_edit_user_information = module.url_api_edit_user_information;
+let url_api_delete_account = module.url_api_delete_account
 
 let login_session_token = sessionStorage.getItem('tokek_for_login_session');
 
@@ -269,6 +270,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <select  id="ward-select"> ${default_ward_address}</select>
                 </div>
                 <button class="save_user-btn">Lưu</button>
+                <button id="delete_acc_btn">Xóa tài khoản</button>
             </div>
             <div class="user_main-img">
                 <p>Ảnh đại diện</p>
@@ -431,6 +433,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert("Cập nhật thông tin thất bại: " + updateResponse.message);
             }
         });
+        // delete acc
+        let delete_acc_btn = document.querySelector("#delete_acc_btn")
+        delete_acc_btn.addEventListener("click",async ()=>{
+            var confirmation = confirm("Bạn có muốn xóa tài khoản không?");
+  
+            if (confirmation) {
+                // Thực hiện xóa tài khoản
+                let data = {
+                    token_login_session:login_session_token
+                }
+                let response = await module.request_data_to_server({ url: url_api_delete_account, data: data, method: delete_method });
+
+                if (response.status){
+                    alert(response.message)
+                    sessionStorage.removeItem("tokek_for_login_session")
+                    sessionStorage.removeItem("user_name")
+                    sessionStorage.removeItem("is_admin")
+                    window.location.href = `${module.url_base_front_hosting}/register.html`
+
+                }
+            } else {
+                // Hủy bỏ xóa tài khoản
+                // Có thể thực hiện các hành động khác tại đây
+            }
+        })
     } else {
         alert(response.message);
     }
