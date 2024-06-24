@@ -26,6 +26,7 @@ from base_codes.gettime import *
 from setting import *
 from base_codes.string_python_en import responses
 from base_codes.get_code import generate_random_6_digit_number
+from base_codes.captcha import *
 
 # from email_with_python.send_emails_using_oulook_server import *
 from email_with_python.check_send_email_using_gmail_server import *
@@ -118,16 +119,129 @@ async def login(login_data: LoginRequest):
 
 
 # register
+# @app.post("/api/register/send-verification-email")
+# async def register_send_verification_email(
+#     register_data: RegisterVerificationCodeRequest,
+# ):
+#     email = register_data.email
+#     username = register_data.username
+#     if email:
+#         check_exists_user_by_email = get_user(
+#             email=email
+#         )  # truy xuất dữ liệu bằng email cho chức năng đăng ký
+#         if check_exists_user_by_email["status"]:
+#             return {
+#                 "response": {
+#                     "message": responses["email_da_duoc_dang_ky"],
+#                     "status": False,
+#                 }
+#             }
+#         else:
+#             check_username = is_username_taken(
+#                 username=username
+#             )  # lấy thông tin người dùng
+#             if check_username:
+#                 return {
+#                     "response": {
+#                         "message": responses["user_da_ton_tai"],
+#                         "status": False,
+#                     }
+#                 }
+#             else:
+#                 # send confirm email
+#                 code_randum = generate_random_6_digit_number()
+
+#                 send_email_confirm_registration(
+#                     username=username,
+#                     code=code_randum,
+#                     password=passwords["gmail_application_password"],
+#                     to_email=email,
+#                     email=emails["gmail"],
+#                     minutes=WAITING_TIME_FOR_CODE_IN_EMAIL,
+#                 )  # gửi email
+#                 add_authentication_code(
+#                     code=code_randum,
+#                     email=email,
+#                     expiration_time=convert_to_datetime(
+#                         time_string=add_time_to_datetime(
+#                             minutes=WAITING_TIME_FOR_CODE_IN_EMAIL
+#                         )["message"]
+#                     ),
+#                 )  # lưu data vào catcha
+
+#                 return {
+#                     "response": {
+#                         "message": responses["check_email_to_get_code"],
+#                         "status": True,
+#                     }
+#                 }
+#                 # return json.dumps(a)
+#     else:
+#         return {"response": {"message": responses["co_loi_xay_ra"], "status": False}}
+
+
+# @app.post("/api/register/create-account")
+# async def register_create_account(request_data: RegisterCreateAccountRequest):
+#     if request_data:
+#         password = request_data.password
+#         email = request_data.email
+#         code = request_data.code
+#         username = request_data.username
+
+#         check_code_verification = query_authentication_code_by_email(
+#             email=email
+#         )  # hàm check code catcha
+#         if check_code_verification["status"]:
+#             check_time = check_expired_time(
+#                 input_time=check_code_verification["message"].expiration_time
+#             )  # true nếu tạo và truy cập trong khoảng 3 phút
+#             if check_time:
+#                 if code == check_code_verification["message"].code:
+#                     add_user(
+#                         email=email,
+#                         password=hash_password(password=password),
+#                         username=username,
+#                     )  # lưu thông tin
+#                     return {
+#                         "response": {
+#                             "message": responses["dang_ky_thanh_cong"],
+#                             "status": True,
+#                         }
+#                     }
+#                 else:
+#                     return {
+#                         "response": {"message": responses["sai_code"], "status": False}
+#                     }
+#             else:
+#                 return {
+#                     "response": {
+#                         "message": responses["code_bi_qua_thoi_gian"],
+#                         "status": False,
+#                     }
+#                 }
+#         else:
+#             {
+#                 "response": {
+#                     "message": responses["khong_tim_thay_email_dang_ky_code"],
+#                     "status": False,
+#                 }
+#             }
+#     else:
+#         return {"response": {"message": responses["co_loi_xay_ra"], "status": False}}
+
+
 @app.post("/api/register/send-verification-email")
 async def register_send_verification_email(
     register_data: RegisterVerificationCodeRequest,
 ):
+    hcaptcha_valid = await verify_hcaptcha(register_data.hcaptcha_response)
+    if not hcaptcha_valid:
+        raise HTTPException(status_code=400, detail="Invalid hCaptcha")
+
     email = register_data.email
     username = register_data.username
     if email:
-        check_exists_user_by_email = get_user(
-            email=email
-        )  # truy xuất dữ liệu bằng email cho chức năng đăng ký
+        check_exists_user_by_email = get_user(email=email)
         if check_exists_user_by_email["status"]:
             return {
                 "response": {
@@ -136,9 +250,7 @@ async def register_send_verification_email(
                 }
             }
         else:
-            check_username = is_username_taken(
-                username=username
-            )  # lấy thông tin người dùng
+            check_username = is_username_taken(username=username)
             if check_username:
                 return {
                     "response": {
@@ -147,60 +259,54 @@ async def register_send_verification_email(
                     }
                 }
             else:
-                # send confirm email
                 code_randum = generate_random_6_digit_number()
-
                 send_email_confirm_registration(
                     username=username,
                     code=code_randum,
-                    password=passwords["gmail_application_password"],
+                    password="gmail_application_password",
                     to_email=email,
-                    email=emails["gmail"],
+                    email="gmail",
                     minutes=WAITING_TIME_FOR_CODE_IN_EMAIL,
-                )  # gửi email
+                )
                 add_authentication_code(
                     code=code_randum,
                     email=email,
-                    expiration_time=convert_to_datetime(
-                        time_string=add_time_to_datetime(
-                            minutes=WAITING_TIME_FOR_CODE_IN_EMAIL
-                        )["message"]
-                    ),
-                )  # lưu data vào catcha
-
+                    expiration_time="2024-06-23T00:00:00",
+                )
                 return {
                     "response": {
                         "message": responses["check_email_to_get_code"],
                         "status": True,
                     }
                 }
-                # return json.dumps(a)
     else:
         return {"response": {"message": responses["co_loi_xay_ra"], "status": False}}
 
 
 @app.post("/api/register/create-account")
 async def register_create_account(request_data: RegisterCreateAccountRequest):
+    # hcaptcha_valid = await verify_hcaptcha(request_data.hcaptcha_response)
+    # if not hcaptcha_valid:
+    #     raise HTTPException(status_code=400, detail="Invalid hCaptcha")
+
     if request_data:
         password = request_data.password
         email = request_data.email
         code = request_data.code
         username = request_data.username
 
-        check_code_verification = query_authentication_code_by_email(
-            email=email
-        )  # hàm check code catcha
+        check_code_verification = query_authentication_code_by_email(email=email)
         if check_code_verification["status"]:
             check_time = check_expired_time(
                 input_time=check_code_verification["message"].expiration_time
-            )  # true nếu tạo và truy cập trong khoảng 3 phút
+            )
             if check_time:
                 if code == check_code_verification["message"].code:
                     add_user(
                         email=email,
                         password=hash_password(password=password),
                         username=username,
-                    )  # lưu thông tin
+                    )
                     return {
                         "response": {
                             "message": responses["dang_ky_thanh_cong"],
@@ -219,7 +325,7 @@ async def register_create_account(request_data: RegisterCreateAccountRequest):
                     }
                 }
         else:
-            {
+            return {
                 "response": {
                     "message": responses["khong_tim_thay_email_dang_ky_code"],
                     "status": False,
@@ -653,7 +759,7 @@ async def search_products_by_keyword(request_data: SearchProductsByKeywordReques
     if request_data:
         keyword = request_data.keyword
         products = search_products(keyword=keyword)
-
+        brands = get_unique_category_and_brand_names()
         if products:
             products_list = []
             for product in products:
@@ -665,7 +771,10 @@ async def search_products_by_keyword(request_data: SearchProductsByKeywordReques
 
             return {
                 "response": {
-                    "message": products_list,
+                    "message": {
+                        "brands": brands["brands"],
+                        "products_list": products_list,
+                    },
                     "status": True,
                 }
             }

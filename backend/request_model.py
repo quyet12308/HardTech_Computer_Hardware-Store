@@ -10,6 +10,7 @@ class LoginRequest(BaseModel):
 class RegisterVerificationCodeRequest(BaseModel):
     email: str
     username: str
+    hcaptcha_response: str
 
 
 class RegisterCreateAccountRequest(BaseModel):

@@ -386,3 +386,6 @@ from base_codes.hash_function import *
 
 # order_info = get_order_info_by_checksum(checksum="240621_13")
 # print(order_info)
+
+# products = search_products(keyword="main")
+# print(products[0].image)

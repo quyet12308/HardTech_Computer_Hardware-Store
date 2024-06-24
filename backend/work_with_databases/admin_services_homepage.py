@@ -47,9 +47,16 @@ def get_statistics(timeframe: str):
     )
 
     # Truy vấn số lượng đơn đặt hàng mới
+    # new_orders = (
+    #     session.query(Order)
+    #     .filter(Order.order_date.between(start_date, end_date))
+    #     .count()
+    # )
     new_orders = (
         session.query(Order)
-        .filter(Order.order_date.between(start_date, end_date))
+        .filter(
+            Order.order_date.between(start_date, end_date), Order.order_status == "paid"
+        )
         .count()
     )
 
