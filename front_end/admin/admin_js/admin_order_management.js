@@ -1,4 +1,4 @@
-
+import * as module from './admin_module.js';
 
 
 document.addEventListener('DOMContentLoaded', function () {
