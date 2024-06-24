@@ -127,6 +127,10 @@ class UpdateOrderStatusRequest(BaseModel):
     order_id: str
 
 
+class AdminManagementPreviewRequest(BaseModel):
+    token_login_session: str
+
+
 class PaymentForOrderRequest(BaseModel):
     token_login_session: str
     new_order_status: str

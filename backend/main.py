@@ -1928,6 +1928,61 @@ async def edit_product(request_data: EditProductRequest):
 ##############################################################################
 
 
+@app.post("/api/admin/order_management_preview")
+async def order_management_preview(request_data: AdminManagementPreviewRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+
+        # check admin
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            is_admin = is_admin_user(user_id=user_id)
+            if is_admin:
+                updateorderstatus = update_order_status(
+                    order_id=order_id, new_status=new_order_status
+                )
+                if updateorderstatus["status"]:
+                    return {
+                        "response": {
+                            "status": True,
+                            "message": responses[
+                                "cap_nhat_trang_thai_don_hang_thanh_cong"
+                            ],
+                        }
+                    }
+                else:
+                    print(f"Lỗi {updateorderstatus['message']}")
+                    return {
+                        "response": {
+                            "status": False,
+                            "message": responses["co_loi_xay_ra"],
+                        }
+                    }
+            else:
+                return {
+                    "response": {
+                        "message": responses["tai_khoan_khong_co_quyen_nay"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
+                }
+            }
+    else:
+        return {
+            "response": {
+                "message": responses["du_lieu_yeu_cau_khong_hop_le"],
+                "status": False,
+            }
+        }
+
+
 @app.put("/api/admin/update-order-status-product")
 async def edit_product(request_data: UpdateOrderStatusRequest):
     if request_data:
