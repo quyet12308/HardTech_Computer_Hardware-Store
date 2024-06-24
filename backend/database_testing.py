@@ -389,3 +389,6 @@ from base_codes.hash_function import *
 
 # products = search_products(keyword="main")
 # print(products[0].image)
+
+# a = get_paid_orders(user_id=4)
+# print(a)

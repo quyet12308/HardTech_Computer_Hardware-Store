@@ -234,9 +234,9 @@ async def login(login_data: LoginRequest):
 async def register_send_verification_email(
     register_data: RegisterVerificationCodeRequest,
 ):
-    hcaptcha_valid = await verify_hcaptcha(register_data.hcaptcha_response)
-    if not hcaptcha_valid:
-        raise HTTPException(status_code=400, detail="Invalid hCaptcha")
+    # hcaptcha_valid = await verify_hcaptcha(register_data.hcaptcha_response)
+    # if not hcaptcha_valid:
+    #     raise HTTPException(status_code=400, detail="Invalid hCaptcha")
 
     email = register_data.email
     username = register_data.username
@@ -263,16 +263,21 @@ async def register_send_verification_email(
                 send_email_confirm_registration(
                     username=username,
                     code=code_randum,
-                    password="gmail_application_password",
+                    password=passwords["gmail_application_password"],
                     to_email=email,
-                    email="gmail",
+                    email=emails["gmail"],
                     minutes=WAITING_TIME_FOR_CODE_IN_EMAIL,
                 )
                 add_authentication_code(
                     code=code_randum,
                     email=email,
-                    expiration_time="2024-06-23T00:00:00",
+                    expiration_time=convert_to_datetime(
+                        time_string=add_time_to_datetime(
+                            minutes=WAITING_TIME_FOR_CODE_IN_EMAIL
+                        )["message"]
+                    ),
                 )
+
                 return {
                     "response": {
                         "message": responses["check_email_to_get_code"],
@@ -813,6 +818,39 @@ async def filter_products_homepage(request_data: FilterProductsHomepageRequest):
                 "response": {
                     "status": False,
                     "message": responses["khong_tim_thay_san_pham"],
+                }
+            }
+
+
+@app.post("/api/order_page/my_order")
+async def my_order(request_data: MyOrderRequest):
+    if request_data:
+        token_login_session = request_data.token_login_session
+
+        check_login_session = get_user_id_from_token(token_value=token_login_session)
+
+        if check_login_session["status"]:
+            user_id = check_login_session["message"]
+            check_my_order = get_paid_orders(user_id=int(user_id))
+            if check_my_order:
+                return {
+                    "response": {
+                        "message": check_my_order,
+                        "status": True,
+                    }
+                }
+            else:
+                return {
+                    "response": {
+                        "message": responses["co_loi_xay_ra"],
+                        "status": False,
+                    }
+                }
+        else:
+            return {
+                "response": {
+                    "message": responses["phien_dang_nhap_het_han"],
+                    "status": False,
                 }
             }
 

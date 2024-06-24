@@ -10,7 +10,7 @@ class LoginRequest(BaseModel):
 class RegisterVerificationCodeRequest(BaseModel):
     email: str
     username: str
-    hcaptcha_response: str
+    # hcaptcha_response: str
 
 
 class RegisterCreateAccountRequest(BaseModel):
@@ -89,6 +89,10 @@ class CreateOrderRequest(BaseModel):
 class GetOrderDetailPreviewRequest(BaseModel):
     token_login_session: str
     order_id: int
+
+
+class MyOrderRequest(BaseModel):
+    token_login_session: str
 
 
 class AddNewProductRequest(BaseModel):

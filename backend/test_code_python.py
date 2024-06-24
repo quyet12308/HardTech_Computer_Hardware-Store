@@ -94,15 +94,74 @@ from Database_initialization_and_structure import *
 # # Tạo tất cả các bảng
 # Base.metadata.create_all(engine, [drop_img_column])
 
-from sqlalchemy import create_engine, inspect
-from Database_initialization_and_structure import Base, Order  # Import mô hình của bạn
-from setting import *
+# from sqlalchemy import create_engine, inspect
+# from Database_initialization_and_structure import Base, Order  # Import mô hình của bạn
+# from setting import *
 
-engine = create_engine(
-    f"sqlite:///{DATA_BASE_PATH}"
-)  # Thay thế bằng chuỗi kết nối của bạn
+# engine = create_engine(
+#     f"sqlite:///{DATA_BASE_PATH}"
+# )  # Thay thế bằng chuỗi kết nối của bạn
 
-inspector = inspect(engine)
-columns = inspector.get_columns("orders")
-for column in columns:
-    print(column["name"])
+# inspector = inspect(engine)
+# columns = inspector.get_columns("orders")
+# for column in columns:
+#     print(column["name"])
+
+[
+    {
+        "order_id": 1,
+        "payment_method": None,
+        "order_date": datetime.datetime(2024, 6, 21, 8, 16, 28),
+        "order_note": "giao hang giờ hành chính",
+        "products": ["CPU Intel Xeon E5-1607 V3 (10M Cache, 3.10 GHz)"],
+        "total_price": Decimal("500000.0000000000"),
+    },
+    {
+        "order_id": 2,
+        "payment_method": "zalopay",
+        "order_date": datetime.datetime(2024, 6, 21, 8, 22, 27),
+        "order_note": "Không ghi chú",
+        "products": ["CPU Intel Xeon E5-1607 V3 (10M Cache, 3.10 GHz)"],
+        "total_price": Decimal("500000.0000000000"),
+    },
+    {
+        "order_id": 3,
+        "payment_method": "momo",
+        "order_date": datetime.datetime(2024, 6, 21, 8, 56, 49),
+        "order_note": "Không ghi chú",
+        "products": ["CPU Intel Xeon E5-1607 V3 (10M Cache, 3.10 GHz)"],
+        "total_price": Decimal("500000.0000000000"),
+    },
+    {
+        "order_id": 6,
+        "payment_method": "paypal",
+        "order_date": datetime.datetime(2024, 6, 21, 13, 5, 3),
+        "order_note": "Không ghi chú",
+        "products": ["CPU Intel Xeon E5-1607 V3 (10M Cache, 3.10 GHz)"],
+        "total_price": Decimal("1000000.0000000000"),
+    },
+    {
+        "order_id": 7,
+        "payment_method": "stripe",
+        "order_date": datetime.datetime(2024, 6, 21, 13, 45, 46),
+        "order_note": "Không ghi chú",
+        "products": ["CPU Intel Core I7 14700F Tray New"],
+        "total_price": Decimal("6990000.0000000000"),
+    },
+    {
+        "order_id": 13,
+        "payment_method": "9pay",
+        "order_date": datetime.datetime(2024, 6, 22, 15, 46, 47),
+        "order_note": "Không ghi chú",
+        "products": ["Mainboard Asrock A520M/Ac WIFI"],
+        "total_price": Decimal("1660000.0000000000"),
+    },
+    {
+        "order_id": 14,
+        "payment_method": "stripe",
+        "order_date": datetime.datetime(2024, 6, 23, 14, 20, 44),
+        "order_note": "Không ghi chú",
+        "products": ["Mainboard Asrock A520M/Ac WIFI"],
+        "total_price": Decimal("1660000.0000000000"),
+    },
+]

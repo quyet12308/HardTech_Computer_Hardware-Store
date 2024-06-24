@@ -326,6 +326,37 @@ def get_order_info_by_checksum(checksum):
         session.close()
 
 
+def get_paid_orders(user_id: int):
+    engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    paid_orders = (
+        session.query(Order)
+        .filter(Order.user_id == user_id, Order.order_status == "paid")
+        .options(
+            joinedload(Order.payment_details),
+            joinedload(Order.order_details).joinedload(OrderDetail.product),
+        )
+        .all()
+    )
+
+    result = []
+    for order in paid_orders:
+        order_info = {
+            "order_id": order.order_id,
+            "payment_method": (
+                order.payment_details[0].provider if order.payment_details else None
+            ),
+            "order_date": order.order_date,
+            "order_note": order.order_note,
+            "products": [detail.product.product_name for detail in order.order_details],
+            "total_price": order.total_price,
+        }
+        result.append(order_info)
+
+    return result
+
+
 def delete_order(order_id):
     # Tạo engine và phiên làm việc
     engine = create_engine(f"sqlite:///{DATA_BASE_PATH}")
