@@ -117,3 +117,6 @@ Vấn đề bạn gặp phải là các hàm editProduct và deleteProduct đư�
 - Cái hcaptcha éo hiểu sao nó lại chặn future gì đó , nên hiện tại sẽ tạm bỏ qua nó => lúc nào rảnh fix lại sau
 
 - Cái brand chưa phích được trong cái search
+
+## Ngày 24/6/2024
+- cái captcha hiện tại chỉ có giao diện => để bao giờ rảnh thì làm thêm

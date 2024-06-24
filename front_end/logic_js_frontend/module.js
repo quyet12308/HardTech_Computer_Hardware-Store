@@ -30,11 +30,11 @@ export const url_api_create_url_for_payment =  `${base_url_api_backend}/api/crea
 export const url_api_update_order_status_when_user_payment_success =  `${base_url_api_backend}/api/update_order_status_when_user_payment_success`
 export const url_api_delete_account =  `${base_url_api_backend}/api/userpage/delete-account`
 export const url_api_send_verification_email =  `${base_url_api_backend}/api/register/send-verification-email`
-export const url_api_create_account =  `${base_url_api_backend}/api/userpage/create-account`
+export const url_api_create_account =  `${base_url_api_backend}/api/register/create-account`
 export const url_api_search_products_by_keyword =  `${base_url_api_backend}/api/search-products-by-keyword`
-
-
-
+export const url_api_forgot_password =  `${base_url_api_backend}/api/forgot-password/forgot-password`
+export const url_api_reset_password =  `${base_url_api_backend}/api/forgot-password/reset-password`
+export const url_api_my_order =  `${base_url_api_backend}/api/order_page/my_order`
 
 
 
@@ -139,6 +139,19 @@ export const convertToBase64 = (file) => {
 
 export function isBase64Image(src) {
   return src.startsWith('data:image/');
+}
+
+export function formatDate(dateString) {
+  const date = new Date(dateString);
+  const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+  };
+  return date.toLocaleDateString('vi-VN', options);
 }
 
 

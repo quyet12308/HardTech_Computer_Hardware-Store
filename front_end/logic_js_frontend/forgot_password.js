@@ -1,8 +1,6 @@
 import * as module from './module.js';
 
-let url_api_forgot_password = module.url_api_forgot_password
-let url_api_reset_password = module.url_api_reset_password
-let post_method = module.method_post
+
 
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -18,7 +16,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     // xử lý logic đăng ký
     fogotpasswordForm.addEventListener('submit',async function(event)  {
         event.preventDefault();
-    
+        let url_api_forgot_password = module.url_api_forgot_password
+        let url_api_reset_password = module.url_api_reset_password
+        let post_method = module.method_post
         // var username = document.getElementById('username2').value;
         var email = document.getElementById('email2').value;
         var password = document.getElementById('password2').value;

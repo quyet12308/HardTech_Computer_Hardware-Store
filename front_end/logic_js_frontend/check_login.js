@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div id="submenu_login">
             <ul >
               <li id="user_info" >Thông tin người dùng</li>
-              <li id="my_order" >Thông tin đơn hàng</li>
+              <li id="my_order" >Đơn hàng của tôi</li>
               <li id="log_out" >Đăng Xuất</li>
             </ul>
       </div>

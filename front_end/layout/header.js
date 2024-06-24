@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     header.innerHTML = `
     <div class="headertop_desc">
     <div class="call">
-        <p><span>Need help?</span> call us <a href="tel:+1234567890">123-456-7890</a></p>
+        <p><span>Cần giúp đỡ?</span> Gọi chúng tôi <a href="tel:+1234567890">123-456-7890</a></p>
     </div>
     <div class="account_desc" id="is_logined"></div>
     <div class="clear"></div>
@@ -104,11 +104,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     <div class="header_bottom">
         <div class="menu">
             <ul>
-                <li><a href="../index.html" class="nav-link">Home</a></li>
-                <li><a href="../about.html" class="nav-link">About</a></li>
-                <li><a href="../delivery.html" class="nav-link">Delivery</a></li>
-                <li><a href="../news.html" class="nav-link">News</a></li>
-                <li><a href="../contact.html" class="nav-link">Contact</a></li>
+                <li><a href="../index.html" class="nav-link">Trang chủ</a></li>
+                <li><a href="../about.html" class="nav-link">giới thiệu</a></li>
+                <li><a href="../delivery.html" class="nav-link">giao hàng</a></li>
+                <li><a href="../news.html" class="nav-link">tin tức</a></li>
+                <li><a href="../contact.html" class="nav-link">liên hệ</a></li>
                 <div class="clear"></div>
             </ul>
         </div>
