@@ -172,7 +172,8 @@ body{
 
   #login-link, 
   #register-link,
-  #forgot-link   {
+  #forgot-link  ,
+  #login-link2 {
     color: #b31500;
     font-weight: 600;
     text-shadow: 1px 1px 0px var(--violet);
